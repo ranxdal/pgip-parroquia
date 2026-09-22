@@ -1,0 +1,26 @@
+
+# Dependencias
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Variables de entorno — NUNCA subir al repositorio
+server/.env
+client/.env
+
+# Archivos de construcción
+client/dist/
+
+# Uploads locales
+server/uploads/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Reportes de pruebas
+server/reporte_pruebas.html

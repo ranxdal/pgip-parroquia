@@ -1,0 +1,309 @@
+{
+    "info": {
+        "name": "PGIP - Colección de Pruebas API",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "1. Autenticación - Login exitoso",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test('Status 200 OK', function() {",
+                            "  pm.response.to.have.status(200);",
+                            "});",
+                            "pm.test('Token generado', function() {",
+                            "  var json = pm.response.json();",
+                            "  pm.expect(json.token).to.be.a('string');",
+                            "  pm.environment.set('token', json.token);",
+                            "});",
+                            "pm.test('Rol correcto', function() {",
+                            "  var json = pm.response.json();",
+                            "  pm.expect(json.usuario.rol).to.eql('admin');",
+                            "});"
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "method": "POST",
+                "url": "http://localhost:3000/api/auth/login",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\"usuario\": \"parroco\", \"contrasena\": \"Admin2026*\"}"
+                }
+            }
+        },
+        {
+            "name": "2. Autenticación - Login fallido",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test('Status 401 Unauthorized', function() {",
+                            "  pm.response.to.have.status(401);",
+                            "});",
+                            "pm.test('Mensaje de error presente', function() {",
+                            "  var json = pm.response.json();",
+                            "  pm.expect(json.error).to.be.a('string');",
+                            "});"
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "method": "POST",
+                "url": "http://localhost:3000/api/auth/login",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\"usuario\": \"parroco\", \"contrasena\": \"contraseña_incorrecta\"}"
+                }
+            }
+        },
+        {
+            "name": "3. Autenticación - Sin token",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test('Status 401 sin token', function() {",
+                            "  pm.response.to.have.status(401);",
+                            "});",
+                            "pm.test('Mensaje acceso denegado', function() {",
+                            "  var json = pm.response.json();",
+                            "  pm.expect(json.error).to.include('Token');",
+                            "});"
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "method": "GET",
+                "url": "http://localhost:3000/api/tesoreria/caja/balance",
+                "header": []
+            }
+        },
+        {
+            "name": "4. Tesorería - Abrir caja exitosamente",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test('Status 201 Created', function() {",
+                            "  pm.response.to.have.status(201);",
+                            "});",
+                            "pm.test('Caja abierta exitosamente', function() {",
+                            "  var json = pm.response.json();",
+                            "  pm.expect(json.sesion.estado).to.eql('abierta');",
+                            "  pm.environment.set('sesion_caja_id', json.sesion.id);",
+                            "});",
+                            "pm.test('Monto inicial correcto', function() {",
+                            "  var json = pm.response.json();",
+                            "  pm.expect(json.sesion.monto_inicial).to.eql('200.00');",
+                            "});"
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "method": "POST",
+                "url": "http://localhost:3000/api/tesoreria/caja/abrir",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    },
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{token}}"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\"monto_inicial\": 200.00}"
+                }
+            }
+        },
+        {
+            "name": "4b. Tesorería - Caja duplicada (debe rechazar)",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test('Status 400 - Caja ya abierta', function() {",
+                            "  pm.response.to.have.status(400);",
+                            "});",
+                            "pm.test('Mensaje de error presente', function() {",
+                            "  var json = pm.response.json();",
+                            "  pm.expect(json.error).to.be.a('string');",
+                            "});"
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "method": "POST",
+                "url": "http://localhost:3000/api/tesoreria/caja/abrir",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    },
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{token}}"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\"monto_inicial\": 200.00}"
+                }
+            }
+        },
+        {
+            "name": "5. Tesorería - Registrar transacción",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test('Status 201 Created', function() {",
+                            "  pm.response.to.have.status(201);",
+                            "});",
+                            "pm.test('Correlativo PGIP generado', function() {",
+                            "  var json = pm.response.json();",
+                            "  pm.expect(json.transaccion.correlativo).to.include('PGIP-');",
+                            "  pm.environment.set('qr_url', json.qr);",
+                            "});",
+                            "pm.test('QR hash generado', function() {",
+                            "  var json = pm.response.json();",
+                            "  pm.expect(json.transaccion.qr_hash).to.be.a('string');",
+                            "});"
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "method": "POST",
+                "url": "http://localhost:3000/api/tesoreria/transaccion",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    },
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{token}}"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\"sesion_caja_id\": \"81b00fd5-498f-44a3-968d-638da9eeacb0\", \"tipo\": \"efectivo\", \"monto\": 75.00, \"descripcion\": \"Prueba automatizada Newman\"}"
+                }
+            }
+        },
+        {
+            "name": "6. Tesorería - Verificar QR",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test('Status 200 OK', function() {",
+                            "  pm.response.to.have.status(200);",
+                            "});",
+                            "pm.test('Comprobante válido', function() {",
+                            "  var json = pm.response.json();",
+                            "  pm.expect(json.mensaje).to.include('válido');",
+                            "});",
+                            "pm.test('Correlativo presente', function() {",
+                            "  var json = pm.response.json();",
+                            "  pm.expect(json.comprobante.correlativo).to.include('PGIP-');",
+                            "});"
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "method": "GET",
+                "url": "http://localhost:3000/api/tesoreria/verificar/78ae145a013ef10808a45eb096aa0e47e9203259746b0b19430299073434839d",
+                "header": []
+            }
+        },
+        {
+            "name": "7. Tesorería - Balance del día",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test('Status 200 OK', function() {",
+                            "  pm.response.to.have.status(200);",
+                            "});",
+                            "pm.test('Balance retornado', function() {",
+                            "  var json = pm.response.json();",
+                            "  pm.expect(json.balance).to.be.an('object');",
+                            "});",
+                            "pm.test('Estado de caja presente', function() {",
+                            "  var json = pm.response.json();",
+                            "  pm.expect(json.balance.estado).to.be.a('string');",
+                            "});"
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "method": "GET",
+                "url": "http://localhost:3000/api/tesoreria/caja/balance",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{token}}"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "8. Ping - Servidor activo",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test('Status 200 OK', function() {",
+                            "  pm.response.to.have.status(200);",
+                            "});",
+                            "pm.test('Servidor PGIP respondiendo', function() {",
+                            "  var json = pm.response.json();",
+                            "  pm.expect(json.mensaje).to.include('PGIP');",
+                            "});"
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "method": "GET",
+                "url": "http://localhost:3000/api/ping",
+                "header": []
+            }
+        }
+    ]
+}
