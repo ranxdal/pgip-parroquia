@@ -1,4 +1,5 @@
 require('dotenv').config();
+console.log('CLIENT_URL configurado:', process.env.CLIENT_URL);
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
