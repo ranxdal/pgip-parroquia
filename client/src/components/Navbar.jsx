@@ -119,7 +119,8 @@ const estilos = {
         height: '56px',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        overflow: 'hidden'
     },
     navLogo: {
         display: 'flex',
@@ -162,7 +163,8 @@ const estilos = {
         fontSize: '1.3rem',
         cursor: 'pointer',
         padding: '4px 10px',
-        borderRadius: '6px'
+        borderRadius: '6px',
+        flexShrink: 0
     },
     menuMovil: {
         backgroundColor: '#1a365d',
