@@ -115,19 +115,28 @@ const estilos = {
         boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
     },
     navContenido: {
-        padding: '0 16px',
+        padding: '0 12px',
         height: '56px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        overflow: 'hidden'
+        gap: '8px',
     },
     navLogo: {
         display: 'flex',
         flexDirection: 'column',
-        lineHeight: 1.2
+        lineHeight: 1.2,
+        minWidth: 0,
+        flex: 1
     },
-    navSub: { fontSize: '0.65rem', color: '#a0aec0' },
+    navSub: {
+        fontSize: '0.65rem',
+        color: '#a0aec0',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        maxWidth: '150px'
+    },
     navLinksDesktop: {
         display: 'flex',
         alignItems: 'center',
@@ -164,6 +173,7 @@ const estilos = {
         cursor: 'pointer',
         padding: '4px 10px',
         borderRadius: '6px',
+        minWidth: '40px',
         flexShrink: 0
     },
     menuMovil: {
