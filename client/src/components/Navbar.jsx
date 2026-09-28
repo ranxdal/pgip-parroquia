@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import styles from './Navbar.module.css';
 
 export default function Navbar() {
     const { usuario, logout } = useAuth();
@@ -28,38 +29,36 @@ export default function Navbar() {
     };
 
     return (
-        <nav style={estilos.navbar}>
-            <div style={estilos.navContenido}>
-                <div style={estilos.navLogo}>
-                    <strong style={{ fontSize: '1.1rem' }}>PGIP</strong>
-                    <span style={estilos.navSub}>Parroquia San Agustín</span>
+        <nav className={styles.navbar}>
+            <div className={styles.navContenido}>
+                <div className={styles.navLogo}>
+                    <strong>PGIP</strong>
+                    <span className={styles.navSub}>Parroquia San Agustín</span>
                 </div>
 
-                {/* Menú desktop */}
                 {!esMovil && (
-                    <div style={estilos.navLinksDesktop}>
+                    <div className={styles.navLinksDesktop}>
                         {usuario?.rol === 'admin' && (
                             <button onClick={() => navegar('/dashboard')}
-                                style={estilos.navBtn}>Dashboard</button>
+                                className={styles.navBtn}>Dashboard</button>
                         )}
                         <button onClick={() => navegar('/tesoreria')}
-                            style={estilos.navBtn}>Tesorería</button>
+                            className={styles.navBtn}>Tesorería</button>
                         <button onClick={() => navegar('/sacramentos')}
-                            style={estilos.navBtn}>Sacramentos</button>
+                            className={styles.navBtn}>Sacramentos</button>
                         <button onClick={() => navegar('/archivo')}
-                            style={estilos.navBtn}>Archivo</button>
+                            className={styles.navBtn}>Archivo</button>
                         <button onClick={() => navegar('/certificados')}
-                            style={estilos.navBtn}>Certificados</button>
-                        <span style={estilos.navUsuario}>{usuario?.nombre}</span>
+                            className={styles.navBtn}>Certificados</button>
+                        <span className={styles.navUsuario}>{usuario?.nombre}</span>
                         <button onClick={handleLogout}
-                            style={estilos.navBtnRojo}>Salir</button>
+                            className={styles.navBtnRojo}>Salir</button>
                     </div>
                 )}
 
-                {/* Botón hamburguesa para móvil */}
                 {esMovil && (
                     <button
-                        style={estilos.hamburguesa}
+                        className={styles.hamburguesa}
                         onClick={() => setMenuAbierto(!menuAbierto)}
                     >
                         {menuAbierto ? '✕' : '☰'}
@@ -67,36 +66,35 @@ export default function Navbar() {
                 )}
             </div>
 
-            {/* Menú móvil desplegable */}
             {esMovil && menuAbierto && (
-                <div style={estilos.menuMovil}>
-                    <div style={estilos.menuUsuario}>
+                <div className={styles.menuMovil}>
+                    <div className={styles.menuUsuario}>
                         👤 {usuario?.nombre} ({usuario?.rol})
                     </div>
                     {usuario?.rol === 'admin' && (
                         <button onClick={() => navegar('/dashboard')}
-                            style={estilos.menuItem}>
+                            className={styles.menuItem}>
                             📊 Dashboard
                         </button>
                     )}
                     <button onClick={() => navegar('/tesoreria')}
-                        style={estilos.menuItem}>
+                        className={styles.menuItem}>
                         💰 Tesorería
                     </button>
                     <button onClick={() => navegar('/sacramentos')}
-                        style={estilos.menuItem}>
+                        className={styles.menuItem}>
                         ✝️ Sacramentos
                     </button>
                     <button onClick={() => navegar('/archivo')}
-                        style={estilos.menuItem}>
+                        className={styles.menuItem}>
                         📁 Archivo Histórico
                     </button>
                     <button onClick={() => navegar('/certificados')}
-                        style={estilos.menuItem}>
+                        className={styles.menuItem}>
                         📄 Certificados
                     </button>
                     <button onClick={handleLogout}
-                        style={estilos.menuItemRojo}>
+                        className={styles.menuItemRojo}>
                         🚪 Cerrar Sesión
                     </button>
                 </div>
@@ -104,112 +102,3 @@ export default function Navbar() {
         </nav>
     );
 }
-
-const estilos = {
-    navbar: {
-        backgroundColor: '#1a365d',
-        color: '#fff',
-        position: 'sticky',
-        top: 0,
-        zIndex: 100,
-        boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
-    },
-    navContenido: {
-        padding: '0 12px',
-        height: '56px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: '8px',
-    },
-    navLogo: {
-        display: 'flex',
-        flexDirection: 'column',
-        lineHeight: 1.2,
-        minWidth: 0,
-        flex: 1
-    },
-    navSub: {
-        fontSize: '0.65rem',
-        color: '#a0aec0',
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        maxWidth: '150px'
-    },
-    navLinksDesktop: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-        flexWrap: 'wrap'
-    },
-    navBtn: {
-        backgroundColor: 'transparent',
-        color: '#fff',
-        border: '1px solid #4a6fa5',
-        padding: '5px 10px',
-        borderRadius: '6px',
-        fontSize: '0.8rem',
-        cursor: 'pointer'
-    },
-    navBtnRojo: {
-        backgroundColor: '#c53030',
-        color: '#fff',
-        border: 'none',
-        padding: '5px 10px',
-        borderRadius: '6px',
-        fontSize: '0.8rem',
-        cursor: 'pointer'
-    },
-    navUsuario: {
-        fontSize: '0.8rem',
-        color: '#a0aec0'
-    },
-    hamburguesa: {
-        backgroundColor: 'transparent',
-        color: '#fff',
-        border: '1px solid #4a6fa5',
-        fontSize: '1.3rem',
-        cursor: 'pointer',
-        padding: '4px 10px',
-        borderRadius: '6px',
-        minWidth: '40px',
-        flexShrink: 0
-    },
-    menuMovil: {
-        backgroundColor: '#1a365d',
-        borderTop: '1px solid #2d4a7a',
-        padding: '8px 0',
-        display: 'flex',
-        flexDirection: 'column'
-    },
-    menuUsuario: {
-        padding: '10px 16px',
-        fontSize: '0.875rem',
-        color: '#a0aec0',
-        borderBottom: '1px solid #2d4a7a',
-        marginBottom: '4px'
-    },
-    menuItem: {
-        backgroundColor: 'transparent',
-        color: '#fff',
-        border: 'none',
-        padding: '14px 16px',
-        textAlign: 'left',
-        fontSize: '1rem',
-        cursor: 'pointer',
-        width: '100%'
-    },
-    menuItemRojo: {
-        backgroundColor: 'transparent',
-        color: '#fc8181',
-        border: 'none',
-        padding: '14px 16px',
-        textAlign: 'left',
-        fontSize: '1rem',
-        cursor: 'pointer',
-        width: '100%',
-        borderTop: '1px solid #2d4a7a',
-        marginTop: '4px'
-    }
-};

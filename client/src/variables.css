@@ -1,0 +1,19 @@
+:root {
+    --color-primario: #1a365d;
+    --color-primario-hover: #2a4a7f;
+    --color-secundario: #2b6cb0;
+    --color-exito: #2f855a;
+    --color-peligro: #c53030;
+    --color-advertencia: #c05621;
+    --color-fondo: #f0f4f8;
+    --color-blanco: #ffffff;
+    --color-texto: #2d3748;
+    --color-texto-suave: #718096;
+    --color-texto-muy-suave: #a0aec0;
+    --color-borde: #e2e8f0;
+    --color-fondo-tabla: #f7fafc;
+    --sombra: 0 1px 3px rgba(0,0,0,0.1);
+    --radio: 10px;
+    --radio-pequeno: 6px;
+    --radio-mediano: 8px;
+}

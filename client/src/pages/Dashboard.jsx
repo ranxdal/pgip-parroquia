@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import Navbar from '../components/Navbar';
+import styles from './Dashboard.module.css';
 import {
     LineChart, Line, BarChart, Bar,
     XAxis, YAxis, CartesianGrid,
@@ -41,29 +42,25 @@ export default function Dashboard() {
         }
     };
 
-    const coloresAlerta = {
-        urgente: '#fc8181',
-        advertencia: '#f6ad55',
-        informacion: '#63b3ed'
+    const claseAlerta = {
+        urgente: styles.alertaUrgente,
+        advertencia: styles.alertaAdvertencia,
+        informacion: styles.alertaInformacion
     };
 
     return (
-        <div style={estilos.contenedor}>
+        <div className={styles.contenedor}>
             <Navbar />
 
-            <div style={estilos.contenido}>
-                <div style={estilos.encabezado}>
-                    <h1 style={estilos.titulo}>Dashboard Ejecutivo</h1>
-                    <div style={estilos.filtros}>
+            <div className={styles.contenido}>
+                <div className={styles.encabezado}>
+                    <h1 className={styles.titulo}>Dashboard Ejecutivo</h1>
+                    <div className={styles.filtros}>
                         {['dia', 'semana', 'mes', 'anio'].map(p => (
                             <button
                                 key={p}
                                 onClick={() => setPeriodo(p)}
-                                style={{
-                                    ...estilos.filtroBton,
-                                    backgroundColor: periodo === p ? '#1a365d' : '#e2e8f0',
-                                    color: periodo === p ? '#fff' : '#2d3748'
-                                }}
+                                className={`${styles.filtroBton} ${periodo === p ? styles.filtroBtonActivo : ''}`}
                             >
                                 {p === 'dia' ? 'Hoy' :
                                     p === 'semana' ? 'Semana' :
@@ -74,12 +71,9 @@ export default function Dashboard() {
                 </div>
 
                 {alertas.length > 0 && (
-                    <div style={estilos.alertasContenedor}>
+                    <div className={styles.alertasContenedor}>
                         {alertas.map((alerta, i) => (
-                            <div key={i} style={{
-                                ...estilos.alerta,
-                                borderLeftColor: coloresAlerta[alerta.nivel]
-                            }}>
+                            <div key={i} className={`${styles.alerta} ${claseAlerta[alerta.nivel]}`}>
                                 ⚠️ {alerta.mensaje}
                             </div>
                         ))}
@@ -87,46 +81,46 @@ export default function Dashboard() {
                 )}
 
                 {cargando ? (
-                    <div style={estilos.cargando}>Cargando indicadores...</div>
+                    <div className={styles.cargando}>Cargando indicadores...</div>
                 ) : datos && (
                     <>
-                        <div style={estilos.kpiGrid}>
-                            <div style={estilos.kpiTarjeta}>
-                                <p style={estilos.kpiEtiqueta}>Ingresos del período</p>
-                                <p style={estilos.kpiValor}>
+                        <div className={styles.kpiGrid}>
+                            <div className={styles.kpiTarjeta}>
+                                <p className={styles.kpiEtiqueta}>Ingresos del período</p>
+                                <p className={styles.kpiValor}>
                                     Q{datos.kpis.ingresos.total.toFixed(2)}
                                 </p>
-                                <p style={estilos.kpiSub}>
+                                <p className={styles.kpiSub}>
                                     {datos.kpis.ingresos.cantidad_transacciones} transacciones
                                 </p>
                             </div>
-                            <div style={estilos.kpiTarjeta}>
-                                <p style={estilos.kpiEtiqueta}>Promedio diario</p>
-                                <p style={estilos.kpiValor}>
+                            <div className={styles.kpiTarjeta}>
+                                <p className={styles.kpiEtiqueta}>Promedio diario</p>
+                                <p className={styles.kpiValor}>
                                     Q{datos.kpis.promedio_diario.toFixed(2)}
                                 </p>
-                                <p style={estilos.kpiSub}>por día</p>
+                                <p className={styles.kpiSub}>por día</p>
                             </div>
-                            <div style={estilos.kpiTarjeta}>
-                                <p style={estilos.kpiEtiqueta}>Proyección próximo mes</p>
-                                <p style={{ ...estilos.kpiValor, color: '#2f855a' }}>
+                            <div className={styles.kpiTarjeta}>
+                                <p className={styles.kpiEtiqueta}>Proyección próximo mes</p>
+                                <p className={styles.kpiValorExito}>
                                     Q{datos.proyeccion.proyeccion?.toFixed(2) || 'N/D'}
                                 </p>
-                                <p style={estilos.kpiSub}>
+                                <p className={styles.kpiSub}>
                                     {datos.proyeccion.meses_analizados} meses analizados
                                 </p>
                             </div>
-                            <div style={estilos.kpiTarjeta}>
-                                <p style={estilos.kpiEtiqueta}>Catecúmenos activos</p>
-                                <p style={estilos.kpiValor}>
+                            <div className={styles.kpiTarjeta}>
+                                <p className={styles.kpiEtiqueta}>Catecúmenos activos</p>
+                                <p className={styles.kpiValor}>
                                     {datos.kpis.catecumenos_activos}
                                 </p>
-                                <p style={estilos.kpiSub}>en proceso</p>
+                                <p className={styles.kpiSub}>en proceso</p>
                             </div>
                         </div>
 
-                        <div style={estilos.graficaContenedor}>
-                            <h2 style={estilos.graficaTitulo}>
+                        <div className={styles.graficaContenedor}>
+                            <h2 className={styles.graficaTitulo}>
                                 Tendencia de Ingresos — Últimos 6 meses
                             </h2>
                             <ResponsiveContainer width="100%" height={300}>
@@ -148,8 +142,8 @@ export default function Dashboard() {
                         </div>
 
                         {datos.kpis.sacramentos.length > 0 && (
-                            <div style={estilos.graficaContenedor}>
-                                <h2 style={estilos.graficaTitulo}>Sacramentos por Tipo</h2>
+                            <div className={styles.graficaContenedor}>
+                                <h2 className={styles.graficaTitulo}>Sacramentos por Tipo</h2>
                                 <ResponsiveContainer width="100%" height={250}>
                                     <BarChart data={datos.kpis.sacramentos}>
                                         <CartesianGrid strokeDasharray="3 3" />
@@ -167,47 +161,3 @@ export default function Dashboard() {
         </div>
     );
 }
-
-const estilos = {
-    contenedor: { minHeight: '100vh', backgroundColor: '#f0f4f8' },
-    contenido: { padding: '16px', maxWidth: '1200px', margin: '0 auto' },
-    encabezado: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '16px',
-        flexWrap: 'wrap',
-        gap: '12px'
-    },
-    titulo: { fontSize: '1.3rem', color: '#1a365d' },
-    filtros: { display: 'flex', gap: '6px', flexWrap: 'wrap' },
-    filtroBton: {
-        padding: '6px 12px', border: 'none',
-        borderRadius: '20px', fontSize: '0.8rem', cursor: 'pointer'
-    },
-    alertasContenedor: { marginBottom: '16px', display: 'flex', flexDirection: 'column', gap: '8px' },
-    alerta: {
-        backgroundColor: '#fff', borderLeft: '4px solid',
-        padding: '10px 14px', borderRadius: '6px',
-        fontSize: '0.85rem', boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-    },
-    cargando: { textAlign: 'center', padding: '40px', color: '#718096' },
-    kpiGrid: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-        gap: '12px', marginBottom: '16px'
-    },
-    kpiTarjeta: {
-        backgroundColor: '#fff', padding: '16px',
-        borderRadius: '10px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-    },
-    kpiEtiqueta: { fontSize: '0.75rem', color: '#718096', marginBottom: '6px' },
-    kpiValor: { fontSize: '1.5rem', fontWeight: 'bold', color: '#1a365d' },
-    kpiSub: { fontSize: '0.7rem', color: '#a0aec0', marginTop: '4px' },
-    graficaContenedor: {
-        backgroundColor: '#fff', padding: '16px',
-        borderRadius: '10px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-        marginBottom: '16px', overflowX: 'auto'
-    },
-    graficaTitulo: { fontSize: '0.95rem', color: '#2d3748', marginBottom: '12px' }
-};

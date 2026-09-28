@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import api from '../services/api';
 import Navbar from '../components/Navbar';
+import styles from './Sacramentos.module.css';
 
 export default function Sacramentos() {
     const [busqueda, setBusqueda] = useState('');
@@ -24,9 +25,7 @@ export default function Sacramentos() {
         if (!busqueda.trim()) return;
         setCargando(true);
         try {
-            const { data } = await api.get(
-                `/sacramentos/feligres/buscar?termino=${busqueda}`
-            );
+            const { data } = await api.get(`/sacramentos/feligres/buscar?termino=${busqueda}`);
             setResultados(data.resultados);
         } catch {
             setError('Error en la búsqueda');
@@ -95,47 +94,39 @@ export default function Sacramentos() {
     };
 
     return (
-        <div style={estilos.contenedor}>
+        <div className={styles.contenedor}>
             <Navbar />
-
-            <div style={estilos.contenido}>
-                <div style={estilos.encabezado}>
-                    <h1 style={estilos.titulo}>Registro de Sacramentos</h1>
-                    <div style={estilos.tabs}>
+            <div className={styles.contenido}>
+                <div className={styles.encabezado}>
+                    <h1 className={styles.titulo}>Registro de Sacramentos</h1>
+                    <div className={styles.tabs}>
                         {['buscar', 'nuevo', 'sacramento'].map(t => (
-                            <button key={t} onClick={() => setVista(t)} style={{
-                                ...estilos.tab,
-                                borderBottom: vista === t ? '2px solid #1a365d' : '2px solid transparent',
-                                color: vista === t ? '#1a365d' : '#718096'
-                            }}>
+                            <button key={t}
+                                onClick={() => setVista(t)}
+                                className={`${styles.tab} ${vista === t ? styles.tabActivo : ''}`}>
                                 {t === 'buscar' ? 'Buscar' :
-                                 t === 'nuevo' ? 'Nuevo' : 'Sacramento'}
+                                 t === 'nuevo' ? 'Nuevo Feligrés' : 'Sacramento'}
                             </button>
                         ))}
                     </div>
                 </div>
 
-                {mensaje && (
-                    <div style={estilos.exito} onClick={() => setMensaje('')}>✅ {mensaje}</div>
-                )}
-                {error && (
-                    <div style={estilos.errorDiv} onClick={() => setError('')}>❌ {error}</div>
-                )}
+                {mensaje && <div className={styles.exito} onClick={() => setMensaje('')}>✅ {mensaje}</div>}
+                {error && <div className={styles.errorDiv} onClick={() => setError('')}>❌ {error}</div>}
 
                 {vista === 'buscar' && (
-                    <div style={estilos.panel}>
-                        <h2 style={estilos.panelTitulo}>Búsqueda por nombre</h2>
-                        <div style={estilos.busquedaFila}>
-                            <input
-                                type="text"
-                                value={busqueda}
+                    <div className={styles.panel}>
+                        <h2 className={styles.panelTitulo}>Búsqueda por nombre</h2>
+                        <div className={styles.busquedaFila}>
+                            <input type="text" value={busqueda}
                                 onChange={e => setBusqueda(e.target.value)}
                                 onKeyDown={e => e.key === 'Enter' && buscarFeligres()}
-                                style={{ ...estilos.input, flex: 1 }}
-                                placeholder="Nombre o apellido..."
-                            />
+                                className={styles.input}
+                                style={{ flex: 1 }}
+                                placeholder="Nombre o apellido..." />
                             <button onClick={buscarFeligres}
-                                style={estilos.botonPrimario}
+                                className={styles.botonPrimario}
+                                style={{ width: 'auto', padding: '10px 20px' }}
                                 disabled={cargando}>
                                 {cargando ? '...' : 'Buscar'}
                             </button>
@@ -145,12 +136,12 @@ export default function Sacramentos() {
                                 {resultados.map(f => (
                                     <div key={f.id}
                                         onClick={() => seleccionarFeligres(f)}
-                                        style={estilos.resultadoItem}>
+                                        className={styles.resultadoItem}>
                                         <div>
                                             <strong>{f.nombres} {f.apellidos}</strong>
-                                            <p style={estilos.textoGris}>Estado: {f.estado}</p>
+                                            <p className={styles.textoGris}>Estado: {f.estado}</p>
                                         </div>
-                                        <span style={estilos.verBtn}>Ver →</span>
+                                        <span className={styles.verBtn}>Ver →</span>
                                     </div>
                                 ))}
                             </div>
@@ -160,24 +151,23 @@ export default function Sacramentos() {
 
                 {vista === 'detalle' && feligresSeleccionado && (
                     <div>
-                        <div style={estilos.panel}>
-                            <h2 style={estilos.panelTitulo}>
+                        <div className={styles.panel}>
+                            <h2 className={styles.panelTitulo}>
                                 {feligresSeleccionado.nombres} {feligresSeleccionado.apellidos}
                             </h2>
-                            <p style={estilos.textoGris}>Estado: {feligresSeleccionado.estado}</p>
+                            <p className={styles.textoGris}>Estado: {feligresSeleccionado.estado}</p>
                         </div>
-                        <div style={estilos.panel}>
-                            <h2 style={estilos.panelTitulo}>Sacramentos registrados</h2>
+                        <div className={styles.panel}>
+                            <h2 className={styles.panelTitulo}>Sacramentos registrados</h2>
                             {sacramentos.length === 0 ? (
-                                <p style={estilos.textoGris}>No hay sacramentos registrados</p>
+                                <p className={styles.textoGris}>No hay sacramentos registrados</p>
                             ) : (
                                 sacramentos.map(s => (
-                                    <div key={s.id} style={{
-                                        ...estilos.sacramentoItem,
-                                        backgroundColor: tipoColor[s.tipo]
-                                    }}>
+                                    <div key={s.id}
+                                        className={styles.sacramentoItem}
+                                        style={{ backgroundColor: tipoColor[s.tipo] }}>
                                         <strong style={{ textTransform: 'capitalize' }}>{s.tipo}</strong>
-                                        <p style={estilos.textoGris}>
+                                        <p className={styles.textoGris}>
                                             {new Date(s.fecha).toLocaleDateString('es-GT')}
                                             {s.libro && ` — Libro: ${s.libro}`}
                                             {s.folio && `, Folio: ${s.folio}`}
@@ -190,36 +180,36 @@ export default function Sacramentos() {
                 )}
 
                 {vista === 'nuevo' && (
-                    <div style={estilos.panel}>
-                        <h2 style={estilos.panelTitulo}>Registrar nuevo feligrés</h2>
-                        <form onSubmit={registrarFeligres} style={estilos.formulario}>
-                            <div style={estilos.grid2}>
-                                <div style={estilos.campo}>
-                                    <label style={estilos.etiqueta}>Nombres</label>
+                    <div className={styles.panel}>
+                        <h2 className={styles.panelTitulo}>Registrar nuevo feligrés</h2>
+                        <form onSubmit={registrarFeligres} className={styles.formulario}>
+                            <div className={styles.grid2}>
+                                <div className={styles.campo}>
+                                    <label className={styles.etiqueta}>Nombres</label>
                                     <input type="text" value={formFeligres.nombres}
                                         onChange={e => setFormFeligres({ ...formFeligres, nombres: e.target.value })}
-                                        style={estilos.input} required />
+                                        className={styles.input} required />
                                 </div>
-                                <div style={estilos.campo}>
-                                    <label style={estilos.etiqueta}>Apellidos</label>
+                                <div className={styles.campo}>
+                                    <label className={styles.etiqueta}>Apellidos</label>
                                     <input type="text" value={formFeligres.apellidos}
                                         onChange={e => setFormFeligres({ ...formFeligres, apellidos: e.target.value })}
-                                        style={estilos.input} required />
+                                        className={styles.input} required />
                                 </div>
                             </div>
-                            <div style={estilos.campo}>
-                                <label style={estilos.etiqueta}>Fecha de nacimiento</label>
+                            <div className={styles.campo}>
+                                <label className={styles.etiqueta}>Fecha de nacimiento</label>
                                 <input type="date" value={formFeligres.fecha_nacimiento}
                                     onChange={e => setFormFeligres({ ...formFeligres, fecha_nacimiento: e.target.value })}
-                                    style={estilos.input} />
+                                    className={styles.input} />
                             </div>
-                            <div style={estilos.checkboxFila}>
+                            <div className={styles.checkboxFila}>
                                 <input type="checkbox" checked={formFeligres.es_catecumeno}
                                     onChange={e => setFormFeligres({ ...formFeligres, es_catecumeno: e.target.checked })}
                                     id="catecumeno" />
-                                <label htmlFor="catecumeno" style={estilos.etiqueta}>Es catecúmeno</label>
+                                <label htmlFor="catecumeno" className={styles.etiqueta}>Es catecúmeno</label>
                             </div>
-                            <button type="submit" style={estilos.botonPrimario} disabled={cargando}>
+                            <button type="submit" className={styles.botonPrimario} disabled={cargando}>
                                 {cargando ? 'Registrando...' : 'Registrar Feligrés'}
                             </button>
                         </form>
@@ -227,77 +217,77 @@ export default function Sacramentos() {
                 )}
 
                 {vista === 'sacramento' && (
-                    <div style={estilos.panel}>
-                        <h2 style={estilos.panelTitulo}>Registrar Sacramento</h2>
+                    <div className={styles.panel}>
+                        <h2 className={styles.panelTitulo}>Registrar Sacramento</h2>
                         {!feligresSeleccionado ? (
-                            <p style={estilos.textoGris}>
+                            <p className={styles.textoGris}>
                                 Primero busque y seleccione un feligrés en la pestaña Buscar
                             </p>
                         ) : (
                             <>
-                                <div style={estilos.feligresTag}>
+                                <div className={styles.feligresTag}>
                                     👤 {feligresSeleccionado.nombres} {feligresSeleccionado.apellidos}
                                 </div>
-                                <form onSubmit={registrarSacramento} style={estilos.formulario}>
-                                    <div style={estilos.grid2}>
-                                        <div style={estilos.campo}>
-                                            <label style={estilos.etiqueta}>Tipo</label>
+                                <form onSubmit={registrarSacramento} className={styles.formulario}>
+                                    <div className={styles.grid2}>
+                                        <div className={styles.campo}>
+                                            <label className={styles.etiqueta}>Tipo</label>
                                             <select value={formSacramento.tipo}
                                                 onChange={e => setFormSacramento({ ...formSacramento, tipo: e.target.value })}
-                                                style={estilos.input}>
+                                                className={styles.input}>
                                                 <option value="bautismo">Bautismo</option>
                                                 <option value="confirmacion">Confirmación</option>
                                                 <option value="matrimonio">Matrimonio</option>
                                             </select>
                                         </div>
-                                        <div style={estilos.campo}>
-                                            <label style={estilos.etiqueta}>Fecha</label>
+                                        <div className={styles.campo}>
+                                            <label className={styles.etiqueta}>Fecha</label>
                                             <input type="date" value={formSacramento.fecha}
                                                 onChange={e => setFormSacramento({ ...formSacramento, fecha: e.target.value })}
-                                                style={estilos.input} required />
+                                                className={styles.input} required />
                                         </div>
                                     </div>
-                                    <div style={estilos.grid3}>
-                                        <div style={estilos.campo}>
-                                            <label style={estilos.etiqueta}>Libro</label>
+                                    <div className={styles.grid3}>
+                                        <div className={styles.campo}>
+                                            <label className={styles.etiqueta}>Libro</label>
                                             <input type="text" value={formSacramento.libro}
                                                 onChange={e => setFormSacramento({ ...formSacramento, libro: e.target.value })}
-                                                style={estilos.input} placeholder="Libro 5" />
+                                                className={styles.input} placeholder="Libro 5" />
                                         </div>
-                                        <div style={estilos.campo}>
-                                            <label style={estilos.etiqueta}>Folio</label>
+                                        <div className={styles.campo}>
+                                            <label className={styles.etiqueta}>Folio</label>
                                             <input type="text" value={formSacramento.folio}
                                                 onChange={e => setFormSacramento({ ...formSacramento, folio: e.target.value })}
-                                                style={estilos.input} placeholder="45" />
+                                                className={styles.input} placeholder="45" />
                                         </div>
-                                        <div style={estilos.campo}>
-                                            <label style={estilos.etiqueta}>Partida</label>
+                                        <div className={styles.campo}>
+                                            <label className={styles.etiqueta}>Partida</label>
                                             <input type="text" value={formSacramento.partida}
                                                 onChange={e => setFormSacramento({ ...formSacramento, partida: e.target.value })}
-                                                style={estilos.input} placeholder="120" />
+                                                className={styles.input} placeholder="120" />
                                         </div>
                                     </div>
-                                    <div style={estilos.campo}>
-                                        <label style={estilos.etiqueta}>Ministro</label>
+                                    <div className={styles.campo}>
+                                        <label className={styles.etiqueta}>Ministro</label>
                                         <input type="text" value={formSacramento.ministro}
                                             onChange={e => setFormSacramento({ ...formSacramento, ministro: e.target.value })}
-                                            style={estilos.input} />
+                                            className={styles.input} />
                                     </div>
-                                    <div style={estilos.grid2}>
-                                        <div style={estilos.campo}>
-                                            <label style={estilos.etiqueta}>Padrino 1</label>
+                                    <div className={styles.grid2}>
+                                        <div className={styles.campo}>
+                                            <label className={styles.etiqueta}>Padrino 1</label>
                                             <input type="text" value={formSacramento.padrino_1}
                                                 onChange={e => setFormSacramento({ ...formSacramento, padrino_1: e.target.value })}
-                                                style={estilos.input} />
+                                                className={styles.input} />
                                         </div>
-                                        <div style={estilos.campo}>
-                                            <label style={estilos.etiqueta}>Padrino 2</label>
+                                        <div className={styles.campo}>
+                                            <label className={styles.etiqueta}>Padrino 2</label>
                                             <input type="text" value={formSacramento.padrino_2}
                                                 onChange={e => setFormSacramento({ ...formSacramento, padrino_2: e.target.value })}
-                                                style={estilos.input} />
+                                                className={styles.input} />
                                         </div>
                                     </div>
-                                    <button type="submit" style={estilos.botonPrimario} disabled={cargando}>
+                                    <button type="submit" className={styles.botonPrimario} disabled={cargando}>
                                         {cargando ? 'Registrando...' : 'Registrar Sacramento'}
                                     </button>
                                 </form>
@@ -309,72 +299,3 @@ export default function Sacramentos() {
         </div>
     );
 }
-
-const estilos = {
-    contenedor: { minHeight: '100vh', backgroundColor: '#f0f4f8' },
-    contenido: { padding: '16px', maxWidth: '1200px', margin: '0 auto' },
-    encabezado: { marginBottom: '16px' },
-    titulo: { fontSize: '1.3rem', color: '#1a365d', marginBottom: '12px' },
-    tabs: { display: 'flex', gap: '0', borderBottom: '1px solid #e2e8f0' },
-    tab: {
-        padding: '10px 16px', background: 'none',
-        border: 'none', cursor: 'pointer',
-        fontSize: '0.875rem', fontWeight: '600'
-    },
-    panel: {
-        backgroundColor: '#fff', padding: '20px',
-        borderRadius: '10px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-        marginBottom: '16px'
-    },
-    panelTitulo: { fontSize: '1rem', color: '#2d3748', marginBottom: '16px' },
-    busquedaFila: { display: 'flex', gap: '12px' },
-    formulario: { display: 'flex', flexDirection: 'column', gap: '16px' },
-    campo: { display: 'flex', flexDirection: 'column', gap: '6px' },
-    etiqueta: { fontSize: '0.875rem', fontWeight: '600', color: '#2d3748' },
-    input: {
-        padding: '10px 14px', border: '1px solid #e2e8f0',
-        borderRadius: '8px', fontSize: '1rem',
-        width: '100%', boxSizing: 'border-box'
-    },
-    botonPrimario: {
-        backgroundColor: '#1a365d', color: '#fff',
-        padding: '12px', border: 'none', borderRadius: '8px',
-        fontSize: '1rem', fontWeight: '600', cursor: 'pointer',
-        width: '100%'
-    },
-    exito: {
-        backgroundColor: '#f0fff4', border: '1px solid #68d391',
-        color: '#2f855a', padding: '12px 16px',
-        borderRadius: '8px', marginBottom: '16px', cursor: 'pointer'
-    },
-    errorDiv: {
-        backgroundColor: '#fff5f5', border: '1px solid #fc8181',
-        color: '#c53030', padding: '12px 16px',
-        borderRadius: '8px', marginBottom: '16px', cursor: 'pointer'
-    },
-    textoGris: { color: '#718096', fontSize: '0.875rem', marginBottom: '4px' },
-    resultadoItem: {
-        display: 'flex', justifyContent: 'space-between',
-        alignItems: 'center', padding: '12px 16px',
-        border: '1px solid #e2e8f0', borderRadius: '8px',
-        marginBottom: '8px', cursor: 'pointer'
-    },
-    verBtn: { color: '#1a365d', fontWeight: '600' },
-    sacramentoItem: { padding: '12px 16px', borderRadius: '8px', marginBottom: '8px' },
-    grid2: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-        gap: '12px'
-    },
-    grid3: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
-        gap: '12px'
-    },
-    checkboxFila: { display: 'flex', alignItems: 'center', gap: '8px' },
-    feligresTag: {
-        backgroundColor: '#ebf8ff', color: '#2b6cb0',
-        padding: '8px 16px', borderRadius: '8px',
-        marginBottom: '16px', fontSize: '0.875rem', fontWeight: '600'
-    }
-};

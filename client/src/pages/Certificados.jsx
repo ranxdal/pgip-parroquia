@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import api from '../services/api';
 import Navbar from '../components/Navbar';
+import styles from './Certificados.module.css';
 import jsPDF from 'jspdf';
 
 export default function Certificados() {
@@ -16,9 +17,7 @@ export default function Certificados() {
         if (!busqueda.trim()) return;
         setCargando(true);
         try {
-            const { data } = await api.get(
-                `/sacramentos/feligres/buscar?termino=${busqueda}`
-            );
+            const { data } = await api.get(`/sacramentos/feligres/buscar?termino=${busqueda}`);
             setResultados(data.resultados);
         } catch {
             setError('Error en la búsqueda');
@@ -164,29 +163,29 @@ export default function Certificados() {
     };
 
     return (
-        <div style={estilos.contenedor}>
+        <div className={styles.contenedor}>
             <Navbar />
-
-            <div style={estilos.contenido}>
-                <h1 style={estilos.titulo}>Emisión de Certificados Sacramentales</h1>
+            <div className={styles.contenido}>
+                <h1 className={styles.titulo}>Emisión de Certificados Sacramentales</h1>
 
                 {error && (
-                    <div style={estilos.errorDiv} onClick={() => setError('')}>❌ {error}</div>
+                    <div className={styles.errorDiv} onClick={() => setError('')}>❌ {error}</div>
                 )}
 
-                <div style={estilos.panel}>
-                    <h2 style={estilos.panelTitulo}>Buscar feligrés</h2>
-                    <div style={estilos.busquedaFila}>
+                <div className={styles.panel}>
+                    <h2 className={styles.panelTitulo}>Buscar feligrés</h2>
+                    <div className={styles.busquedaFila}>
                         <input
                             type="text"
                             value={busqueda}
                             onChange={e => setBusqueda(e.target.value)}
                             onKeyDown={e => e.key === 'Enter' && buscarFeligres()}
-                            style={{ ...estilos.input, flex: 1 }}
+                            className={styles.input}
+                            style={{ flex: 1 }}
                             placeholder="Nombre o apellido..."
                         />
                         <button onClick={buscarFeligres}
-                            style={estilos.botonPrimario}
+                            className={styles.botonPrimario}
                             disabled={cargando}>
                             {cargando ? '...' : 'Buscar'}
                         </button>
@@ -197,12 +196,12 @@ export default function Certificados() {
                             {resultados.map(f => (
                                 <div key={f.id}
                                     onClick={() => seleccionarFeligres(f)}
-                                    style={estilos.resultadoItem}>
+                                    className={styles.resultadoItem}>
                                     <div>
                                         <strong>{f.nombres} {f.apellidos}</strong>
-                                        <p style={estilos.textoGris}>Estado: {f.estado}</p>
+                                        <p className={styles.textoGris}>Estado: {f.estado}</p>
                                     </div>
-                                    <span style={estilos.verBtn}>Seleccionar →</span>
+                                    <span className={styles.verBtn}>Seleccionar →</span>
                                 </div>
                             ))}
                         </div>
@@ -210,40 +209,37 @@ export default function Certificados() {
                 </div>
 
                 {feligres && (
-                    <div style={estilos.panel}>
-                        <h2 style={estilos.panelTitulo}>
+                    <div className={styles.panel}>
+                        <h2 className={styles.panelTitulo}>
                             {feligres.nombres} {feligres.apellidos}
                         </h2>
-                        <p style={estilos.textoGris}>
+                        <p className={styles.textoGris}>
                             Seleccione el sacramento para generar el certificado
                         </p>
 
                         {sacramentos.length === 0 ? (
-                            <p style={estilos.textoGris}>No hay sacramentos registrados</p>
+                            <p className={styles.textoGris}>No hay sacramentos registrados</p>
                         ) : (
-                            <div style={estilos.sacramentosGrid}>
+                            <div className={styles.sacramentosGrid}>
                                 {sacramentos.map(s => (
-                                    <div key={s.id} style={{
-                                        ...estilos.sacramentoCard,
-                                        backgroundColor: tipoColor[s.tipo]?.bg,
-                                        border: sacramentoSeleccionado?.id === s.id
-                                            ? `2px solid ${tipoColor[s.tipo]?.color}`
-                                            : '2px solid transparent'
-                                    }}
+                                    <div key={s.id}
+                                        className={styles.sacramentoCard}
+                                        style={{
+                                            backgroundColor: tipoColor[s.tipo]?.bg,
+                                            border: sacramentoSeleccionado?.id === s.id
+                                                ? `2px solid ${tipoColor[s.tipo]?.color}`
+                                                : '2px solid transparent'
+                                        }}
                                         onClick={() => setSacramentoSeleccionado(s)}>
-                                        <p style={{
-                                            fontWeight: 'bold',
-                                            color: tipoColor[s.tipo]?.color,
-                                            textTransform: 'capitalize',
-                                            marginBottom: '4px'
-                                        }}>
+                                        <p className={styles.sacramentoTipo}
+                                            style={{ color: tipoColor[s.tipo]?.color }}>
                                             {s.tipo}
                                         </p>
-                                        <p style={estilos.textoGris}>
+                                        <p className={styles.textoGris}>
                                             {new Date(s.fecha).toLocaleDateString('es-GT')}
                                         </p>
                                         {s.libro && (
-                                            <p style={estilos.textoGris}>
+                                            <p className={styles.textoGris}>
                                                 {s.libro} — Folio {s.folio}
                                             </p>
                                         )}
@@ -255,7 +251,7 @@ export default function Certificados() {
                         {sacramentoSeleccionado && (
                             <button
                                 onClick={() => generarCertificado(sacramentoSeleccionado)}
-                                style={{ ...estilos.botonVerde, marginTop: '16px' }}>
+                                className={styles.botonVerde}>
                                 🖨️ Generar Certificado de {sacramentoSeleccionado.tipo}
                             </button>
                         )}
@@ -265,21 +261,3 @@ export default function Certificados() {
         </div>
     );
 }
-
-const estilos = {
-    contenedor: { minHeight: '100vh', backgroundColor: '#f0f4f8' },
-    contenido: { padding: '16px', maxWidth: '1200px', margin: '0 auto' },
-    titulo: { fontSize: '1.3rem', color: '#1a365d', marginBottom: '16px' },
-    panel: { backgroundColor: '#fff', padding: '20px', borderRadius: '10px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', marginBottom: '16px' },
-    panelTitulo: { fontSize: '1rem', color: '#2d3748', marginBottom: '16px' },
-    busquedaFila: { display: 'flex', gap: '12px' },
-    input: { padding: '10px 14px', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '1rem', boxSizing: 'border-box' },
-    botonPrimario: { backgroundColor: '#1a365d', color: '#fff', padding: '10px 20px', border: 'none', borderRadius: '8px', fontSize: '1rem', fontWeight: '600', cursor: 'pointer' },
-    botonVerde: { backgroundColor: '#2f855a', color: '#fff', padding: '12px 24px', border: 'none', borderRadius: '8px', fontSize: '1rem', fontWeight: '600', cursor: 'pointer', width: '100%' },
-    errorDiv: { backgroundColor: '#fff5f5', border: '1px solid #fc8181', color: '#c53030', padding: '12px 16px', borderRadius: '8px', marginBottom: '16px', cursor: 'pointer' },
-    textoGris: { color: '#718096', fontSize: '0.875rem', margin: '2px 0' },
-    resultadoItem: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', border: '1px solid #e2e8f0', borderRadius: '8px', marginBottom: '8px', cursor: 'pointer' },
-    verBtn: { color: '#1a365d', fontWeight: '600' },
-    sacramentosGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: '12px', marginTop: '16px' },
-    sacramentoCard: { padding: '16px', borderRadius: '8px', cursor: 'pointer', transition: 'border 0.2s' }
-};
