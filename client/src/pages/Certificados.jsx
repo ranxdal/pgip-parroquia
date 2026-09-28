@@ -1,12 +1,9 @@
 import { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
+import Navbar from '../components/Navbar';
 import jsPDF from 'jspdf';
 
 export default function Certificados() {
-    const { usuario, logout } = useAuth();
-    const navigate = useNavigate();
     const [busqueda, setBusqueda] = useState('');
     const [resultados, setResultados] = useState([]);
     const [feligres, setFeligres] = useState(null);
@@ -45,8 +42,7 @@ export default function Certificados() {
     const generarCertificado = (sacramento) => {
         const doc = new jsPDF();
         const fechaEmision = new Date().toLocaleDateString('es-GT');
-        const fechaSacramento = new Date(sacramento.fecha)
-            .toLocaleDateString('es-GT');
+        const fechaSacramento = new Date(sacramento.fecha).toLocaleDateString('es-GT');
 
         const tipoTitulo = {
             bautismo: 'CONSTANCIA DE BAUTISMO',
@@ -54,31 +50,22 @@ export default function Certificados() {
             matrimonio: 'CONSTANCIA DE MATRIMONIO'
         };
 
-        // Encabezado
         doc.setFontSize(14);
         doc.setFont('helvetica', 'bold');
         doc.text('PARROQUIA SAN AGUSTÍN DE SUMPANGO', 105, 20, { align: 'center' });
         doc.setFontSize(11);
         doc.setFont('helvetica', 'normal');
         doc.text('Sumpango, Sacatepéquez, Guatemala', 105, 28, { align: 'center' });
-
-        // Línea separadora
         doc.setLineWidth(0.5);
         doc.line(20, 33, 190, 33);
 
-        // Título del certificado
         doc.setFontSize(16);
         doc.setFont('helvetica', 'bold');
-        doc.text(tipoTitulo[sacramento.tipo] || 'CONSTANCIA SACRAMENTAL',
-            105, 45, { align: 'center' });
-
-        // Línea separadora
+        doc.text(tipoTitulo[sacramento.tipo] || 'CONSTANCIA SACRAMENTAL', 105, 45, { align: 'center' });
         doc.line(20, 50, 190, 50);
 
-        // Cuerpo del certificado
         doc.setFontSize(11);
         doc.setFont('helvetica', 'normal');
-
         let y = 65;
         const lineHeight = 10;
 
@@ -87,7 +74,6 @@ export default function Certificados() {
         doc.text('Sacatepéquez, certifica que en los libros parroquiales consta:', 20, y);
         y += lineHeight * 1.5;
 
-        // Datos del feligrés
         doc.setFont('helvetica', 'bold');
         doc.text('NOMBRE:', 20, y);
         doc.setFont('helvetica', 'normal');
@@ -98,10 +84,7 @@ export default function Certificados() {
             doc.setFont('helvetica', 'bold');
             doc.text('FECHA DE NACIMIENTO:', 20, y);
             doc.setFont('helvetica', 'normal');
-            doc.text(
-                new Date(feligres.fecha_nacimiento).toLocaleDateString('es-GT'),
-                80, y
-            );
+            doc.text(new Date(feligres.fecha_nacimiento).toLocaleDateString('es-GT'), 80, y);
             y += lineHeight;
         }
 
@@ -136,8 +119,6 @@ export default function Certificados() {
         }
 
         y += lineHeight * 0.5;
-
-        // Referencia del libro
         if (sacramento.libro || sacramento.folio) {
             doc.setFontSize(10);
             doc.setTextColor(100);
@@ -149,24 +130,18 @@ export default function Certificados() {
             y += lineHeight * 1.5;
         }
 
-        // Texto legal
         doc.setFontSize(10);
         doc.setFont('helvetica', 'italic');
-        doc.text(
-            'La presente constancia se expide a solicitud del interesado para los',
-            20, y
-        );
+        doc.text('La presente constancia se expide a solicitud del interesado para los', 20, y);
         y += 7;
         doc.text('fines que estime conveniente.', 20, y);
         y += lineHeight * 2;
 
-        // Fecha de emisión y firma
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(11);
         doc.text(`Sumpango, Sacatepéquez, ${fechaEmision}`, 20, y);
         y += lineHeight * 3;
 
-        // Línea de firma
         doc.line(60, y, 150, y);
         y += 6;
         doc.setFont('helvetica', 'bold');
@@ -175,20 +150,12 @@ export default function Certificados() {
         doc.setFont('helvetica', 'normal');
         doc.text('Parroquia San Agustín de Sumpango', 105, y, { align: 'center' });
 
-        // Pie de página
         doc.setFontSize(8);
         doc.setTextColor(150);
-        doc.text(
-            `Generado por PGIP — Sistema de Gestión Parroquial | ${fechaEmision}`,
-            105, 280, { align: 'center' }
-        );
+        doc.text(`Generado por PGIP — Sistema de Gestión Parroquial | ${fechaEmision}`, 105, 280, { align: 'center' });
 
-        // Guardar el PDF
-        const nombreArchivo = `certificado_${sacramento.tipo}_${feligres.apellidos.replace(/\s/g, '_')}.pdf`;
-        doc.save(nombreArchivo);
+        doc.save(`certificado_${sacramento.tipo}_${feligres.apellidos.replace(/\s/g, '_')}.pdf`);
     };
-
-    const handleLogout = () => { logout(); navigate('/login'); };
 
     const tipoColor = {
         bautismo: { bg: '#ebf8ff', color: '#2b6cb0' },
@@ -198,40 +165,15 @@ export default function Certificados() {
 
     return (
         <div style={estilos.contenedor}>
-            <nav style={estilos.navbar}>
-                <div style={estilos.navLogo}>
-                    <strong>PGIP</strong>
-                    <span style={estilos.navSub}>Parroquia San Agustín</span>
-                </div>
-                <div style={estilos.navLinks}>
-                    {usuario?.rol === 'admin' && (
-                        <button onClick={() => navigate('/dashboard')}
-                            style={estilos.navBtn}>Dashboard</button>
-                    )}
-                    <button onClick={() => navigate('/tesoreria')}
-                        style={estilos.navBtn}>Tesorería</button>
-                    <button onClick={() => navigate('/sacramentos')}
-                        style={estilos.navBtn}>Sacramentos</button>
-                    <button onClick={() => navigate('/archivo')}
-                        style={estilos.navBtn}>Archivo</button>
-                    <span style={estilos.navUsuario}>
-                        {usuario?.nombre} ({usuario?.rol})
-                    </span>
-                    <button onClick={handleLogout}
-                        style={estilos.navBtnRojo}>Cerrar Sesión</button>
-                </div>
-            </nav>
+            <Navbar />
 
             <div style={estilos.contenido}>
                 <h1 style={estilos.titulo}>Emisión de Certificados Sacramentales</h1>
 
                 {error && (
-                    <div style={estilos.errorDiv} onClick={() => setError('')}>
-                        ❌ {error}
-                    </div>
+                    <div style={estilos.errorDiv} onClick={() => setError('')}>❌ {error}</div>
                 )}
 
-                {/* Búsqueda */}
                 <div style={estilos.panel}>
                     <h2 style={estilos.panelTitulo}>Buscar feligrés</h2>
                     <div style={estilos.busquedaFila}>
@@ -241,12 +183,12 @@ export default function Certificados() {
                             onChange={e => setBusqueda(e.target.value)}
                             onKeyDown={e => e.key === 'Enter' && buscarFeligres()}
                             style={{ ...estilos.input, flex: 1 }}
-                            placeholder="Escriba el nombre o apellido..."
+                            placeholder="Nombre o apellido..."
                         />
                         <button onClick={buscarFeligres}
                             style={estilos.botonPrimario}
                             disabled={cargando}>
-                            {cargando ? 'Buscando...' : 'Buscar'}
+                            {cargando ? '...' : 'Buscar'}
                         </button>
                     </div>
 
@@ -258,20 +200,15 @@ export default function Certificados() {
                                     style={estilos.resultadoItem}>
                                     <div>
                                         <strong>{f.nombres} {f.apellidos}</strong>
-                                        <p style={estilos.textoGris}>
-                                            Estado: {f.estado}
-                                        </p>
+                                        <p style={estilos.textoGris}>Estado: {f.estado}</p>
                                     </div>
-                                    <span style={estilos.verBtn}>
-                                        Seleccionar →
-                                    </span>
+                                    <span style={estilos.verBtn}>Seleccionar →</span>
                                 </div>
                             ))}
                         </div>
                     )}
                 </div>
 
-                {/* Sacramentos del feligrés */}
                 {feligres && (
                     <div style={estilos.panel}>
                         <h2 style={estilos.panelTitulo}>
@@ -282,9 +219,7 @@ export default function Certificados() {
                         </p>
 
                         {sacramentos.length === 0 ? (
-                            <p style={estilos.textoGris}>
-                                No hay sacramentos registrados para este feligrés
-                            </p>
+                            <p style={estilos.textoGris}>No hay sacramentos registrados</p>
                         ) : (
                             <div style={estilos.sacramentosGrid}>
                                 {sacramentos.map(s => (
@@ -305,8 +240,7 @@ export default function Certificados() {
                                             {s.tipo}
                                         </p>
                                         <p style={estilos.textoGris}>
-                                            {new Date(s.fecha)
-                                                .toLocaleDateString('es-GT')}
+                                            {new Date(s.fecha).toLocaleDateString('es-GT')}
                                         </p>
                                         {s.libro && (
                                             <p style={estilos.textoGris}>
@@ -321,12 +255,8 @@ export default function Certificados() {
                         {sacramentoSeleccionado && (
                             <button
                                 onClick={() => generarCertificado(sacramentoSeleccionado)}
-                                style={{
-                                    ...estilos.botonPrimario,
-                                    backgroundColor: '#2f855a',
-                                    marginTop: '16px'
-                                }}>
-                                🖨️ Generar e Imprimir Certificado de {sacramentoSeleccionado.tipo}
+                                style={{ ...estilos.botonVerde, marginTop: '16px' }}>
+                                🖨️ Generar Certificado de {sacramentoSeleccionado.tipo}
                             </button>
                         )}
                     </div>
@@ -338,65 +268,18 @@ export default function Certificados() {
 
 const estilos = {
     contenedor: { minHeight: '100vh', backgroundColor: '#f0f4f8' },
-    navbar: {
-        backgroundColor: '#1a365d', color: '#fff',
-        padding: '0 24px', height: '60px',
-        display: 'flex', alignItems: 'center',
-        justifyContent: 'space-between'
-    },
-    navLogo: { display: 'flex', flexDirection: 'column' },
-    navSub: { fontSize: '0.7rem', color: '#a0aec0' },
-    navLinks: { display: 'flex', alignItems: 'center', gap: '12px' },
-    navBtn: {
-        backgroundColor: 'transparent', color: '#fff',
-        border: '1px solid #4a6fa5', padding: '6px 12px',
-        borderRadius: '6px', fontSize: '0.875rem'
-    },
-    navBtnRojo: {
-        backgroundColor: '#c53030', color: '#fff',
-        border: 'none', padding: '6px 12px',
-        borderRadius: '6px', fontSize: '0.875rem'
-    },
-    navUsuario: { fontSize: '0.875rem', color: '#a0aec0' },
-    contenido: { padding: '24px', maxWidth: '1200px', margin: '0 auto' },
-    titulo: { fontSize: '1.5rem', color: '#1a365d', marginBottom: '24px' },
-    panel: {
-        backgroundColor: '#fff', padding: '24px',
-        borderRadius: '10px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-        marginBottom: '16px'
-    },
+    contenido: { padding: '16px', maxWidth: '1200px', margin: '0 auto' },
+    titulo: { fontSize: '1.3rem', color: '#1a365d', marginBottom: '16px' },
+    panel: { backgroundColor: '#fff', padding: '20px', borderRadius: '10px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', marginBottom: '16px' },
     panelTitulo: { fontSize: '1rem', color: '#2d3748', marginBottom: '16px' },
     busquedaFila: { display: 'flex', gap: '12px' },
-    input: {
-        padding: '10px 14px', border: '1px solid #e2e8f0',
-        borderRadius: '8px', fontSize: '1rem'
-    },
-    botonPrimario: {
-        backgroundColor: '#1a365d', color: '#fff',
-        padding: '12px 24px', border: 'none',
-        borderRadius: '8px', fontSize: '1rem',
-        fontWeight: '600', cursor: 'pointer'
-    },
-    errorDiv: {
-        backgroundColor: '#fff5f5', border: '1px solid #fc8181',
-        color: '#c53030', padding: '12px 16px',
-        borderRadius: '8px', marginBottom: '16px', cursor: 'pointer'
-    },
+    input: { padding: '10px 14px', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '1rem', boxSizing: 'border-box' },
+    botonPrimario: { backgroundColor: '#1a365d', color: '#fff', padding: '10px 20px', border: 'none', borderRadius: '8px', fontSize: '1rem', fontWeight: '600', cursor: 'pointer' },
+    botonVerde: { backgroundColor: '#2f855a', color: '#fff', padding: '12px 24px', border: 'none', borderRadius: '8px', fontSize: '1rem', fontWeight: '600', cursor: 'pointer', width: '100%' },
+    errorDiv: { backgroundColor: '#fff5f5', border: '1px solid #fc8181', color: '#c53030', padding: '12px 16px', borderRadius: '8px', marginBottom: '16px', cursor: 'pointer' },
     textoGris: { color: '#718096', fontSize: '0.875rem', margin: '2px 0' },
-    resultadoItem: {
-        display: 'flex', justifyContent: 'space-between',
-        alignItems: 'center', padding: '12px 16px',
-        border: '1px solid #e2e8f0', borderRadius: '8px',
-        marginBottom: '8px', cursor: 'pointer'
-    },
+    resultadoItem: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', border: '1px solid #e2e8f0', borderRadius: '8px', marginBottom: '8px', cursor: 'pointer' },
     verBtn: { color: '#1a365d', fontWeight: '600' },
-    sacramentosGrid: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-        gap: '12px', marginTop: '16px'
-    },
-    sacramentoCard: {
-        padding: '16px', borderRadius: '8px',
-        cursor: 'pointer', transition: 'border 0.2s'
-    }
+    sacramentosGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: '12px', marginTop: '16px' },
+    sacramentoCard: { padding: '16px', borderRadius: '8px', cursor: 'pointer', transition: 'border 0.2s' }
 };

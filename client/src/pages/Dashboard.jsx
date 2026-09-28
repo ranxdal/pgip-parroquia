@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
+import Navbar from '../components/Navbar';
 import {
     LineChart, Line, BarChart, Bar,
     XAxis, YAxis, CartesianGrid,
@@ -9,7 +9,6 @@ import {
 } from 'recharts';
 
 export default function Dashboard() {
-    const { usuario, logout } = useAuth();
     const navigate = useNavigate();
     const [periodo, setPeriodo] = useState('mes');
     const [datos, setDatos] = useState(null);
@@ -42,11 +41,6 @@ export default function Dashboard() {
         }
     };
 
-    const handleLogout = () => {
-        logout();
-        navigate('/login');
-    };
-
     const coloresAlerta = {
         urgente: '#fc8181',
         advertencia: '#f6ad55',
@@ -55,29 +49,9 @@ export default function Dashboard() {
 
     return (
         <div style={estilos.contenedor}>
-            {/* Barra de navegación */}
-            <nav style={estilos.navbar}>
-                <div style={estilos.navLogo}>
-                    <strong>PGIP</strong>
-                    <span style={estilos.navSub}>Parroquia San Agustín</span>
-                </div>
-                <div style={estilos.navLinks}>
-                    <button onClick={() => navigate('/tesoreria')}
-                        style={estilos.navBtn}>Tesorería</button>
-                    <button onClick={() => navigate('/sacramentos')}
-                        style={estilos.navBtn}>Sacramentos</button>
-                    <button onClick={() => navigate('/archivo')}
-                        style={estilos.navBtn}>Archivo</button>
-                    <span style={estilos.navUsuario}>
-                        {usuario?.nombre} ({usuario?.rol})
-                    </span>
-                    <button onClick={handleLogout}
-                        style={estilos.navBtnRojo}>Cerrar Sesión</button>
-                </div>
-            </nav>
+            <Navbar />
 
             <div style={estilos.contenido}>
-                {/* Encabezado */}
                 <div style={estilos.encabezado}>
                     <h1 style={estilos.titulo}>Dashboard Ejecutivo</h1>
                     <div style={estilos.filtros}>
@@ -99,7 +73,6 @@ export default function Dashboard() {
                     </div>
                 </div>
 
-                {/* Alertas */}
                 {alertas.length > 0 && (
                     <div style={estilos.alertasContenedor}>
                         {alertas.map((alerta, i) => (
@@ -117,7 +90,6 @@ export default function Dashboard() {
                     <div style={estilos.cargando}>Cargando indicadores...</div>
                 ) : datos && (
                     <>
-                        {/* Tarjetas KPI */}
                         <div style={estilos.kpiGrid}>
                             <div style={estilos.kpiTarjeta}>
                                 <p style={estilos.kpiEtiqueta}>Ingresos del período</p>
@@ -128,7 +100,6 @@ export default function Dashboard() {
                                     {datos.kpis.ingresos.cantidad_transacciones} transacciones
                                 </p>
                             </div>
-
                             <div style={estilos.kpiTarjeta}>
                                 <p style={estilos.kpiEtiqueta}>Promedio diario</p>
                                 <p style={estilos.kpiValor}>
@@ -136,7 +107,6 @@ export default function Dashboard() {
                                 </p>
                                 <p style={estilos.kpiSub}>por día</p>
                             </div>
-
                             <div style={estilos.kpiTarjeta}>
                                 <p style={estilos.kpiEtiqueta}>Proyección próximo mes</p>
                                 <p style={{ ...estilos.kpiValor, color: '#2f855a' }}>
@@ -146,7 +116,6 @@ export default function Dashboard() {
                                     {datos.proyeccion.meses_analizados} meses analizados
                                 </p>
                             </div>
-
                             <div style={estilos.kpiTarjeta}>
                                 <p style={estilos.kpiEtiqueta}>Catecúmenos activos</p>
                                 <p style={estilos.kpiValor}>
@@ -156,7 +125,6 @@ export default function Dashboard() {
                             </div>
                         </div>
 
-                        {/* Gráfica de tendencias */}
                         <div style={estilos.graficaContenedor}>
                             <h2 style={estilos.graficaTitulo}>
                                 Tendencia de Ingresos — Últimos 6 meses
@@ -166,9 +134,7 @@ export default function Dashboard() {
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis dataKey="mes" />
                                     <YAxis />
-                                    <Tooltip
-                                        formatter={(value) => [`Q${value}`, 'Ingresos']}
-                                    />
+                                    <Tooltip formatter={(value) => [`Q${value}`, 'Ingresos']} />
                                     <Legend />
                                     <Line
                                         type="monotone"
@@ -181,23 +147,16 @@ export default function Dashboard() {
                             </ResponsiveContainer>
                         </div>
 
-                        {/* Gráfica de sacramentos */}
                         {datos.kpis.sacramentos.length > 0 && (
                             <div style={estilos.graficaContenedor}>
-                                <h2 style={estilos.graficaTitulo}>
-                                    Sacramentos por Tipo
-                                </h2>
+                                <h2 style={estilos.graficaTitulo}>Sacramentos por Tipo</h2>
                                 <ResponsiveContainer width="100%" height={250}>
                                     <BarChart data={datos.kpis.sacramentos}>
                                         <CartesianGrid strokeDasharray="3 3" />
                                         <XAxis dataKey="tipo" />
                                         <YAxis />
                                         <Tooltip />
-                                        <Bar
-                                            dataKey="cantidad"
-                                            fill="#2b6cb0"
-                                            name="Cantidad"
-                                        />
+                                        <Bar dataKey="cantidad" fill="#2b6cb0" name="Cantidad" />
                                     </BarChart>
                                 </ResponsiveContainer>
                             </div>
@@ -211,82 +170,44 @@ export default function Dashboard() {
 
 const estilos = {
     contenedor: { minHeight: '100vh', backgroundColor: '#f0f4f8' },
-    navbar: {
-        backgroundColor: '#1a365d',
-        color: '#fff',
-        padding: '0 24px',
-        height: '60px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between'
-    },
-    navLogo: { display: 'flex', flexDirection: 'column' },
-    navSub: { fontSize: '0.7rem', color: '#a0aec0' },
-    navLinks: { display: 'flex', alignItems: 'center', gap: '12px' },
-    navBtn: {
-        backgroundColor: 'transparent',
-        color: '#fff',
-        border: '1px solid #4a6fa5',
-        padding: '6px 12px',
-        borderRadius: '6px',
-        fontSize: '0.875rem'
-    },
-    navBtnRojo: {
-        backgroundColor: '#c53030',
-        color: '#fff',
-        border: 'none',
-        padding: '6px 12px',
-        borderRadius: '6px',
-        fontSize: '0.875rem'
-    },
-    navUsuario: { fontSize: '0.875rem', color: '#a0aec0' },
-    contenido: { padding: '24px', maxWidth: '1200px', margin: '0 auto' },
+    contenido: { padding: '16px', maxWidth: '1200px', margin: '0 auto' },
     encabezado: {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: '24px'
+        marginBottom: '16px',
+        flexWrap: 'wrap',
+        gap: '12px'
     },
-    titulo: { fontSize: '1.5rem', color: '#1a365d' },
-    filtros: { display: 'flex', gap: '8px' },
+    titulo: { fontSize: '1.3rem', color: '#1a365d' },
+    filtros: { display: 'flex', gap: '6px', flexWrap: 'wrap' },
     filtroBton: {
-        padding: '6px 16px',
-        border: 'none',
-        borderRadius: '20px',
-        fontSize: '0.875rem',
-        cursor: 'pointer'
+        padding: '6px 12px', border: 'none',
+        borderRadius: '20px', fontSize: '0.8rem', cursor: 'pointer'
     },
-    alertasContenedor: { marginBottom: '24px', display: 'flex', flexDirection: 'column', gap: '8px' },
+    alertasContenedor: { marginBottom: '16px', display: 'flex', flexDirection: 'column', gap: '8px' },
     alerta: {
-        backgroundColor: '#fff',
-        borderLeft: '4px solid',
-        padding: '12px 16px',
-        borderRadius: '6px',
-        fontSize: '0.875rem',
-        boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+        backgroundColor: '#fff', borderLeft: '4px solid',
+        padding: '10px 14px', borderRadius: '6px',
+        fontSize: '0.85rem', boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
     },
     cargando: { textAlign: 'center', padding: '40px', color: '#718096' },
     kpiGrid: {
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-        gap: '16px',
-        marginBottom: '24px'
+        gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+        gap: '12px', marginBottom: '16px'
     },
     kpiTarjeta: {
-        backgroundColor: '#fff',
-        padding: '20px',
-        borderRadius: '10px',
-        boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+        backgroundColor: '#fff', padding: '16px',
+        borderRadius: '10px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
     },
-    kpiEtiqueta: { fontSize: '0.8rem', color: '#718096', marginBottom: '8px' },
-    kpiValor: { fontSize: '1.8rem', fontWeight: 'bold', color: '#1a365d' },
-    kpiSub: { fontSize: '0.75rem', color: '#a0aec0', marginTop: '4px' },
+    kpiEtiqueta: { fontSize: '0.75rem', color: '#718096', marginBottom: '6px' },
+    kpiValor: { fontSize: '1.5rem', fontWeight: 'bold', color: '#1a365d' },
+    kpiSub: { fontSize: '0.7rem', color: '#a0aec0', marginTop: '4px' },
     graficaContenedor: {
-        backgroundColor: '#fff',
-        padding: '20px',
-        borderRadius: '10px',
-        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-        marginBottom: '24px'
+        backgroundColor: '#fff', padding: '16px',
+        borderRadius: '10px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+        marginBottom: '16px', overflowX: 'auto'
     },
-    graficaTitulo: { fontSize: '1rem', color: '#2d3748', marginBottom: '16px' }
+    graficaTitulo: { fontSize: '0.95rem', color: '#2d3748', marginBottom: '12px' }
 };

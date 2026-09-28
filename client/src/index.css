@@ -19,3 +19,38 @@ input:focus {
     outline: 2px solid #1a365d;
     outline-offset: 1px;
 }
+
+/* Responsivo móvil */
+@media (max-width: 768px) {
+    nav [style*="navLinksDesktop"] {
+        display: none !important;
+    }
+
+    nav [style*="hamburguesa"] {
+        display: block !important;
+    }
+
+    /* Grids de dos columnas pasan a una en móvil */
+    div[style*="gridTemplateColumns: 1fr 1fr"] {
+        grid-template-columns: 1fr !important;
+    }
+
+    div[style*="gridTemplateColumns: 1fr 1fr 1fr"] {
+        grid-template-columns: 1fr 1fr !important;
+    }
+
+    /* KPI cards en móvil */
+    div[style*="repeat(auto-fit, minmax(200px"] {
+        grid-template-columns: 1fr 1fr !important;
+    }
+}
+
+@media (max-width: 480px) {
+    div[style*="repeat(auto-fit, minmax(200px"] {
+        grid-template-columns: 1fr !important;
+    }
+
+    div[style*="gridTemplateColumns: 1fr 1fr 1fr"] {
+        grid-template-columns: 1fr !important;
+    }
+}
