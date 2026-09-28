@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
@@ -6,6 +6,16 @@ export default function Navbar() {
     const { usuario, logout } = useAuth();
     const navigate = useNavigate();
     const [menuAbierto, setMenuAbierto] = useState(false);
+    const [esMovil, setEsMovil] = useState(window.innerWidth <= 768);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setEsMovil(window.innerWidth <= 768);
+            if (window.innerWidth > 768) setMenuAbierto(false);
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const handleLogout = () => {
         logout();
@@ -20,44 +30,45 @@ export default function Navbar() {
     return (
         <nav style={estilos.navbar}>
             <div style={estilos.navContenido}>
-                {/* Logo */}
                 <div style={estilos.navLogo}>
-                    <strong>PGIP</strong>
+                    <strong style={{ fontSize: '1.1rem' }}>PGIP</strong>
                     <span style={estilos.navSub}>Parroquia San Agustín</span>
                 </div>
 
                 {/* Menú desktop */}
-                <div style={estilos.navLinksDesktop}>
-                    {usuario?.rol === 'admin' && (
-                        <button onClick={() => navegar('/dashboard')}
-                            style={estilos.navBtn}>Dashboard</button>
-                    )}
-                    <button onClick={() => navegar('/tesoreria')}
-                        style={estilos.navBtn}>Tesorería</button>
-                    <button onClick={() => navegar('/sacramentos')}
-                        style={estilos.navBtn}>Sacramentos</button>
-                    <button onClick={() => navegar('/archivo')}
-                        style={estilos.navBtn}>Archivo</button>
-                    <button onClick={() => navegar('/certificados')}
-                        style={estilos.navBtn}>Certificados</button>
-                    <span style={estilos.navUsuario}>
-                        {usuario?.nombre}
-                    </span>
-                    <button onClick={handleLogout}
-                        style={estilos.navBtnRojo}>Salir</button>
-                </div>
+                {!esMovil && (
+                    <div style={estilos.navLinksDesktop}>
+                        {usuario?.rol === 'admin' && (
+                            <button onClick={() => navegar('/dashboard')}
+                                style={estilos.navBtn}>Dashboard</button>
+                        )}
+                        <button onClick={() => navegar('/tesoreria')}
+                            style={estilos.navBtn}>Tesorería</button>
+                        <button onClick={() => navegar('/sacramentos')}
+                            style={estilos.navBtn}>Sacramentos</button>
+                        <button onClick={() => navegar('/archivo')}
+                            style={estilos.navBtn}>Archivo</button>
+                        <button onClick={() => navegar('/certificados')}
+                            style={estilos.navBtn}>Certificados</button>
+                        <span style={estilos.navUsuario}>{usuario?.nombre}</span>
+                        <button onClick={handleLogout}
+                            style={estilos.navBtnRojo}>Salir</button>
+                    </div>
+                )}
 
                 {/* Botón hamburguesa para móvil */}
-                <button
-                    style={estilos.hamburguesa}
-                    onClick={() => setMenuAbierto(!menuAbierto)}
-                >
-                    {menuAbierto ? '✕' : '☰'}
-                </button>
+                {esMovil && (
+                    <button
+                        style={estilos.hamburguesa}
+                        onClick={() => setMenuAbierto(!menuAbierto)}
+                    >
+                        {menuAbierto ? '✕' : '☰'}
+                    </button>
+                )}
             </div>
 
             {/* Menú móvil desplegable */}
-            {menuAbierto && (
+            {esMovil && menuAbierto && (
                 <div style={estilos.menuMovil}>
                     <div style={estilos.menuUsuario}>
                         👤 {usuario?.nombre} ({usuario?.rol})
@@ -108,27 +119,19 @@ const estilos = {
         height: '56px',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between',
-        maxWidth: '1200px',
-        margin: '0 auto',
-        width: '100%'
+        justifyContent: 'space-between'
     },
     navLogo: {
         display: 'flex',
         flexDirection: 'column',
         lineHeight: 1.2
     },
-    navSub: {
-        fontSize: '0.65rem',
-        color: '#a0aec0'
-    },
+    navSub: { fontSize: '0.65rem', color: '#a0aec0' },
     navLinksDesktop: {
         display: 'flex',
         alignItems: 'center',
         gap: '8px',
-        '@media (max-width: 768px)': {
-            display: 'none'
-        }
+        flexWrap: 'wrap'
     },
     navBtn: {
         backgroundColor: 'transparent',
@@ -150,17 +153,16 @@ const estilos = {
     },
     navUsuario: {
         fontSize: '0.8rem',
-        color: '#a0aec0',
-        marginRight: '4px'
+        color: '#a0aec0'
     },
     hamburguesa: {
-        display: 'none',
         backgroundColor: 'transparent',
         color: '#fff',
-        border: 'none',
-        fontSize: '1.5rem',
+        border: '1px solid #4a6fa5',
+        fontSize: '1.3rem',
         cursor: 'pointer',
-        padding: '4px 8px'
+        padding: '4px 10px',
+        borderRadius: '6px'
     },
     menuMovil: {
         backgroundColor: '#1a365d',
@@ -180,9 +182,9 @@ const estilos = {
         backgroundColor: 'transparent',
         color: '#fff',
         border: 'none',
-        padding: '12px 16px',
+        padding: '14px 16px',
         textAlign: 'left',
-        fontSize: '0.95rem',
+        fontSize: '1rem',
         cursor: 'pointer',
         width: '100%'
     },
@@ -190,9 +192,9 @@ const estilos = {
         backgroundColor: 'transparent',
         color: '#fc8181',
         border: 'none',
-        padding: '12px 16px',
+        padding: '14px 16px',
         textAlign: 'left',
-        fontSize: '0.95rem',
+        fontSize: '1rem',
         cursor: 'pointer',
         width: '100%',
         borderTop: '1px solid #2d4a7a',
