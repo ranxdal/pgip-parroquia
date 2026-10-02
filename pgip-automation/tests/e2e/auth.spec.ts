@@ -8,8 +8,8 @@ test.describe('Módulo 1: Autenticación y Control de Acceso (PGIP)', () => {
 
   test('TC-AUTO-001A: Inicio de sesión exitoso como Administrador', async ({ page }) => {
     // Ingresar credenciales
-    await page.getByLabel('Correo Electrónico').fill('admin@parroquia.org');
-    await page.getByLabel('Contraseña').fill('PGIP2026*Secure');
+    await page.getByLabel('Ingrese su usuario').fill('parroco');
+    await page.getByLabel('Ingrese su contraseña').fill('Admin2026*');
     await page.getByRole('button', { name: /Iniciar Sesión|Ingresar/i }).click();
 
     // Verificaciones
@@ -22,8 +22,8 @@ test.describe('Módulo 1: Autenticación y Control de Acceso (PGIP)', () => {
   });
 
   test('TC-AUTO-001B: Denegar acceso con credenciales incorrectas', async ({ page }) => {
-    await page.getByLabel('Correo Electrónico').fill('admin@parroquia.org');
-    await page.getByLabel('Contraseña').fill('ClaveErronea123');
+    await page.getByLabel('Ingrese su usuario').fill('admin@parroquia.org');
+    await page.getByLabel('Ingrese su contraseña').fill('ClaveErronea123');
     await page.getByRole('button', { name: /Iniciar Sesión|Ingresar/i }).click();
 
     // Verificar mensaje de error de alerta

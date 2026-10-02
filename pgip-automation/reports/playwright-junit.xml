@@ -1,0 +1,148 @@
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="2" time="203.656079">
+<testsuite name="auth.spec.ts" timestamp="2026-10-01T02:41:43.831Z" hostname="chromium" tests="2" failures="0" skipped="0" time="197.351" errors="2">
+<testcase name="Módulo 1: Autenticación y Control de Acceso (PGIP) › TC-AUTO-001A: Inicio de sesión exitoso como Administrador" classname="auth.spec.ts" time="90.192">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\test-results\auth-Módulo-1-Autenticació-9a110--exitoso-como-Administrador-chromium\video.webm]]
+
+[[ATTACHMENT|..\test-results\auth-Módulo-1-Autenticació-9a110--exitoso-como-Administrador-chromium\error-context.md]]
+
+[[ATTACHMENT|..\test-results\auth-Módulo-1-Autenticació-9a110--exitoso-como-Administrador-chromium-retry1\test-failed-1.png]]
+
+[[ATTACHMENT|..\test-results\auth-Módulo-1-Autenticació-9a110--exitoso-como-Administrador-chromium-retry1\video.webm]]
+
+[[ATTACHMENT|..\test-results\auth-Módulo-1-Autenticació-9a110--exitoso-como-Administrador-chromium-retry1\error-context.md]]
+
+[[ATTACHMENT|..\test-results\auth-Módulo-1-Autenticació-9a110--exitoso-como-Administrador-chromium-retry1\trace.zip]]
+]]>
+</system-out>
+<error message="page.goto: Timeout 45000ms exceeded." type="TimeoutError">
+<![CDATA[  [chromium] › auth.spec.ts:9:7 › Módulo 1: Autenticación y Control de Acceso (PGIP) › TC-AUTO-001A: Inicio de sesión exitoso como Administrador 
+
+    TimeoutError: page.goto: Timeout 45000ms exceeded.
+    Call log:
+      - navigating to "https://pgip-parroquia.vercel.app/login", waiting until "load"
+
+
+      4 |
+      5 |   test.beforeEach(async ({ page }) => {
+    > 6 |     await page.goto('/login');
+        |                ^
+      7 |   });
+      8 |
+      9 |   test('TC-AUTO-001A: Inicio de sesión exitoso como Administrador', async ({ page }) => {
+        at C:\Users\Usuario\Desktop\pgip\pgip-automation\tests\e2e\auth.spec.ts:6:16
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\auth-Módulo-1-Autenticació-9a110--exitoso-como-Administrador-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\auth-Módulo-1-Autenticació-9a110--exitoso-como-Administrador-chromium\error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_TIMED_OUT at https://pgip-parroquia.vercel.app/login
+    Call log:
+      - navigating to "https://pgip-parroquia.vercel.app/login", waiting until "load"
+
+
+      4 |
+      5 |   test.beforeEach(async ({ page }) => {
+    > 6 |     await page.goto('/login');
+        |                ^
+      7 |   });
+      8 |
+      9 |   test('TC-AUTO-001A: Inicio de sesión exitoso como Administrador', async ({ page }) => {
+        at C:\Users\Usuario\Desktop\pgip\pgip-automation\tests\e2e\auth.spec.ts:6:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\auth-Módulo-1-Autenticació-9a110--exitoso-como-Administrador-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\auth-Módulo-1-Autenticació-9a110--exitoso-como-Administrador-chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\auth-Módulo-1-Autenticació-9a110--exitoso-como-Administrador-chromium-retry1\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\auth-Módulo-1-Autenticació-9a110--exitoso-como-Administrador-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\auth-Módulo-1-Autenticació-9a110--exitoso-como-Administrador-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="Módulo 1: Autenticación y Control de Acceso (PGIP) › TC-AUTO-001B: Denegar acceso con credenciales incorrectas" classname="auth.spec.ts" time="107.159">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\test-results\auth-Módulo-1-Autenticació-d8ce5-on-credenciales-incorrectas-chromium\video.webm]]
+
+[[ATTACHMENT|..\test-results\auth-Módulo-1-Autenticació-d8ce5-on-credenciales-incorrectas-chromium\error-context.md]]
+
+[[ATTACHMENT|..\test-results\auth-Módulo-1-Autenticació-d8ce5-on-credenciales-incorrectas-chromium-retry1\video.webm]]
+
+[[ATTACHMENT|..\test-results\auth-Módulo-1-Autenticació-d8ce5-on-credenciales-incorrectas-chromium-retry1\error-context.md]]
+
+[[ATTACHMENT|..\test-results\auth-Módulo-1-Autenticació-d8ce5-on-credenciales-incorrectas-chromium-retry1\trace.zip]]
+]]>
+</system-out>
+<error message="page.goto: Timeout 45000ms exceeded." type="TimeoutError">
+<![CDATA[  [chromium] › auth.spec.ts:24:7 › Módulo 1: Autenticación y Control de Acceso (PGIP) › TC-AUTO-001B: Denegar acceso con credenciales incorrectas 
+
+    TimeoutError: page.goto: Timeout 45000ms exceeded.
+    Call log:
+      - navigating to "https://pgip-parroquia.vercel.app/login", waiting until "load"
+
+
+      4 |
+      5 |   test.beforeEach(async ({ page }) => {
+    > 6 |     await page.goto('/login');
+        |                ^
+      7 |   });
+      8 |
+      9 |   test('TC-AUTO-001A: Inicio de sesión exitoso como Administrador', async ({ page }) => {
+        at C:\Users\Usuario\Desktop\pgip\pgip-automation\tests\e2e\auth.spec.ts:6:16
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\auth-Módulo-1-Autenticació-d8ce5-on-credenciales-incorrectas-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\auth-Módulo-1-Autenticació-d8ce5-on-credenciales-incorrectas-chromium\error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.goto: Timeout 45000ms exceeded.
+    Call log:
+      - navigating to "https://pgip-parroquia.vercel.app/login", waiting until "load"
+
+
+      4 |
+      5 |   test.beforeEach(async ({ page }) => {
+    > 6 |     await page.goto('/login');
+        |                ^
+      7 |   });
+      8 |
+      9 |   test('TC-AUTO-001A: Inicio de sesión exitoso como Administrador', async ({ page }) => {
+        at C:\Users\Usuario\Desktop\pgip\pgip-automation\tests\e2e\auth.spec.ts:6:16
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\auth-Módulo-1-Autenticació-d8ce5-on-credenciales-incorrectas-chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\auth-Módulo-1-Autenticació-d8ce5-on-credenciales-incorrectas-chromium-retry1\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\auth-Módulo-1-Autenticació-d8ce5-on-credenciales-incorrectas-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\auth-Módulo-1-Autenticació-d8ce5-on-credenciales-incorrectas-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+</testsuite>
+</testsuites>
