@@ -30,7 +30,10 @@
     "uuid": "^14.0.2"
   },
   "devDependencies": {
-    "nodemon": "^3.1.14"
+    "@types/jest": "^30.0.0",
+    "jest": "^30.5.2",
+    "nodemon": "^3.1.14",
+    "supertest": "^7.3.1"
   },
   "allowScripts": {
     "tesseract.js@7.0.0": true,

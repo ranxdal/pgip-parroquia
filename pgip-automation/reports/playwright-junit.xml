@@ -1,148 +1,83 @@
-<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="2" time="203.656079">
-<testsuite name="auth.spec.ts" timestamp="2026-10-01T02:41:43.831Z" hostname="chromium" tests="2" failures="0" skipped="0" time="197.351" errors="2">
-<testcase name="Módulo 1: Autenticación y Control de Acceso (PGIP) › TC-AUTO-001A: Inicio de sesión exitoso como Administrador" classname="auth.spec.ts" time="90.192">
+<testsuites id="" name="" tests="5" failures="1" skipped="0" errors="0" time="30.00002">
+<testsuite name="cn-01-autenticacion-api.spec.ts" timestamp="2026-10-03T00:40:02.445Z" hostname="chromium" tests="3" failures="1" skipped="0" time="4.826" errors="0">
+<testcase name="CN-01 Autenticación con credenciales válidas (API) › CN-01-02 Login exitoso vía API (secretario)" classname="cn-01-autenticacion-api.spec.ts" time="2.651">
 <system-out>
 <![CDATA[
-[[ATTACHMENT|..\test-results\auth-Módulo-1-Autenticació-9a110--exitoso-como-Administrador-chromium\video.webm]]
+[[ATTACHMENT|..\test-results\cn-01-autenticacion-api-CN-e40bf-exitoso-vía-API-secretario--chromium\error-context.md]]
 
-[[ATTACHMENT|..\test-results\auth-Módulo-1-Autenticació-9a110--exitoso-como-Administrador-chromium\error-context.md]]
+[[ATTACHMENT|..\test-results\cn-01-autenticacion-api-CN-e40bf-exitoso-vía-API-secretario--chromium\error-context.md]]
 
-[[ATTACHMENT|..\test-results\auth-Módulo-1-Autenticació-9a110--exitoso-como-Administrador-chromium-retry1\test-failed-1.png]]
+[[ATTACHMENT|..\test-results\cn-01-autenticacion-api-CN-e40bf-exitoso-vía-API-secretario--chromium-retry1\error-context.md]]
 
-[[ATTACHMENT|..\test-results\auth-Módulo-1-Autenticació-9a110--exitoso-como-Administrador-chromium-retry1\video.webm]]
+[[ATTACHMENT|..\test-results\cn-01-autenticacion-api-CN-e40bf-exitoso-vía-API-secretario--chromium-retry1\error-context.md]]
 
-[[ATTACHMENT|..\test-results\auth-Módulo-1-Autenticació-9a110--exitoso-como-Administrador-chromium-retry1\error-context.md]]
-
-[[ATTACHMENT|..\test-results\auth-Módulo-1-Autenticació-9a110--exitoso-como-Administrador-chromium-retry1\trace.zip]]
+[[ATTACHMENT|..\test-results\cn-01-autenticacion-api-CN-e40bf-exitoso-vía-API-secretario--chromium-retry1\trace.zip]]
 ]]>
 </system-out>
-<error message="page.goto: Timeout 45000ms exceeded." type="TimeoutError">
-<![CDATA[  [chromium] › auth.spec.ts:9:7 › Módulo 1: Autenticación y Control de Acceso (PGIP) › TC-AUTO-001A: Inicio de sesión exitoso como Administrador 
+<failure message="Tiempo de respuesta: 1558 ms" type="expect.toBeLessThan">
+<![CDATA[  [chromium] › cn-01-autenticacion-api.spec.ts:23:7 › CN-01 Autenticación con credenciales válidas (API) › CN-01-02 Login exitoso vía API (secretario) 
 
-    TimeoutError: page.goto: Timeout 45000ms exceeded.
-    Call log:
-      - navigating to "https://pgip-parroquia.vercel.app/login", waiting until "load"
+    Error: Tiempo de respuesta: 1558 ms
 
+    expect(received).toBeLessThan(expected)
 
-      4 |
-      5 |   test.beforeEach(async ({ page }) => {
-    > 6 |     await page.goto('/login');
-        |                ^
-      7 |   });
-      8 |
-      9 |   test('TC-AUTO-001A: Inicio de sesión exitoso como Administrador', async ({ page }) => {
-        at C:\Users\Usuario\Desktop\pgip\pgip-automation\tests\e2e\auth.spec.ts:6:16
+    Expected: < 1000
+    Received:   1558
 
-    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\auth-Módulo-1-Autenticació-9a110--exitoso-como-Administrador-chromium\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
+      34 |     expect(body.usuario.usuario).toBe(SEC_USER);
+      35 |     expect(body.usuario.rol).toBeTruthy();
+    > 36 |     expect(ms, `Tiempo de respuesta: ${ms} ms`).toBeLessThan(1000);
+         |                                                 ^
+      37 |   });
+      38 |
+      39 |   test('CN-01-03 Estructura y claims del token JWT', async () => {
+        at C:\Users\Usuario\Desktop\pgip\pgip-automation\tests\e2e\cn-01-autenticacion-api.spec.ts:36:49
 
-    Error Context: ..\..\test-results\auth-Módulo-1-Autenticació-9a110--exitoso-como-Administrador-chromium\error-context.md
+    Error Context: ..\..\test-results\cn-01-autenticacion-api-CN-e40bf-exitoso-vía-API-secretario--chromium\error-context.md
+
+    Error Context: ..\..\test-results\cn-01-autenticacion-api-CN-e40bf-exitoso-vía-API-secretario--chromium\error-context.md
 
     Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
 
-    Error: page.goto: net::ERR_TIMED_OUT at https://pgip-parroquia.vercel.app/login
-    Call log:
-      - navigating to "https://pgip-parroquia.vercel.app/login", waiting until "load"
+    Error: Tiempo de respuesta: 1037 ms
 
+    expect(received).toBeLessThan(expected)
 
-      4 |
-      5 |   test.beforeEach(async ({ page }) => {
-    > 6 |     await page.goto('/login');
-        |                ^
-      7 |   });
-      8 |
-      9 |   test('TC-AUTO-001A: Inicio de sesión exitoso como Administrador', async ({ page }) => {
-        at C:\Users\Usuario\Desktop\pgip\pgip-automation\tests\e2e\auth.spec.ts:6:16
+    Expected: < 1000
+    Received:   1037
 
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ..\..\test-results\auth-Módulo-1-Autenticació-9a110--exitoso-como-Administrador-chromium-retry1\test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
+      34 |     expect(body.usuario.usuario).toBe(SEC_USER);
+      35 |     expect(body.usuario.rol).toBeTruthy();
+    > 36 |     expect(ms, `Tiempo de respuesta: ${ms} ms`).toBeLessThan(1000);
+         |                                                 ^
+      37 |   });
+      38 |
+      39 |   test('CN-01-03 Estructura y claims del token JWT', async () => {
+        at C:\Users\Usuario\Desktop\pgip\pgip-automation\tests\e2e\cn-01-autenticacion-api.spec.ts:36:49
 
-    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\auth-Módulo-1-Autenticació-9a110--exitoso-como-Administrador-chromium-retry1\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
+    Error Context: ..\..\test-results\cn-01-autenticacion-api-CN-e40bf-exitoso-vía-API-secretario--chromium-retry1\error-context.md
 
-    Error Context: ..\..\test-results\auth-Módulo-1-Autenticació-9a110--exitoso-como-Administrador-chromium-retry1\error-context.md
-
-    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\..\test-results\auth-Módulo-1-Autenticació-9a110--exitoso-como-Administrador-chromium-retry1\trace.zip
-    Usage:
-
-        npx playwright show-trace ..\..\test-results\auth-Módulo-1-Autenticació-9a110--exitoso-como-Administrador-chromium-retry1\trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-]]>
-</error>
-</testcase>
-<testcase name="Módulo 1: Autenticación y Control de Acceso (PGIP) › TC-AUTO-001B: Denegar acceso con credenciales incorrectas" classname="auth.spec.ts" time="107.159">
-<system-out>
-<![CDATA[
-[[ATTACHMENT|..\test-results\auth-Módulo-1-Autenticació-d8ce5-on-credenciales-incorrectas-chromium\video.webm]]
-
-[[ATTACHMENT|..\test-results\auth-Módulo-1-Autenticació-d8ce5-on-credenciales-incorrectas-chromium\error-context.md]]
-
-[[ATTACHMENT|..\test-results\auth-Módulo-1-Autenticació-d8ce5-on-credenciales-incorrectas-chromium-retry1\video.webm]]
-
-[[ATTACHMENT|..\test-results\auth-Módulo-1-Autenticació-d8ce5-on-credenciales-incorrectas-chromium-retry1\error-context.md]]
-
-[[ATTACHMENT|..\test-results\auth-Módulo-1-Autenticació-d8ce5-on-credenciales-incorrectas-chromium-retry1\trace.zip]]
-]]>
-</system-out>
-<error message="page.goto: Timeout 45000ms exceeded." type="TimeoutError">
-<![CDATA[  [chromium] › auth.spec.ts:24:7 › Módulo 1: Autenticación y Control de Acceso (PGIP) › TC-AUTO-001B: Denegar acceso con credenciales incorrectas 
-
-    TimeoutError: page.goto: Timeout 45000ms exceeded.
-    Call log:
-      - navigating to "https://pgip-parroquia.vercel.app/login", waiting until "load"
-
-
-      4 |
-      5 |   test.beforeEach(async ({ page }) => {
-    > 6 |     await page.goto('/login');
-        |                ^
-      7 |   });
-      8 |
-      9 |   test('TC-AUTO-001A: Inicio de sesión exitoso como Administrador', async ({ page }) => {
-        at C:\Users\Usuario\Desktop\pgip\pgip-automation\tests\e2e\auth.spec.ts:6:16
-
-    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\auth-Módulo-1-Autenticació-d8ce5-on-credenciales-incorrectas-chromium\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ..\..\test-results\auth-Módulo-1-Autenticació-d8ce5-on-credenciales-incorrectas-chromium\error-context.md
-
-    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
-
-    TimeoutError: page.goto: Timeout 45000ms exceeded.
-    Call log:
-      - navigating to "https://pgip-parroquia.vercel.app/login", waiting until "load"
-
-
-      4 |
-      5 |   test.beforeEach(async ({ page }) => {
-    > 6 |     await page.goto('/login');
-        |                ^
-      7 |   });
-      8 |
-      9 |   test('TC-AUTO-001A: Inicio de sesión exitoso como Administrador', async ({ page }) => {
-        at C:\Users\Usuario\Desktop\pgip\pgip-automation\tests\e2e\auth.spec.ts:6:16
-
-    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
-    ..\..\test-results\auth-Módulo-1-Autenticació-d8ce5-on-credenciales-incorrectas-chromium-retry1\video.webm
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: ..\..\test-results\auth-Módulo-1-Autenticació-d8ce5-on-credenciales-incorrectas-chromium-retry1\error-context.md
+    Error Context: ..\..\test-results\cn-01-autenticacion-api-CN-e40bf-exitoso-vía-API-secretario--chromium-retry1\error-context.md
 
     attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
-    ..\..\test-results\auth-Módulo-1-Autenticació-d8ce5-on-credenciales-incorrectas-chromium-retry1\trace.zip
+    ..\..\test-results\cn-01-autenticacion-api-CN-e40bf-exitoso-vía-API-secretario--chromium-retry1\trace.zip
     Usage:
 
-        npx playwright show-trace ..\..\test-results\auth-Módulo-1-Autenticació-d8ce5-on-credenciales-incorrectas-chromium-retry1\trace.zip
+        npx playwright show-trace ..\..\test-results\cn-01-autenticacion-api-CN-e40bf-exitoso-vía-API-secretario--chromium-retry1\trace.zip
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 ]]>
-</error>
+</failure>
+</testcase>
+<testcase name="CN-01 Autenticación con credenciales válidas (API) › CN-01-03 Estructura y claims del token JWT" classname="cn-01-autenticacion-api.spec.ts" time="0.876">
+</testcase>
+<testcase name="CN-01 Autenticación con credenciales válidas (API) › CN-01-05 Rechazo de credenciales inválidas" classname="cn-01-autenticacion-api.spec.ts" time="1.299">
+</testcase>
+</testsuite>
+<testsuite name="cn-01-autenticacion.spec.ts" timestamp="2026-10-03T00:40:02.445Z" hostname="chromium" tests="2" failures="0" skipped="0" time="20.285" errors="0">
+<testcase name="CN-01 Autenticación con credenciales válidas › CN-01-01 Login exitoso desde la interfaz (párroco)" classname="cn-01-autenticacion.spec.ts" time="17.498">
+</testcase>
+<testcase name="CN-01 Autenticación con credenciales válidas › CN-01-04 Persistencia de sesión al recargar la página" classname="cn-01-autenticacion.spec.ts" time="2.787">
 </testcase>
 </testsuite>
 </testsuites>

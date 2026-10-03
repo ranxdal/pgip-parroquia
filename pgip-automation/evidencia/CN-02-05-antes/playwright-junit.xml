@@ -1,0 +1,71 @@
+<testsuites id="" name="" tests="3" failures="1" skipped="0" errors="0" time="7.437634">
+<testsuite name="cn-02-roles-api.spec.ts" timestamp="2026-10-02T21:13:31.932Z" hostname="chromium" tests="3" failures="1" skipped="0" time="1.678" errors="0">
+<testcase name="CN-02 Restricción de roles RBAC (API) › CN-02-03 API de analítica rechaza al secretario" classname="cn-02-roles-api.spec.ts" time="0.155">
+</testcase>
+<testcase name="CN-02 Restricción de roles RBAC (API) › CN-02-04 Contraste de permisos: párroco vs secretario" classname="cn-02-roles-api.spec.ts" time="1.223">
+</testcase>
+<testcase name="CN-02 Restricción de roles RBAC (API) › CN-02-05 Token con rol alterado es rechazado" classname="cn-02-roles-api.spec.ts" time="0.3">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\test-results\cn-02-roles-api-CN-02-Rest-21270-n-rol-alterado-es-rechazado-chromium\error-context.md]]
+
+[[ATTACHMENT|..\test-results\cn-02-roles-api-CN-02-Rest-21270-n-rol-alterado-es-rechazado-chromium\error-context.md]]
+
+[[ATTACHMENT|..\test-results\cn-02-roles-api-CN-02-Rest-21270-n-rol-alterado-es-rechazado-chromium-retry1\error-context.md]]
+
+[[ATTACHMENT|..\test-results\cn-02-roles-api-CN-02-Rest-21270-n-rol-alterado-es-rechazado-chromium-retry1\error-context.md]]
+
+[[ATTACHMENT|..\test-results\cn-02-roles-api-CN-02-Rest-21270-n-rol-alterado-es-rechazado-chromium-retry1\trace.zip]]
+]]>
+</system-out>
+<failure message="expect(received).toBe(expected) // Object.is equality" type="expect.toBe">
+<![CDATA[  [chromium] › cn-02-roles-api.spec.ts:59:7 › CN-02 Restricción de roles RBAC (API) › CN-02-05 Token con rol alterado es rechazado 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 401
+    Received: 403
+
+      67 |       headers: { Authorization: `Bearer ${tokenAlterado}` },
+      68 |     });
+    > 69 |     expect(res.status()).toBe(401);
+         |                          ^
+      70 |   });
+      71 | });
+        at C:\Users\Usuario\Desktop\pgip\pgip-automation\tests\e2e\cn-02-roles-api.spec.ts:69:26
+
+    Error Context: ..\..\test-results\cn-02-roles-api-CN-02-Rest-21270-n-rol-alterado-es-rechazado-chromium\error-context.md
+
+    Error Context: ..\..\test-results\cn-02-roles-api-CN-02-Rest-21270-n-rol-alterado-es-rechazado-chromium\error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 401
+    Received: 403
+
+      67 |       headers: { Authorization: `Bearer ${tokenAlterado}` },
+      68 |     });
+    > 69 |     expect(res.status()).toBe(401);
+         |                          ^
+      70 |   });
+      71 | });
+        at C:\Users\Usuario\Desktop\pgip\pgip-automation\tests\e2e\cn-02-roles-api.spec.ts:69:26
+
+    Error Context: ..\..\test-results\cn-02-roles-api-CN-02-Rest-21270-n-rol-alterado-es-rechazado-chromium-retry1\error-context.md
+
+    Error Context: ..\..\test-results\cn-02-roles-api-CN-02-Rest-21270-n-rol-alterado-es-rechazado-chromium-retry1\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\test-results\cn-02-roles-api-CN-02-Rest-21270-n-rol-alterado-es-rechazado-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\test-results\cn-02-roles-api-CN-02-Rest-21270-n-rol-alterado-es-rechazado-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+</testsuite>
+</testsuites>

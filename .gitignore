@@ -23,4 +23,4 @@ npm-debug.log*
 Thumbs.db
 
 # Reportes de pruebas
-server/reporte_pruebas.html
+server/reporte_pruebas.html.env

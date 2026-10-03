@@ -4,7 +4,7 @@
       "C:\\Program Files\\nodejs\\node.exe",
       "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\node_modules\\@playwright\\test\\cli.js",
       "test",
-      "auth.spec.ts"
+      "cn-01"
     ],
     "configFile": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\playwright.config.ts",
     "rootDir": "C:/Users/Usuario/Desktop/pgip/pgip-automation/tests/e2e",
@@ -79,20 +79,20 @@
   },
   "suites": [
     {
-      "title": "auth.spec.ts",
-      "file": "auth.spec.ts",
+      "title": "cn-01-autenticacion-api.spec.ts",
+      "file": "cn-01-autenticacion-api.spec.ts",
       "column": 0,
       "line": 0,
       "specs": [],
       "suites": [
         {
-          "title": "Módulo 1: Autenticación y Control de Acceso (PGIP)",
-          "file": "auth.spec.ts",
-          "line": 3,
+          "title": "CN-01 Autenticación con credenciales válidas (API)",
+          "file": "cn-01-autenticacion-api.spec.ts",
+          "line": 12,
           "column": 6,
           "specs": [
             {
-              "title": "TC-AUTO-001A: Inicio de sesión exitoso como Administrador",
+              "title": "CN-01-02 Login exitoso vía API (secretario)",
               "ok": false,
               "tags": [],
               "tests": [
@@ -107,120 +107,115 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 53569,
+                      "duration": 1581,
                       "error": {
-                        "message": "TimeoutError: page.goto: Timeout 45000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"https://pgip-parroquia.vercel.app/login\", waiting until \"load\"\u001b[22m\n",
-                        "stack": "TimeoutError: page.goto: Timeout 45000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"https://pgip-parroquia.vercel.app/login\", waiting until \"load\"\u001b[22m\n\n    at C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\tests\\e2e\\auth.spec.ts:6:16",
+                        "message": "Error: Tiempo de respuesta: 1558 ms\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m1000\u001b[39m\nReceived:   \u001b[31m1558\u001b[39m",
+                        "stack": "Error: Tiempo de respuesta: 1558 ms\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m1000\u001b[39m\nReceived:   \u001b[31m1558\u001b[39m\n    at C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\tests\\e2e\\cn-01-autenticacion-api.spec.ts:36:49",
                         "location": {
-                          "file": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\tests\\e2e\\auth.spec.ts",
-                          "column": 16,
-                          "line": 6
+                          "file": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\tests\\e2e\\cn-01-autenticacion-api.spec.ts",
+                          "column": 49,
+                          "line": 36
                         },
-                        "snippet": "\u001b[0m \u001b[90m 4 |\u001b[39m\n \u001b[90m 5 |\u001b[39m   test\u001b[33m.\u001b[39mbeforeEach(\u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 6 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/login'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m   |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 7 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 8 |\u001b[39m\n \u001b[90m 9 |\u001b[39m   test(\u001b[32m'TC-AUTO-001A: Inicio de sesión exitoso como Administrador'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                        "snippet": "\u001b[0m \u001b[90m 34 |\u001b[39m     expect(body\u001b[33m.\u001b[39musuario\u001b[33m.\u001b[39musuario)\u001b[33m.\u001b[39mtoBe(\u001b[33mSEC_USER\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 35 |\u001b[39m     expect(body\u001b[33m.\u001b[39musuario\u001b[33m.\u001b[39mrol)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 36 |\u001b[39m     expect(ms\u001b[33m,\u001b[39m \u001b[32m`Tiempo de respuesta: ${ms} ms`\u001b[39m)\u001b[33m.\u001b[39mtoBeLessThan(\u001b[35m1000\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 37 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 38 |\u001b[39m\n \u001b[90m 39 |\u001b[39m   test(\u001b[32m'CN-01-03 Estructura y claims del token JWT'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m () \u001b[33m=>\u001b[39m {\u001b[0m"
                       },
                       "errors": [
                         {
                           "location": {
-                            "file": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\tests\\e2e\\auth.spec.ts",
-                            "column": 16,
-                            "line": 6
+                            "file": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\tests\\e2e\\cn-01-autenticacion-api.spec.ts",
+                            "column": 49,
+                            "line": 36
                           },
-                          "message": "TimeoutError: page.goto: Timeout 45000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"https://pgip-parroquia.vercel.app/login\", waiting until \"load\"\u001b[22m\n\n\n\u001b[0m \u001b[90m 4 |\u001b[39m\n \u001b[90m 5 |\u001b[39m   test\u001b[33m.\u001b[39mbeforeEach(\u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 6 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/login'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m   |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 7 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 8 |\u001b[39m\n \u001b[90m 9 |\u001b[39m   test(\u001b[32m'TC-AUTO-001A: Inicio de sesión exitoso como Administrador'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[2m    at C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\tests\\e2e\\auth.spec.ts:6:16\u001b[22m"
+                          "message": "Error: Tiempo de respuesta: 1558 ms\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m1000\u001b[39m\nReceived:   \u001b[31m1558\u001b[39m\n\n\u001b[0m \u001b[90m 34 |\u001b[39m     expect(body\u001b[33m.\u001b[39musuario\u001b[33m.\u001b[39musuario)\u001b[33m.\u001b[39mtoBe(\u001b[33mSEC_USER\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 35 |\u001b[39m     expect(body\u001b[33m.\u001b[39musuario\u001b[33m.\u001b[39mrol)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 36 |\u001b[39m     expect(ms\u001b[33m,\u001b[39m \u001b[32m`Tiempo de respuesta: ${ms} ms`\u001b[39m)\u001b[33m.\u001b[39mtoBeLessThan(\u001b[35m1000\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 37 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 38 |\u001b[39m\n \u001b[90m 39 |\u001b[39m   test(\u001b[32m'CN-01-03 Estructura y claims del token JWT'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m () \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[2m    at C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\tests\\e2e\\cn-01-autenticacion-api.spec.ts:36:49\u001b[22m"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-01T02:41:44.276Z",
+                      "startTime": "2026-10-03T00:40:03.062Z",
                       "annotations": [],
                       "attachments": [
                         {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\test-results\\auth-Módulo-1-Autenticació-9a110--exitoso-como-Administrador-chromium\\video.webm"
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\test-results\\cn-01-autenticacion-api-CN-e40bf-exitoso-vía-API-secretario--chromium\\error-context.md"
                         },
                         {
                           "name": "error-context",
                           "contentType": "text/markdown",
-                          "path": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\test-results\\auth-Módulo-1-Autenticació-9a110--exitoso-como-Administrador-chromium\\error-context.md"
+                          "path": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\test-results\\cn-01-autenticacion-api-CN-e40bf-exitoso-vía-API-secretario--chromium\\error-context.md"
                         }
                       ],
                       "errorLocation": {
-                        "file": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\tests\\e2e\\auth.spec.ts",
-                        "column": 16,
-                        "line": 6
+                        "file": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\tests\\e2e\\cn-01-autenticacion-api.spec.ts",
+                        "column": 49,
+                        "line": 36
                       }
                     },
                     {
                       "workerIndex": 1,
                       "parallelIndex": 0,
                       "status": "failed",
-                      "duration": 36623,
+                      "duration": 1070,
                       "error": {
-                        "message": "Error: page.goto: net::ERR_TIMED_OUT at https://pgip-parroquia.vercel.app/login\nCall log:\n\u001b[2m  - navigating to \"https://pgip-parroquia.vercel.app/login\", waiting until \"load\"\u001b[22m\n",
-                        "stack": "Error: page.goto: net::ERR_TIMED_OUT at https://pgip-parroquia.vercel.app/login\nCall log:\n\u001b[2m  - navigating to \"https://pgip-parroquia.vercel.app/login\", waiting until \"load\"\u001b[22m\n\n    at C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\tests\\e2e\\auth.spec.ts:6:16",
+                        "message": "Error: Tiempo de respuesta: 1037 ms\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m1000\u001b[39m\nReceived:   \u001b[31m1037\u001b[39m",
+                        "stack": "Error: Tiempo de respuesta: 1037 ms\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m1000\u001b[39m\nReceived:   \u001b[31m1037\u001b[39m\n    at C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\tests\\e2e\\cn-01-autenticacion-api.spec.ts:36:49",
                         "location": {
-                          "file": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\tests\\e2e\\auth.spec.ts",
-                          "column": 16,
-                          "line": 6
+                          "file": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\tests\\e2e\\cn-01-autenticacion-api.spec.ts",
+                          "column": 49,
+                          "line": 36
                         },
-                        "snippet": "\u001b[0m \u001b[90m 4 |\u001b[39m\n \u001b[90m 5 |\u001b[39m   test\u001b[33m.\u001b[39mbeforeEach(\u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 6 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/login'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m   |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 7 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 8 |\u001b[39m\n \u001b[90m 9 |\u001b[39m   test(\u001b[32m'TC-AUTO-001A: Inicio de sesión exitoso como Administrador'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                        "snippet": "\u001b[0m \u001b[90m 34 |\u001b[39m     expect(body\u001b[33m.\u001b[39musuario\u001b[33m.\u001b[39musuario)\u001b[33m.\u001b[39mtoBe(\u001b[33mSEC_USER\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 35 |\u001b[39m     expect(body\u001b[33m.\u001b[39musuario\u001b[33m.\u001b[39mrol)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 36 |\u001b[39m     expect(ms\u001b[33m,\u001b[39m \u001b[32m`Tiempo de respuesta: ${ms} ms`\u001b[39m)\u001b[33m.\u001b[39mtoBeLessThan(\u001b[35m1000\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 37 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 38 |\u001b[39m\n \u001b[90m 39 |\u001b[39m   test(\u001b[32m'CN-01-03 Estructura y claims del token JWT'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m () \u001b[33m=>\u001b[39m {\u001b[0m"
                       },
                       "errors": [
                         {
                           "location": {
-                            "file": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\tests\\e2e\\auth.spec.ts",
-                            "column": 16,
-                            "line": 6
+                            "file": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\tests\\e2e\\cn-01-autenticacion-api.spec.ts",
+                            "column": 49,
+                            "line": 36
                           },
-                          "message": "Error: page.goto: net::ERR_TIMED_OUT at https://pgip-parroquia.vercel.app/login\nCall log:\n\u001b[2m  - navigating to \"https://pgip-parroquia.vercel.app/login\", waiting until \"load\"\u001b[22m\n\n\n\u001b[0m \u001b[90m 4 |\u001b[39m\n \u001b[90m 5 |\u001b[39m   test\u001b[33m.\u001b[39mbeforeEach(\u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 6 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/login'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m   |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 7 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 8 |\u001b[39m\n \u001b[90m 9 |\u001b[39m   test(\u001b[32m'TC-AUTO-001A: Inicio de sesión exitoso como Administrador'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[2m    at C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\tests\\e2e\\auth.spec.ts:6:16\u001b[22m"
+                          "message": "Error: Tiempo de respuesta: 1037 ms\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: < \u001b[32m1000\u001b[39m\nReceived:   \u001b[31m1037\u001b[39m\n\n\u001b[0m \u001b[90m 34 |\u001b[39m     expect(body\u001b[33m.\u001b[39musuario\u001b[33m.\u001b[39musuario)\u001b[33m.\u001b[39mtoBe(\u001b[33mSEC_USER\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 35 |\u001b[39m     expect(body\u001b[33m.\u001b[39musuario\u001b[33m.\u001b[39mrol)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 36 |\u001b[39m     expect(ms\u001b[33m,\u001b[39m \u001b[32m`Tiempo de respuesta: ${ms} ms`\u001b[39m)\u001b[33m.\u001b[39mtoBeLessThan(\u001b[35m1000\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 37 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 38 |\u001b[39m\n \u001b[90m 39 |\u001b[39m   test(\u001b[32m'CN-01-03 Estructura y claims del token JWT'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m () \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[2m    at C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\tests\\e2e\\cn-01-autenticacion-api.spec.ts:36:49\u001b[22m"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 1,
-                      "startTime": "2026-10-01T02:42:38.704Z",
+                      "startTime": "2026-10-03T00:40:05.889Z",
                       "annotations": [],
                       "attachments": [
                         {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\test-results\\auth-Módulo-1-Autenticació-9a110--exitoso-como-Administrador-chromium-retry1\\test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\test-results\\auth-Módulo-1-Autenticació-9a110--exitoso-como-Administrador-chromium-retry1\\video.webm"
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\test-results\\cn-01-autenticacion-api-CN-e40bf-exitoso-vía-API-secretario--chromium-retry1\\error-context.md"
                         },
                         {
                           "name": "error-context",
                           "contentType": "text/markdown",
-                          "path": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\test-results\\auth-Módulo-1-Autenticació-9a110--exitoso-como-Administrador-chromium-retry1\\error-context.md"
+                          "path": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\test-results\\cn-01-autenticacion-api-CN-e40bf-exitoso-vía-API-secretario--chromium-retry1\\error-context.md"
                         },
                         {
                           "name": "trace",
                           "contentType": "application/zip",
-                          "path": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\test-results\\auth-Módulo-1-Autenticació-9a110--exitoso-como-Administrador-chromium-retry1\\trace.zip"
+                          "path": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\test-results\\cn-01-autenticacion-api-CN-e40bf-exitoso-vía-API-secretario--chromium-retry1\\trace.zip"
                         }
                       ],
                       "errorLocation": {
-                        "file": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\tests\\e2e\\auth.spec.ts",
-                        "column": 16,
-                        "line": 6
+                        "file": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\tests\\e2e\\cn-01-autenticacion-api.spec.ts",
+                        "column": 49,
+                        "line": 36
                       }
                     }
                   ],
                   "status": "unexpected"
                 }
               ],
-              "id": "d748ac400d08b85935ef-94b6cc16367dca351e3f",
-              "file": "auth.spec.ts",
-              "line": 9,
+              "id": "b0b5db78ed4fba08e61c-384a6d5f21299c763476",
+              "file": "cn-01-autenticacion-api.spec.ts",
+              "line": 23,
               "column": 7
             },
             {
-              "title": "TC-AUTO-001B: Denegar acceso con credenciales incorrectas",
-              "ok": false,
+              "title": "CN-01-03 Estructura y claims del token JWT",
+              "ok": true,
               "tags": [],
               "tests": [
                 {
@@ -233,111 +228,142 @@
                     {
                       "workerIndex": 2,
                       "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 53531,
-                      "error": {
-                        "message": "TimeoutError: page.goto: Timeout 45000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"https://pgip-parroquia.vercel.app/login\", waiting until \"load\"\u001b[22m\n",
-                        "stack": "TimeoutError: page.goto: Timeout 45000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"https://pgip-parroquia.vercel.app/login\", waiting until \"load\"\u001b[22m\n\n    at C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\tests\\e2e\\auth.spec.ts:6:16",
-                        "location": {
-                          "file": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\tests\\e2e\\auth.spec.ts",
-                          "column": 16,
-                          "line": 6
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 4 |\u001b[39m\n \u001b[90m 5 |\u001b[39m   test\u001b[33m.\u001b[39mbeforeEach(\u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 6 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/login'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m   |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 7 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 8 |\u001b[39m\n \u001b[90m 9 |\u001b[39m   test(\u001b[32m'TC-AUTO-001A: Inicio de sesión exitoso como Administrador'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\tests\\e2e\\auth.spec.ts",
-                            "column": 16,
-                            "line": 6
-                          },
-                          "message": "TimeoutError: page.goto: Timeout 45000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"https://pgip-parroquia.vercel.app/login\", waiting until \"load\"\u001b[22m\n\n\n\u001b[0m \u001b[90m 4 |\u001b[39m\n \u001b[90m 5 |\u001b[39m   test\u001b[33m.\u001b[39mbeforeEach(\u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 6 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/login'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m   |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 7 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 8 |\u001b[39m\n \u001b[90m 9 |\u001b[39m   test(\u001b[32m'TC-AUTO-001A: Inicio de sesión exitoso como Administrador'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[2m    at C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\tests\\e2e\\auth.spec.ts:6:16\u001b[22m"
-                        }
-                      ],
+                      "status": "passed",
+                      "duration": 876,
+                      "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-01T02:43:17.084Z",
+                      "startTime": "2026-10-03T00:40:08.158Z",
                       "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\test-results\\auth-Módulo-1-Autenticació-d8ce5-on-credenciales-incorrectas-chromium\\video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\test-results\\auth-Módulo-1-Autenticació-d8ce5-on-credenciales-incorrectas-chromium\\error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\tests\\e2e\\auth.spec.ts",
-                        "column": 16,
-                        "line": 6
-                      }
-                    },
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 53628,
-                      "error": {
-                        "message": "TimeoutError: page.goto: Timeout 45000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"https://pgip-parroquia.vercel.app/login\", waiting until \"load\"\u001b[22m\n",
-                        "stack": "TimeoutError: page.goto: Timeout 45000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"https://pgip-parroquia.vercel.app/login\", waiting until \"load\"\u001b[22m\n\n    at C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\tests\\e2e\\auth.spec.ts:6:16",
-                        "location": {
-                          "file": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\tests\\e2e\\auth.spec.ts",
-                          "column": 16,
-                          "line": 6
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 4 |\u001b[39m\n \u001b[90m 5 |\u001b[39m   test\u001b[33m.\u001b[39mbeforeEach(\u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 6 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/login'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m   |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 7 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 8 |\u001b[39m\n \u001b[90m 9 |\u001b[39m   test(\u001b[32m'TC-AUTO-001A: Inicio de sesión exitoso como Administrador'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\tests\\e2e\\auth.spec.ts",
-                            "column": 16,
-                            "line": 6
-                          },
-                          "message": "TimeoutError: page.goto: Timeout 45000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"https://pgip-parroquia.vercel.app/login\", waiting until \"load\"\u001b[22m\n\n\n\u001b[0m \u001b[90m 4 |\u001b[39m\n \u001b[90m 5 |\u001b[39m   test\u001b[33m.\u001b[39mbeforeEach(\u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 6 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/login'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m   |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 7 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 8 |\u001b[39m\n \u001b[90m 9 |\u001b[39m   test(\u001b[32m'TC-AUTO-001A: Inicio de sesión exitoso como Administrador'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[2m    at C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\tests\\e2e\\auth.spec.ts:6:16\u001b[22m"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 1,
-                      "startTime": "2026-10-01T02:44:12.432Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\test-results\\auth-Módulo-1-Autenticació-d8ce5-on-credenciales-incorrectas-chromium-retry1\\video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\test-results\\auth-Módulo-1-Autenticació-d8ce5-on-credenciales-incorrectas-chromium-retry1\\error-context.md"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\test-results\\auth-Módulo-1-Autenticació-d8ce5-on-credenciales-incorrectas-chromium-retry1\\trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "C:\\Users\\Usuario\\Desktop\\pgip\\pgip-automation\\tests\\e2e\\auth.spec.ts",
-                        "column": 16,
-                        "line": 6
-                      }
+                      "attachments": []
                     }
                   ],
-                  "status": "unexpected"
+                  "status": "expected"
                 }
               ],
-              "id": "d748ac400d08b85935ef-1cce8dc67b1d0444b359",
-              "file": "auth.spec.ts",
-              "line": 24,
+              "id": "b0b5db78ed4fba08e61c-5173980fa3eb67a4882d",
+              "file": "cn-01-autenticacion-api.spec.ts",
+              "line": 39,
+              "column": 7
+            },
+            {
+              "title": "CN-01-05 Rechazo de credenciales inválidas",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1299,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-03T00:40:09.476Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b0b5db78ed4fba08e61c-aff74c6f5f460cbd0b50",
+              "file": "cn-01-autenticacion-api.spec.ts",
+              "line": 62,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "cn-01-autenticacion.spec.ts",
+      "file": "cn-01-autenticacion.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "CN-01 Autenticación con credenciales válidas",
+          "file": "cn-01-autenticacion.spec.ts",
+          "line": 22,
+          "column": 6,
+          "specs": [
+            {
+              "title": "CN-01-01 Login exitoso desde la interfaz (párroco)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 17498,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-03T00:40:10.829Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a4806c7c6d077c157109-5911a973cba1d15de133",
+              "file": "cn-01-autenticacion.spec.ts",
+              "line": 28,
+              "column": 7
+            },
+            {
+              "title": "CN-01-04 Persistencia de sesión al recargar la página",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2787,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-03T00:40:29.327Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a4806c7c6d077c157109-5ba9a5890583eee3cca0",
+              "file": "cn-01-autenticacion.spec.ts",
+              "line": 33,
               "column": 7
             }
           ]
@@ -347,11 +373,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-10-01T02:41:43.771Z",
-    "duration": 203656.079,
-    "expected": 0,
+    "startTime": "2026-10-03T00:40:02.394Z",
+    "duration": 30000.02,
+    "expected": 4,
     "skipped": 0,
-    "unexpected": 2,
+    "unexpected": 1,
     "flaky": 0
   }
 }
