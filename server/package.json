@@ -5,7 +5,24 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "jest --runInBand --forceExit",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/tests"
+    ],
+    "testMatch": [
+      "**/*.test.js"
+    ],
+    "verbose": true,
+    "testTimeout": 30000,
+    "transformIgnorePatterns": [
+      "node_modules/(?!(uuid)/)"
+    ]
   },
   "keywords": [],
   "author": "",
@@ -27,7 +44,7 @@
     "pg": "^8.23.0",
     "simple-statistics": "^7.10.2",
     "tesseract.js": "^7.0.0",
-    "uuid": "^14.0.2"
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",

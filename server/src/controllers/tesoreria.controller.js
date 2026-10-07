@@ -89,6 +89,25 @@ const cerrarCaja = async (req, res) => {
 // Registrar transacción
 const registrarTransaccion = async (req, res) => {
     const { sesion_caja_id, tipo, monto, descripcion } = req.body;
+    // Validar campos obligatorios
+    if (!sesion_caja_id) {
+        return res.status(400).json({ 
+            error: 'El campo sesion_caja_id es obligatorio' 
+        });
+    }
+
+    if (!tipo || !['efectivo', 'transferencia'].includes(tipo)) {
+        return res.status(400).json({ 
+            error: 'El tipo de pago debe ser efectivo o transferencia' 
+        });
+    }
+
+    if (!monto || monto <= 0) {
+        return res.status(400).json({ 
+            error: 'El monto debe ser mayor a cero' 
+        });
+    }
+    
     const client = await pool.connect();
 
     try {
