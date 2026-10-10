@@ -16,6 +16,23 @@ const subirFolio = async (req, res) => {
 
         const resultado = await procesarFolio(req.file.path);
 
+        const numeroLibro = req.body.numero_libro || null;
+        const numeroFolio = req.body.numero_folio || null;
+        const numeroPartida = req.body.numero_partida || null;
+
+        // ✅ CORRECCIÓN CB-01-05: verificar duplicado antes del INSERT
+        if (numeroLibro && numeroFolio && numeroPartida) {
+            const { rows: existentes } = await pool.query(
+                `SELECT id FROM pgip.folio_historico
+                 WHERE numero_libro = $1 AND numero_folio = $2 AND numero_partida = $3`,
+                [numeroLibro, numeroFolio, numeroPartida]
+            );
+            if (existentes.length > 0) {
+                if (fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
+                return res.status(409).json({ error: 'Ya existe un folio con el mismo libro, folio y partida' });
+            }
+        }
+
         const { rows } = await pool.query(
             `INSERT INTO pgip.folio_historico
              (numero_libro, numero_folio, numero_partida,
@@ -24,9 +41,9 @@ const subirFolio = async (req, res) => {
              VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
              RETURNING *`,
             [
-                req.body.numero_libro || null,
-                req.body.numero_folio || null,
-                req.body.numero_partida || null,
+                numeroLibro,
+                numeroFolio,
+                numeroPartida,
                 req.body.tipo_sacramento || null,
                 resultado.texto,
                 resultado.confianza,
@@ -58,6 +75,11 @@ const subirFolio = async (req, res) => {
 // Buscar en folios históricos por texto
 const buscarFolios = async (req, res) => {
     const { termino } = req.query;
+
+    // ✅ CORRECCIÓN CB-01-02: validar término antes de consultar PostgreSQL
+    if (!termino || termino.trim() === '') {
+        return res.status(400).json({ error: 'El término de búsqueda es requerido' });
+    }
 
     try {
         const { rows } = await pool.query(

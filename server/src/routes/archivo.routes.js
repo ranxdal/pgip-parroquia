@@ -41,13 +41,31 @@ const upload = multer({
 });
 
 // Todas las rutas requieren token
-router.use(verificarToken);
+//router.use(verificarToken);
 
 // Rutas
-router.post('/subir', verificarRol(['admin', 'operador']),
+// Quita esta línea:
+//router.use(verificarToken);
+
+// Y agrega verificarToken explícito en cada ruta:
+router.post('/subir', verificarToken, verificarRol(['admin', 'operador']),
     upload.single('imagen'), subirFolio);
-router.get('/buscar', verificarRol(['admin', 'operador']), buscarFolios);
-router.get('/', verificarRol(['admin', 'operador']), obtenerFolios);
-router.get('/:id', verificarRol(['admin', 'operador']), obtenerFolio);
+router.get('/buscar', verificarToken, verificarRol(['admin', 'operador']), buscarFolios);
+router.get('/', verificarToken, verificarRol(['admin', 'operador']), obtenerFolios);
+router.get('/:id', verificarToken, verificarRol(['admin', 'operador']), obtenerFolio);
+
+
+router.use((err, req, res, next) => {
+    if (err instanceof multer.MulterError) {
+        if (err.code === 'LIMIT_FILE_SIZE') {
+            return res.status(400).json({ error: 'El archivo excede el tamaño máximo permitido (10MB)' });
+        }
+        return res.status(400).json({ error: err.message });
+    }
+    if (err && err.message && err.message.includes('Solo se permiten')) {
+        return res.status(400).json({ error: err.message });
+    }
+    next(err);
+});
 
 module.exports = router;
