@@ -16,7 +16,8 @@
       "<rootDir>/tests"
     ],
     "testMatch": [
-      "**/*.test.js"
+      "**/*.test.js",
+      "**/*.test.v*.js"
     ],
     "verbose": true,
     "testTimeout": 30000,
