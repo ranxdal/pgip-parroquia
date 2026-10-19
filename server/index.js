@@ -9,6 +9,7 @@ const tesoreríaRoutes = require('./src/routes/tesoreria.routes');
 const sacramentosRoutes = require('./src/routes/sacramentos.routes');
 const archivoRoutes = require('./src/routes/archivo.routes');
 const analyticsRoutes = require('./src/routes/analytics.routes');
+const intencionesRoutes = require('./src/routes/intenciones.routes');
 
 const app = express();
 
