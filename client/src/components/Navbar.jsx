@@ -50,6 +50,10 @@ export default function Navbar() {
                             className={styles.navBtn}>Archivo</button>
                         <button onClick={() => navegar('/certificados')}
                             className={styles.navBtn}>Certificados</button>
+                        <button onClick={() => navegar('/certificados')}
+                            className={styles.navBtn}>Certificados</button>
+                        <button onClick={() => navegar('/intenciones')}
+                            className={styles.navBtn}>Intenciones</button>
                         <span className={styles.navUsuario}>{usuario?.nombre}</span>
                         <button onClick={handleLogout}
                             className={styles.navBtnRojo}>Salir</button>
@@ -92,6 +96,10 @@ export default function Navbar() {
                     <button onClick={() => navegar('/certificados')}
                         className={styles.menuItem}>
                         📄 Certificados
+                    </button>
+                    <button onClick={() => navegar('/intenciones')}
+                        className={styles.menuItem}>
+                        🕊️ Intenciones de Misa
                     </button>
                     <button onClick={handleLogout}
                         className={styles.menuItemRojo}>

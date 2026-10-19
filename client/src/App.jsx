@@ -6,6 +6,7 @@ import Tesoreria from './pages/Tesoreria';
 import Sacrementos from './pages/Sacramentos';
 import Archivo from './pages/Archivo';
 import Certificados from './pages/Certificados';
+import Intenciones from './pages/Intenciones';
 
 function RutaProtegida({ children, soloAdmin = false }) {
     const { usuario, cargando } = useAuth();
@@ -47,6 +48,11 @@ export default function App() {
             <Route path="/certificados" element={
                 <RutaProtegida>
                     <Certificados />
+                </RutaProtegida>
+            } />
+            <Route path="/intenciones" element={
+                <RutaProtegida>
+                    <Intenciones />
                 </RutaProtegida>
             } />
             <Route path="/archivo" element={
