@@ -97,7 +97,6 @@ const registrarSacramento = async (req, res) => {
     } = req.body;
 
     try {
-        // Validar prerrequisitos
         const { valido, faltantes } = await validarPrerrequisitos(feligres_id, tipo);
 
         if (!valido) {
@@ -107,7 +106,6 @@ const registrarSacramento = async (req, res) => {
             });
         }
 
-        // Verificar que la fecha no sea futura
         if (new Date(fecha) > new Date()) {
             return res.status(400).json({
                 error: 'La fecha del sacramento no puede ser una fecha futura'
@@ -124,7 +122,6 @@ const registrarSacramento = async (req, res) => {
              ministro, padrino_1, padrino_2, req.usuario.id]
         );
 
-        // Actualizar estado del feligrés
         await pool.query(
             `UPDATE pgip.feligres SET estado = 'activo',
              es_catecumeno = false
@@ -153,9 +150,7 @@ const obtenerSacramentosFeligres = async (req, res) => {
         );
 
         if (feligres.length === 0) {
-            return res.status(404).json({
-                error: 'Feligrés no encontrado'
-            });
+            return res.status(404).json({ error: 'Feligrés no encontrado' });
         }
 
         const { rows: sacramentos } = await pool.query(
@@ -176,9 +171,79 @@ const obtenerSacramentosFeligres = async (req, res) => {
     }
 };
 
+// Actualizar sacramento
+const actualizarSacramento = async (req, res) => {
+    const { id } = req.params;
+    const { fecha, libro, folio, partida, ministro, padrino_1, padrino_2 } = req.body;
+
+    try {
+        const { rows: existe } = await pool.query(
+            `SELECT id FROM pgip.sacramento WHERE id = $1`,
+            [id]
+        );
+
+        if (existe.length === 0) {
+            return res.status(404).json({ error: 'Sacramento no encontrado' });
+        }
+
+        if (fecha && new Date(fecha) > new Date()) {
+            return res.status(400).json({
+                error: 'La fecha del sacramento no puede ser una fecha futura'
+            });
+        }
+
+        const { rows } = await pool.query(
+            `UPDATE pgip.sacramento
+             SET fecha    = COALESCE($1, fecha),
+                 libro    = COALESCE($2, libro),
+                 folio    = COALESCE($3, folio),
+                 partida  = COALESCE($4, partida),
+                 ministro = COALESCE($5, ministro),
+                 padrino_1 = COALESCE($6, padrino_1),
+                 padrino_2 = COALESCE($7, padrino_2)
+             WHERE id = $8
+             RETURNING *`,
+            [fecha, libro, folio, partida, ministro, padrino_1, padrino_2, id]
+        );
+
+        res.json({
+            mensaje: 'Sacramento actualizado exitosamente',
+            sacramento: rows[0]
+        });
+
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+// Eliminar sacramento
+const eliminarSacramento = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const { rows: existe } = await pool.query(
+            `SELECT id, feligres_id, tipo FROM pgip.sacramento WHERE id = $1`,
+            [id]
+        );
+
+        if (existe.length === 0) {
+            return res.status(404).json({ error: 'Sacramento no encontrado' });
+        }
+
+        await pool.query(`DELETE FROM pgip.sacramento WHERE id = $1`, [id]);
+
+        res.json({ mensaje: 'Sacramento eliminado exitosamente' });
+
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 module.exports = {
     registrarFeligres,
     buscarFeligres,
     registrarSacramento,
-    obtenerSacramentosFeligres
+    obtenerSacramentosFeligres,
+    actualizarSacramento,
+    eliminarSacramento
 };

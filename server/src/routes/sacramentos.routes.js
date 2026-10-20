@@ -4,7 +4,9 @@ const {
     registrarFeligres,
     buscarFeligres,
     registrarSacramento,
-    obtenerSacramentosFeligres
+    obtenerSacramentosFeligres,
+    actualizarSacramento,
+    eliminarSacramento
 } = require('../controllers/sacramentos.controller');
 const { verificarToken, verificarRol } = require('../middleware/auth.middleware');
 
@@ -18,5 +20,7 @@ router.get('/feligres/:feligres_id', verificarRol(['admin', 'operador']), obtene
 
 // Rutas de sacramentos
 router.post('/', verificarRol(['admin', 'operador']), registrarSacramento);
+router.put('/:id', verificarRol(['admin', 'operador']), actualizarSacramento);
+router.delete('/:id', verificarRol(['admin']), eliminarSacramento);
 
 module.exports = router;

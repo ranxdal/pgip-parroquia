@@ -1,169 +1,338 @@
+/* ─── Variables ──────────────────────────────────────────────────────────── */
+:root {
+    --azul:        #2b6cb0;
+    --azul-dark:   #1a365d;
+    --azul-light:  #ebf8ff;
+    --verde:       #276749;
+    --verde-light: #f0fff4;
+    --rojo:        #c53030;
+    --rojo-light:  #fff5f5;
+    --gris:        #718096;
+    --gris-light:  #f7f8fa;
+    --borde:       #e2e8f0;
+    --radio:       10px;
+    --sombra:      0 2px 8px rgba(0,0,0,.08);
+}
 
+/* ─── Layout ─────────────────────────────────────────────────────────────── */
 .contenedor {
     min-height: 100vh;
-    background-color: var(--color-fondo);
+    background: #f7f8fa;
+    font-family: 'Segoe UI', Arial, sans-serif;
 }
 
 .contenido {
-    padding: 16px;
-    max-width: 1200px;
+    max-width: 900px;
     margin: 0 auto;
+    padding: 32px 20px;
 }
 
 .titulo {
-    font-size: 1.5rem;
-    color: var(--color-primario);
-    margin-bottom: 16px;
-    margin-top: 0;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--azul-dark);
+    margin: 0 0 24px;
 }
 
+/* ─── Panel ──────────────────────────────────────────────────────────────── */
 .panel {
-    background-color: var(--color-blanco);
-    padding: 20px;
+    background: #fff;
+    border: 1px solid var(--borde);
     border-radius: var(--radio);
+    padding: 24px;
+    margin-bottom: 20px;
     box-shadow: var(--sombra);
-    margin-bottom: 16px;
 }
 
 .panelTitulo {
-    font-size: 1rem;
-    color: var(--color-texto);
-    margin-bottom: 16px;
-    margin-top: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--azul-dark);
+    margin: 0 0 16px;
 }
 
+/* ─── Alertas ────────────────────────────────────────────────────────────── */
+.errorDiv {
+    background: var(--rojo-light);
+    border: 1px solid #fed7d7;
+    color: var(--rojo);
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.exitoDiv {
+    background: var(--verde-light);
+    border: 1px solid #c6f6d5;
+    color: var(--verde);
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* ─── Búsqueda ───────────────────────────────────────────────────────────── */
 .busquedaFila {
     display: flex;
-    gap: 12px;
+    gap: 10px;
+    align-items: center;
 }
 
 .input {
+    width: 100%;
     padding: 10px 14px;
-    border: 1px solid var(--color-borde);
-    border-radius: var(--radio-mediano);
-    font-size: 1rem;
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color .2s;
     box-sizing: border-box;
-    outline: none;
-    transition: border-color 0.2s;
 }
 
 .input:focus {
-    border-color: var(--color-primario);
+    outline: none;
+    border-color: var(--azul);
+    box-shadow: 0 0 0 3px rgba(43,108,176,.15);
 }
 
-.botonPrimario {
-    background-color: var(--color-primario);
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: var(--radio-mediano);
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    white-space: nowrap;
-}
-
-.botonPrimario:hover {
-    background-color: var(--color-primario-hover);
-}
-
-.botonPrimario:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-}
-
-.botonVerde {
-    background-color: var(--color-exito);
-    color: #fff;
-    padding: 12px 24px;
-    border: none;
-    border-radius: var(--radio-mediano);
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    width: 100%;
-    margin-top: 16px;
-    transition: background-color 0.2s;
-}
-
-.botonVerde:hover {
-    background-color: #276749;
-}
-
-.errorDiv {
-    background-color: #fff5f5;
-    border: 1px solid #fc8181;
-    color: var(--color-peligro);
-    padding: 12px 16px;
-    border-radius: var(--radio-mediano);
-    margin-bottom: 16px;
-    cursor: pointer;
-}
-
-.textoGris {
-    color: var(--color-texto-suave);
-    font-size: 0.875rem;
-    margin: 2px 0;
-}
-
+/* ─── Resultados de búsqueda ─────────────────────────────────────────────── */
 .resultadoItem {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 12px 16px;
-    border: 1px solid var(--color-borde);
-    border-radius: var(--radio-mediano);
+    border: 1px solid var(--borde);
+    border-radius: 8px;
     margin-bottom: 8px;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background .15s, border-color .15s;
 }
 
 .resultadoItem:hover {
-    background-color: var(--color-fondo);
+    background: var(--azul-light);
+    border-color: var(--azul);
+}
+
+.textoGris {
+    color: var(--gris);
+    font-size: 13px;
+    margin: 2px 0 0;
 }
 
 .verBtn {
-    color: var(--color-primario);
-    font-weight: 600;
+    color: var(--azul);
+    font-size: 13px;
+    font-weight: 500;
 }
 
+/* ─── Grid de sacramentos ────────────────────────────────────────────────── */
 .sacramentosGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 12px;
-    margin-top: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+    margin-bottom: 20px;
 }
 
 .sacramentoCard {
+    border-radius: 10px;
     padding: 16px;
-    border-radius: var(--radio-mediano);
-    cursor: pointer;
-    transition: border 0.2s, transform 0.1s;
-    border: 2px solid transparent;
+    transition: box-shadow .2s, transform .15s;
+    position: relative;
 }
 
 .sacramentoCard:hover {
-    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(0,0,0,.12);
+    transform: translateY(-1px);
 }
 
 .sacramentoTipo {
-    font-weight: bold;
+    font-size: 16px;
+    font-weight: 700;
     text-transform: capitalize;
-    margin-bottom: 4px;
-    margin-top: 0;
+    margin: 0 0 4px;
 }
 
-@media (max-width: 480px) {
-    .busquedaFila {
-        flex-direction: column;
-    }
+/* Botones editar/eliminar dentro de la card */
+.cardAcciones {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
 
-    .botonPrimario {
-        width: 100%;
-    }
+.botonEditar {
+    flex: 1;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: 500;
+    background: #fff;
+    border: 1px solid #bee3f8;
+    color: var(--azul);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background .15s;
+}
 
-    .sacramentosGrid {
-        grid-template-columns: 1fr 1fr;
-    }
+.botonEditar:hover {
+    background: var(--azul-light);
+}
+
+.botonEliminar {
+    flex: 1;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: 500;
+    background: #fff;
+    border: 1px solid #fed7d7;
+    color: var(--rojo);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background .15s;
+}
+
+.botonEliminar:hover {
+    background: var(--rojo-light);
+}
+
+/* ─── Botones principales ────────────────────────────────────────────────── */
+.botonPrimario {
+    padding: 10px 20px;
+    background: var(--azul);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s;
+    white-space: nowrap;
+}
+
+.botonPrimario:hover:not(:disabled) {
+    background: var(--azul-dark);
+}
+
+.botonPrimario:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.botonVerde {
+    padding: 12px 24px;
+    background: var(--verde);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s;
+    margin-top: 8px;
+}
+
+.botonVerde:hover {
+    background: #1a4731;
+}
+
+.botonSecundario {
+    padding: 10px 20px;
+    background: var(--gris-light);
+    color: #4a5568;
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s;
+}
+
+.botonSecundario:hover:not(:disabled) {
+    background: #edf2f7;
+}
+
+.botonSecundario:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.botonRojo {
+    padding: 10px 20px;
+    background: var(--rojo);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s;
+}
+
+.botonRojo:hover:not(:disabled) {
+    background: #9b2c2c;
+}
+
+.botonRojo:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+/* ─── Modal ──────────────────────────────────────────────────────────────── */
+.modalOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 16px;
+}
+
+.modal {
+    background: #fff;
+    border-radius: 12px;
+    padding: 28px;
+    width: 100%;
+    max-width: 520px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.25);
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modalTitulo {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--azul-dark);
+    margin: 0 0 20px;
+}
+
+.formGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 24px;
+}
+
+.label {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #4a5568;
+}
+
+.modalAcciones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* ─── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+    .titulo { font-size: 1.4rem; }
+    .sacramentosGrid { grid-template-columns: 1fr; }
+    .formGrid { grid-template-columns: 1fr; }
+    .busquedaFila { flex-wrap: wrap; }
 }
