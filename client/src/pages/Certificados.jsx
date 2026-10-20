@@ -258,7 +258,8 @@ export default function Certificados() {
         // ── BAUTISMO ──
         if (sacramento.tipo === 'bautismo') {
             campo('Nombre:', `${feligres.nombres} ${feligres.apellidos}`, y); y += lh;
-            campo('Nombre de los padres:', sacramento.padre || '', y); y += lhS;
+            const nombresPadres = [feligres.nombre_padre, feligres.nombre_madre].filter(Boolean).join(' y ');
+            campo('Nombre de los padres:', nombresPadres, y); y += lhS;
             linea(y); y += lh;
             y += 3;
             campo('Nombre de los padrinos:', sacramento.padrino_1 || '', y); y += lhS;

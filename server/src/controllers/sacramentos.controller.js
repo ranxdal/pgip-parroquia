@@ -2,7 +2,8 @@ const pool = require('../services/db');
 
 // Registrar feligrés
 const registrarFeligres = async (req, res) => {
-    const { nombres, apellidos, fecha_nacimiento, es_catecumeno } = req.body;
+    const { nombres, apellidos, fecha_nacimiento, es_catecumeno,
+            nombre_padre, nombre_madre } = req.body;
 
     try {
         const { rows: existe } = await pool.query(
@@ -22,10 +23,12 @@ const registrarFeligres = async (req, res) => {
 
         const { rows } = await pool.query(
             `INSERT INTO pgip.feligres
-             (nombres, apellidos, fecha_nacimiento, es_catecumeno, estado)
-             VALUES ($1, $2, $3, $4, $5)
+             (nombres, apellidos, fecha_nacimiento, es_catecumeno, estado,
+              nombre_padre, nombre_madre)
+             VALUES ($1, $2, $3, $4, $5, $6, $7)
              RETURNING *`,
-            [nombres, apellidos, fecha_nacimiento, es_catecumeno || false, estado]
+            [nombres, apellidos, fecha_nacimiento, es_catecumeno || false, estado,
+             nombre_padre || null, nombre_madre || null]
         );
 
         res.status(201).json({
