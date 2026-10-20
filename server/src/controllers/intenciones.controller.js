@@ -12,7 +12,7 @@ const registrarIntencion = async (req, res) => {
 
     try {
         const result = await pool.query(
-            `INSERT INTO intenciones_misa (fecha_misa, nombre_familia, intencion, texto_lectura, creado_por)
+            `INSERT INTO pgip.intenciones_misa (fecha_misa, nombre_familia, intencion, texto_lectura, creado_por)
              VALUES ($1, $2, $3, $4, $5)
              RETURNING *`,
             [fecha_misa, nombre_familia, intencion, texto_lectura || null, req.usuario?.id || null]
@@ -34,7 +34,7 @@ const listarIntencionesPorFecha = async (req, res) => {
 
     try {
         const result = await pool.query(
-            `SELECT * FROM intenciones_misa
+            `SELECT * FROM pgip.intenciones_misa
              WHERE fecha_misa = $1
              ORDER BY created_at ASC`,
             [fecha]
@@ -50,7 +50,7 @@ const listarIntencionesPorFecha = async (req, res) => {
 const listarIntenciones = async (req, res) => {
     try {
         const result = await pool.query(
-            `SELECT * FROM intenciones_misa ORDER BY fecha_misa DESC, created_at DESC LIMIT 100`
+            `SELECT * FROM pgip.intenciones_misa ORDER BY fecha_misa DESC, created_at DESC LIMIT 100`
         );
         res.json({ intenciones: result.rows });
     } catch (err) {
@@ -66,7 +66,7 @@ const actualizarIntencion = async (req, res) => {
 
     try {
         const result = await pool.query(
-            `UPDATE intenciones_misa
+            `UPDATE pgip.intenciones_misa
              SET nombre_familia = COALESCE($1, nombre_familia),
                  intencion      = COALESCE($2, intencion),
                  texto_lectura  = COALESCE($3, texto_lectura),
@@ -90,7 +90,7 @@ const eliminarIntencion = async (req, res) => {
     const { id } = req.params;
     try {
         const result = await pool.query(
-            'DELETE FROM intenciones_misa WHERE id = $1 RETURNING id',
+            'DELETE FROM pgip.intenciones_misa WHERE id = $1 RETURNING id',
             [id]
         );
         if (result.rows.length === 0) {
@@ -109,7 +109,7 @@ const exportarWordPorFecha = async (req, res) => {
 
     try {
         const result = await pool.query(
-            `SELECT * FROM intenciones_misa
+            `SELECT * FROM pgip.intenciones_misa
              WHERE fecha_misa = $1
              ORDER BY created_at ASC`,
             [fecha]
