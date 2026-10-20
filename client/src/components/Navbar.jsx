@@ -50,8 +50,6 @@ export default function Navbar() {
                             className={styles.navBtn}>Archivo</button>
                         <button onClick={() => navegar('/certificados')}
                             className={styles.navBtn}>Certificados</button>
-                        <button onClick={() => navegar('/certificados')}
-                            className={styles.navBtn}>Certificados</button>
                         <button onClick={() => navegar('/intenciones')}
                             className={styles.navBtn}>Intenciones</button>
                         <span className={styles.navUsuario}>{usuario?.nombre}</span>
