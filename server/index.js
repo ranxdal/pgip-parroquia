@@ -40,6 +40,7 @@ app.use('/api/tesoreria', tesoreríaRoutes);
 app.use('/api/sacramentos', sacramentosRoutes);
 app.use('/api/archivo', archivoRoutes);
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api/intenciones', intencionesRoutes);
 
 // Rutas de prueba
 app.get('/api/ping', (req, res) => {
