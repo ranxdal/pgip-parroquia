@@ -3,7 +3,7 @@ import styles from './Intenciones.module.css';
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
-const getToken = () => localStorage.getItem('token');
+const getToken = () => localStorage.getItem('pgip_token');
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 const apiFetch = async (path, options = {}) => {
