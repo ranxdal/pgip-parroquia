@@ -45,380 +45,427 @@ export default function Certificados() {
             format: 'letter'
         });
 
+        // ── Fechas ──
         const fechaEmision = new Date().toLocaleDateString('es-GT', {
             day: 'numeric', month: 'long', year: 'numeric'
         });
-        const fechaSacramento = new Date(sacramento.fecha).toLocaleDateString('es-GT', {
-            day: 'numeric', month: 'long', year: 'numeric'
-        });
 
-        const anioSacramento = new Date(sacramento.fecha).getFullYear();
-        const diaSacramento = new Date(sacramento.fecha).getDate();
-        const mesSacramento = new Date(sacramento.fecha).toLocaleDateString('es-GT', { month: 'long' });
+        // Usar fecha ajustada para evitar desfase de zona horaria
+        const partesFecha = sacramento.fecha
+            ? sacramento.fecha.slice(0, 10).split('-')
+            : ['', '', ''];
+        const anioSacramento = partesFecha[0];
+        const mesSacramento  = new Date(
+            parseInt(partesFecha[0]),
+            parseInt(partesFecha[1]) - 1,
+            parseInt(partesFecha[2])
+        ).toLocaleDateString('es-GT', { month: 'long' });
+        const diaSacramento  = parseInt(partesFecha[2]);
 
-        // Colores según tipo de sacramento
+        const fechaSacramento = `${diaSacramento} de ${mesSacramento} de ${anioSacramento}`;
+
+        // Fecha de emisión descompuesta
+        const hoy = new Date();
+        const diaEmision = hoy.getDate();
+        const mesEmision = hoy.toLocaleDateString('es-GT', { month: 'long' });
+        const anioEmision = hoy.getFullYear();
+
+        // ── Colores según tipo ──
         const colores = {
-            bautismo: { r: 26, g: 54, b: 93 },        // Azul oscuro
-            confirmacion: { r: 20, g: 83, b: 45 },     // Verde oscuro
-            matrimonio: { r: 120, g: 53, b: 15 }       // Café oscuro
+            bautismo:     { r: 26,  g: 54,  b: 93  },  // Azul oscuro
+            confirmacion: { r: 20,  g: 83,  b: 45  },  // Verde oscuro
+            matrimonio:   { r: 120, g: 53,  b: 15  }   // Café oscuro
         };
-
         const color = colores[sacramento.tipo] || colores.bautismo;
+        const C = (fn) => { fn(); };  // helper para claridad
 
-        // ── BORDE DECORATIVO EXTERIOR ──
+        // ─────────────────────────────────────────────────
+        // BORDE DOBLE
+        // ─────────────────────────────────────────────────
         doc.setDrawColor(color.r, color.g, color.b);
         doc.setLineWidth(1.5);
         doc.rect(8, 8, 196, 271);
-
-        // Borde interior
         doc.setLineWidth(0.4);
         doc.rect(11, 11, 190, 265);
 
-        // ── CARGAR LOGO ──
+        // ─────────────────────────────────────────────────
+        // LOGO
+        // ─────────────────────────────────────────────────
         try {
             const logoUrl = new URL('../assets/logo-parroquia.jpg', import.meta.url).href;
             const response = await fetch(logoUrl);
             const blob = await response.blob();
             const reader = new FileReader();
-
             await new Promise((resolve) => {
                 reader.onload = () => {
-                    doc.addImage(reader.result, 'JPEG', 14, 14, 35, 28);
+                    doc.addImage(reader.result, 'JPEG', 14, 14, 32, 26);
                     resolve();
                 };
                 reader.readAsDataURL(blob);
             });
-        } catch (e) {
+        } catch {
             console.log('Logo no disponible');
         }
 
-        // ── ENCABEZADO ──
+        // ─────────────────────────────────────────────────
+        // ENCABEZADO  (logo a la izquierda, texto a la derecha)
+        // ─────────────────────────────────────────────────
         doc.setTextColor(color.r, color.g, color.b);
-        doc.setFontSize(16);
-        doc.setFont('helvetica', 'bold');
-        doc.text('PARROQUIA SAN AGUSTÍN', 130, 22, { align: 'center' });
-
-        doc.setFontSize(9);
-        doc.setFont('helvetica', 'normal');
-        doc.text('Vicaría Episcopal de Sacatepéquez', 130, 28, { align: 'center' });
-        doc.text('"Santo Hermano Pedro"', 130, 33, { align: 'center' });
-        doc.text('Arquidiócesis de Santiago de Guatemala', 130, 38, { align: 'center' });
-
-        // Línea separadora encabezado
-        doc.setDrawColor(color.r, color.g, color.b);
-        doc.setLineWidth(0.8);
-        doc.line(14, 45, 204, 45);
-        doc.setLineWidth(0.3);
-        doc.line(14, 47, 204, 47);
-
-        // ── TÍTULO DEL CERTIFICADO ──
-        const titulos = {
-            bautismo: 'CONSTANCIA DE BAUTISMO',
-            confirmacion: 'CONSTANCIA DE CONFIRMACIÓN',
-            matrimonio: 'CONSTANCIA DE MATRIMONIO RELIGIOSO'
-        };
-
         doc.setFontSize(15);
         doc.setFont('helvetica', 'bold');
-        doc.setTextColor(color.r, color.g, color.b);
-        doc.text(titulos[sacramento.tipo], 106, 57, { align: 'center' });
+        doc.text('PARROQUIA SAN AGUSTÍN', 125, 21, { align: 'center' });
 
-        // Línea bajo el título
-        doc.setLineWidth(0.3);
-        doc.line(40, 60, 172, 60);
-
-        // ── CUERPO DEL CERTIFICADO ──
-        doc.setTextColor(30, 30, 30);
-        doc.setFontSize(10.5);
+        doc.setFontSize(8.5);
         doc.setFont('helvetica', 'normal');
+        doc.text('Vicaría Episcopal de Sacatepéquez', 125, 27, { align: 'center' });
+        doc.text('"Santo Hermano Pedro"', 125, 32, { align: 'center' });
+        doc.text('Arquidiócesis de Santiago de Guatemala.', 125, 37, { align: 'center' });
 
-        let y = 72;
-        const lineH = 9;
-        const lineColor = [color.r, color.g, color.b];
+        // Separador doble
+        doc.setDrawColor(color.r, color.g, color.b);
+        doc.setLineWidth(0.8);
+        doc.line(14, 43, 204, 43);
+        doc.setLineWidth(0.3);
+        doc.line(14, 45, 204, 45);
 
-        // Función auxiliar para línea con etiqueta y valor
-        const campoLinea = (etiqueta, valor, yPos, xInicio = 14, ancho = 190) => {
+        // ─────────────────────────────────────────────────
+        // TÍTULO
+        // ─────────────────────────────────────────────────
+        const titulos = {
+            bautismo:     'CONSTANCIA DE BAUTISMO',
+            confirmacion: 'CONSTANCIA DE CONFIRMACIÓN',
+            matrimonio:   'CONSTANCIA DE MATRIMONIO RELIGIOSO'
+        };
+
+        doc.setFontSize(13);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(color.r, color.g, color.b);
+        doc.text(titulos[sacramento.tipo], 109, 55, { align: 'center' });
+
+        // ─────────────────────────────────────────────────
+        // HELPERS INTERNOS
+        // ─────────────────────────────────────────────────
+        const xL = 17;   // margen izquierdo del cuerpo
+        const xR = 201;  // margen derecho del cuerpo
+
+        // Dibuja etiqueta + línea + valor opcional
+        const campo = (etiqueta, valor, y, xIni = xL, xFin = xR) => {
             doc.setFont('helvetica', 'normal');
             doc.setTextColor(30, 30, 30);
-            doc.text(etiqueta, xInicio, yPos);
-            const anchoEtiqueta = doc.getTextWidth(etiqueta);
+            doc.text(etiqueta, xIni, y);
+            const w = doc.getTextWidth(etiqueta);
             doc.setDrawColor(color.r, color.g, color.b);
             doc.setLineWidth(0.3);
-            doc.line(xInicio + anchoEtiqueta + 1, yPos + 1, xInicio + ancho, yPos + 1);
+            doc.line(xIni + w + 1, y + 1, xFin, y + 1);
             if (valor) {
                 doc.setFont('helvetica', 'bold');
                 doc.setTextColor(color.r, color.g, color.b);
-                doc.text(valor, xInicio + anchoEtiqueta + 3, yPos);
+                doc.text(valor, xIni + w + 3, y);
             }
         };
 
+        // Solo línea horizontal (campo vacío de continuación)
+        const linea = (y, xIni = xL, xFin = xR) => {
+            doc.setDrawColor(color.r, color.g, color.b);
+            doc.setLineWidth(0.3);
+            doc.line(xIni, y + 1, xFin, y + 1);
+        };
+
+        // Texto normal (sin negrita, color oscuro)
+        const txt = (texto, x, y) => {
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(30, 30, 30);
+            doc.text(texto, x, y);
+        };
+
+        // Texto en negrita con color del sacramento
+        const bold = (texto, x, y) => {
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(color.r, color.g, color.b);
+            doc.text(texto, x, y);
+        };
+
+        doc.setFontSize(10);
+        let y = 66;
+        const lh = 9;   // interlineado estándar
+        const lhS = 5;  // interlineado corto (espacio extra dentro de un campo)
+
+        // ═════════════════════════════════════════════════
+        // BAUTISMO
+        // ═════════════════════════════════════════════════
         if (sacramento.tipo === 'bautismo') {
-            doc.setFont('helvetica', 'normal');
-            doc.text('En el libro de Bautismos', 14, y); y += lineH;
 
-            // No. Folio Partida en una línea
-            doc.text('No.', 14, y);
-            doc.line(22, y + 1, 65, y + 1);
-            doc.text('Folio:', 68, y);
-            doc.line(83, y + 1, 130, y + 1);
-            doc.text('Partida:', 133, y);
-            doc.line(152, y + 1, 204, y + 1);
+            // ── Nombre ──
+            campo('Nombre:', `${feligres.nombres} ${feligres.apellidos}`, y); y += lh;
 
-            if (sacramento.folio || sacramento.partida || sacramento.libro) {
-                doc.setFont('helvetica', 'bold');
-                doc.setTextColor(color.r, color.g, color.b);
-                if (sacramento.libro) doc.text(sacramento.libro, 24, y);
-                if (sacramento.folio) doc.text(sacramento.folio, 85, y);
-                if (sacramento.partida) doc.text(sacramento.partida, 154, y);
+            // ── Nombre de los padres (dos líneas) ──
+            campo('Nombre de los padres:', sacramento.padre || '', y); y += lhS;
+            linea(y); y += lh;
+
+            y += 3; // espacio extra entre bloques
+
+            // ── Nombre de los padrinos (dos líneas) ──
+            campo('Nombre de los padrinos:', sacramento.padrino_1 || '', y); y += lhS;
+            // segunda línea padrinos
+            if (sacramento.padrino_2) {
+                bold(sacramento.padrino_2, xL, y);
             }
-            y += lineH;
+            linea(y); y += lh;
 
-            doc.setFont('helvetica', 'normal');
-            doc.setTextColor(30, 30, 30);
-            doc.text('De esta Parroquia, consta que el día', 14, y);
-            doc.setFont('helvetica', 'bold');
-            doc.setTextColor(color.r, color.g, color.b);
-            doc.text(`${diaSacramento}`, 90, y);
-            doc.setFont('helvetica', 'normal');
-            doc.setTextColor(30, 30, 30);
-            doc.text('de', 98, y);
-            doc.setFont('helvetica', 'bold');
-            doc.setTextColor(color.r, color.g, color.b);
-            doc.text(`${mesSacramento}`, 104, y);
-            doc.setFont('helvetica', 'normal');
-            doc.setTextColor(30, 30, 30);
-            doc.text('del año', 138, y);
-            doc.setFont('helvetica', 'bold');
-            doc.setTextColor(color.r, color.g, color.b);
-            doc.text(`${anioSacramento}`, 158, y);
-            y += lineH;
+            y += 3;
 
-            doc.setFont('helvetica', 'normal');
-            doc.setTextColor(30, 30, 30);
-            campoLinea('Nombre:', `${feligres.nombres} ${feligres.apellidos}`, y);
-            y += lineH;
+            // ── Fecha de nacimiento ──
+            campo('Fecha de nacimiento:',
+                feligres.fecha_nacimiento
+                    ? (() => {
+                        const [a, m, d] = feligres.fecha_nacimiento.slice(0, 10).split('-');
+                        return `${parseInt(d)} de ${new Date(parseInt(a), parseInt(m)-1, parseInt(d)).toLocaleDateString('es-GT', { month: 'long' })} de ${a}`;
+                      })()
+                    : '',
+                y);
+            y += lh;
 
-            campoLinea('Nombre de los padres:', '', y); y += lineH;
-            doc.line(14, y + 1, 204, y + 1); y += lineH;
+            // ── Fecha de bautismo ──
+            campo('Fecha de bautismo:', fechaSacramento, y); y += lh;
 
-            campoLinea('Nombre de los padrinos:', '', y); y += lineH;
+            // ── Libro de bautismos ──
+            campo('Libro de bautismos:', sacramento.libro || '', y); y += lh;
 
-            if (sacramento.padrino_1 || sacramento.padrino_2) {
-                doc.setFont('helvetica', 'bold');
-                doc.setTextColor(color.r, color.g, color.b);
-                const padrinos = [sacramento.padrino_1, sacramento.padrino_2].filter(Boolean).join(' y ');
-                doc.text(padrinos, 14, y);
-                doc.setFont('helvetica', 'normal');
-                doc.setTextColor(30, 30, 30);
-            }
-            doc.line(14, y + 1, 204, y + 1);
-            y += lineH;
+            // ── No. / Folio / Partida ──
+            txt('No.', xL, y);
+            doc.setDrawColor(color.r, color.g, color.b);
+            doc.setLineWidth(0.3);
+            doc.line(xL + 7, y + 1, xL + 45, y + 1);
+            if (sacramento.libro) bold(sacramento.libro, xL + 9, y);
 
-            if (feligres.fecha_nacimiento) {
-                campoLinea('Fecha de nacimiento:',
-                    new Date(feligres.fecha_nacimiento).toLocaleDateString('es-GT'), y);
-                y += lineH;
-            }
+            txt('Folio:', xL + 48, y);
+            doc.line(xL + 62, y + 1, xL + 100, y + 1);
+            if (sacramento.folio) bold(String(sacramento.folio), xL + 64, y);
 
-            campoLinea('Fecha de bautismo:', fechaSacramento, y); y += lineH;
-            campoLinea('Libro de bautismos:', sacramento.libro || '', y); y += lineH * 1.5;
+            txt('Partida:', xL + 103, y);
+            doc.line(xL + 120, y + 1, xR, y + 1);
+            if (sacramento.partida) bold(String(sacramento.partida), xL + 122, y);
+            y += lh + 2;
 
-            campoLinea('Anotación marginal:', '', y); y += lineH;
-            doc.line(14, y + 1, 204, y + 1); y += lineH * 2;
+            // ── Anotación marginal ──
+            campo('Anotación marginal:', '', y); y += lhS;
+            linea(y); y += lh + 3;
 
+        // ═════════════════════════════════════════════════
+        // CONFIRMACIÓN
+        // ═════════════════════════════════════════════════
         } else if (sacramento.tipo === 'confirmacion') {
-            doc.text('En el libro de Confirmaciones', 14, y); y += lineH;
 
-            doc.text('No.', 14, y);
-            doc.line(22, y + 1, 65, y + 1);
-            doc.text('Folio:', 68, y);
-            doc.line(83, y + 1, 130, y + 1);
-            doc.text('Partida:', 133, y);
-            doc.line(152, y + 1, 204, y + 1);
+            // ── "En el libro de Confirmaciones" ──
+            txt('En el libro de Confirmaciones', xL, y); y += lh;
 
-            if (sacramento.folio || sacramento.partida || sacramento.libro) {
-                doc.setFont('helvetica', 'bold');
-                doc.setTextColor(color.r, color.g, color.b);
-                if (sacramento.libro) doc.text(sacramento.libro, 24, y);
-                if (sacramento.folio) doc.text(sacramento.folio, 85, y);
-                if (sacramento.partida) doc.text(sacramento.partida, 154, y);
-            }
-            y += lineH;
+            // ── No. / Folio / Partida / De esta — todo en una línea ──
+            txt('No.', xL, y);
+            doc.setDrawColor(color.r, color.g, color.b);
+            doc.setLineWidth(0.3);
+            doc.line(xL + 7, y + 1, xL + 40, y + 1);
+            if (sacramento.libro) bold(sacramento.libro, xL + 9, y);
 
-            doc.setFont('helvetica', 'normal');
-            doc.setTextColor(30, 30, 30);
-            doc.text('De esta Parroquia, consta que el día', 14, y);
-            doc.setFont('helvetica', 'bold');
-            doc.setTextColor(color.r, color.g, color.b);
-            doc.text(`${diaSacramento}`, 90, y);
-            doc.setFont('helvetica', 'normal');
-            doc.setTextColor(30, 30, 30);
-            doc.text('de', 98, y);
-            doc.setFont('helvetica', 'bold');
-            doc.setTextColor(color.r, color.g, color.b);
-            doc.text(`${mesSacramento}`, 104, y);
-            doc.setFont('helvetica', 'normal');
-            doc.setTextColor(30, 30, 30);
-            doc.text('del año', 138, y);
-            doc.setFont('helvetica', 'bold');
-            doc.setTextColor(color.r, color.g, color.b);
-            doc.text(`${anioSacramento}`, 158, y);
-            y += lineH;
+            txt('Folio:', xL + 43, y);
+            doc.line(xL + 56, y + 1, xL + 90, y + 1);
+            if (sacramento.folio) bold(String(sacramento.folio), xL + 58, y);
 
-            doc.setFont('helvetica', 'normal');
-            doc.setTextColor(30, 30, 30);
-            if (sacramento.ministro) {
-                campoLinea('Su excelencia Mons.:', sacramento.ministro, y);
-                y += lineH;
-            } else {
-                campoLinea('Su excelencia Mons.:', '', y); y += lineH;
-                doc.line(14, y + 1, 204, y + 1); y += lineH;
-            }
+            txt('Partida:', xL + 93, y);
+            doc.line(xL + 108, y + 1, xL + 138, y + 1);
+            if (sacramento.partida) bold(String(sacramento.partida), xL + 110, y);
 
-            campoLinea('Confirió el Sacramento de la Confirmación a:',
-                `${feligres.nombres} ${feligres.apellidos}`, y);
-            y += lineH;
-            doc.line(14, y + 1, 204, y + 1); y += lineH;
+            txt('De esta', xL + 141, y);
+            y += lh;
 
+            // ── Parroquia, consta que el ___ de ___ del año ___ ──
+            txt('Parroquia, consta que el', xL, y);
+            const xDia = xL + doc.getTextWidth('Parroquia, consta que el') + 2;
+            bold(String(diaSacramento), xDia, y);
+            const xDe1 = xDia + doc.getTextWidth(String(diaSacramento)) + 2;
+            txt('de', xDe1, y);
+            const xMes = xDe1 + doc.getTextWidth('de') + 2;
+            bold(mesSacramento, xMes, y);
+            const xDelAnio = xMes + doc.getTextWidth(mesSacramento) + 2;
+            txt('del año', xDelAnio, y);
+            const xAnio = xDelAnio + doc.getTextWidth('del año') + 2;
+            bold(String(anioSacramento), xAnio, y);
+            y += lh;
+
+            // ── Su excelencia Mons. ──
+            campo('Su excelencia Mons.', sacramento.ministro || '', y); y += lhS;
+            linea(y); y += lh + 2;
+
+            // ── Confirió el Sacramento... a: ──
+            campo('Confirió el Sacramento de la Confirmación a:', `${feligres.nombres} ${feligres.apellidos}`, y);
+            y += lhS;
+            linea(y); y += lh;
+
+            // ── de: ___ años de edad ──
             if (feligres.fecha_nacimiento) {
-                const edad = new Date().getFullYear() - new Date(feligres.fecha_nacimiento).getFullYear();
-                doc.text(`de: `, 14, y);
-                doc.setFont('helvetica', 'bold');
-                doc.setTextColor(color.r, color.g, color.b);
-                doc.text(`${edad}`, 25, y);
-                doc.setFont('helvetica', 'normal');
-                doc.setTextColor(30, 30, 30);
-                doc.text('años de edad,', 35, y);
-                y += lineH;
+                const [a] = feligres.fecha_nacimiento.slice(0, 10).split('-');
+                const edad = new Date().getFullYear() - parseInt(a);
+                txt('de:', xL, y);
+                bold(String(edad), xL + 10, y);
+                txt('años de edad,', xL + 10 + doc.getTextWidth(String(edad)) + 2, y);
+                y += lh;
+            } else {
+                campo('de:', '', y); y += lh;
             }
 
-            campoLinea('bautizado en la Parroquia de:', '', y); y += lineH;
-            campoLinea('Hijo (a) de:', '', y); y += lineH;
-            doc.line(14, y + 1, 204, y + 1); y += lineH;
-            campoLinea('y de:', '', y); y += lineH;
-            doc.line(14, y + 1, 204, y + 1); y += lineH;
+            // ── bautizado en la Parroquia de ──
+            campo('bautizado en la Parroquia de', '', y); y += lh;
 
-            campoLinea('Padrinos:', '', y); y += lineH;
-            if (sacramento.padrino_1 || sacramento.padrino_2) {
-                doc.setFont('helvetica', 'bold');
-                doc.setTextColor(color.r, color.g, color.b);
-                const padrinos = [sacramento.padrino_1, sacramento.padrino_2].filter(Boolean).join(' y ');
-                doc.text(padrinos, 14, y);
+            // ── Hijo (a) de: ──
+            campo('Hijo (a) de:', '', y); y += lhS;
+            linea(y); y += lh;
+
+            // ── y de: ──
+            campo('y de:', '', y); y += lhS;
+            linea(y); y += lh + 2;
+
+            // ── Padrinos ──
+            campo('Padrinos:', sacramento.padrino_1 || '', y); y += lhS;
+            if (sacramento.padrino_2) {
+                bold(sacramento.padrino_2, xL, y);
             }
-            doc.line(14, y + 1, 204, y + 1); y += lineH;
-            doc.line(14, y + 1, 204, y + 1); y += lineH * 1.5;
+            linea(y); y += lh;
 
-            campoLinea('Anotación marginal:', '', y); y += lineH;
-            doc.line(14, y + 1, 204, y + 1); y += lineH * 2;
+            // ── Anotación marginal ──
+            campo('Anotación marginal:', '', y); y += lhS;
+            linea(y); y += lh + 3;
 
+        // ═════════════════════════════════════════════════
+        // MATRIMONIO
+        // ═════════════════════════════════════════════════
         } else if (sacramento.tipo === 'matrimonio') {
-            doc.setFont('helvetica', 'normal');
-            doc.setTextColor(30, 30, 30);
-            doc.text('El infrascrito Párroco, hace constar:', 14, y); y += lineH;
 
-            doc.text('Que en fecha:', 14, y);
+            txt('El infrascrito Párroco, hace constar:', xL, y); y += lh;
+
+            // ── Que en fecha: ___ de ___ de ___ ──
+            txt('Que en fecha:', xL, y);
+            const xD = xL + doc.getTextWidth('Que en fecha:') + 2;
+            doc.setDrawColor(color.r, color.g, color.b);
+            doc.setLineWidth(0.3);
+            doc.line(xD, y + 1, xD + 18, y + 1);
+            bold(String(diaSacramento), xD + 1, y);
+
+            const xDe2 = xD + 20;
+            txt('de', xDe2, y);
+            const xM2 = xDe2 + doc.getTextWidth('de') + 2;
+            doc.line(xM2, y + 1, xM2 + 38, y + 1);
+            bold(mesSacramento, xM2 + 1, y);
+
+            const xDe3 = xM2 + 40;
+            txt('de', xDe3, y);
+            const xA2 = xDe3 + doc.getTextWidth('de') + 2;
+            doc.line(xA2, y + 1, xA2 + 18, y + 1);
+            bold(String(anioSacramento), xA2 + 1, y);
+            y += lh;
+
+            txt('Contrajeron Matrimonio Religioso:', xL, y); y += lh;
+
+            // Línea 1 contrayentes — nombre del feligrés registrado
             doc.setFont('helvetica', 'bold');
             doc.setTextColor(color.r, color.g, color.b);
-            doc.text(`${diaSacramento}`, 52, y);
+            doc.text(`${feligres.nombres} ${feligres.apellidos}`, xL, y);
             doc.setFont('helvetica', 'normal');
             doc.setTextColor(30, 30, 30);
-            doc.text('de', 62, y);
-            doc.setFont('helvetica', 'bold');
-            doc.setTextColor(color.r, color.g, color.b);
-            doc.text(`${mesSacramento}`, 68, y);
-            doc.setFont('helvetica', 'normal');
-            doc.setTextColor(30, 30, 30);
-            doc.text('de', 110, y);
-            doc.setFont('helvetica', 'bold');
-            doc.setTextColor(color.r, color.g, color.b);
-            doc.text(`${anioSacramento}`, 116, y);
-            y += lineH;
+            linea(y); y += lh;
 
-            doc.setFont('helvetica', 'normal');
-            doc.setTextColor(30, 30, 30);
-            doc.text('Contrajeron Matrimonio Religioso:', 14, y); y += lineH;
-
-            doc.setFont('helvetica', 'bold');
-            doc.setTextColor(color.r, color.g, color.b);
-            doc.text(`${feligres.nombres} ${feligres.apellidos}`, 14, y);
-            doc.setFont('helvetica', 'normal');
-            doc.setTextColor(30, 30, 30);
-            doc.line(14, y + 1, 204, y + 1); y += lineH;
-            doc.line(14, y + 1, 204, y + 1); y += lineH * 1.5;
-
-            doc.text('Según consta el Libro:', 14, y); y += lineH;
-
-            doc.text('No.', 14, y);
-            doc.line(22, y + 1, 75, y + 1);
-            doc.text('Folio:', 78, y);
-            doc.line(93, y + 1, 145, y + 1);
-            doc.text('Partida:', 148, y);
-            doc.line(167, y + 1, 204, y + 1);
-
-            if (sacramento.folio || sacramento.partida || sacramento.libro) {
-                doc.setFont('helvetica', 'bold');
-                doc.setTextColor(color.r, color.g, color.b);
-                if (sacramento.libro) doc.text(sacramento.libro, 24, y);
-                if (sacramento.folio) doc.text(sacramento.folio, 95, y);
-                if (sacramento.partida) doc.text(sacramento.partida, 169, y);
+            // Línea 2 contrayentes — cónyuge (guardado en sacramento.conyugue o dejar en blanco)
+            if (sacramento.conyugue) {
+                bold(sacramento.conyugue, xL, y);
             }
-            y += lineH * 1.5;
+            linea(y); y += lh + 2;
 
-            campoLinea('Anotación marginal:', '', y); y += lineH;
-            doc.line(14, y + 1, 204, y + 1); y += lineH;
-            doc.line(14, y + 1, 204, y + 1); y += lineH * 2;
+            txt('Según consta el Libro:', xL, y); y += lh;
+
+            // ── No. / Folio / Partida ──
+            txt('No.', xL, y);
+            doc.setDrawColor(color.r, color.g, color.b);
+            doc.setLineWidth(0.3);
+            doc.line(xL + 7, y + 1, xL + 45, y + 1);
+            if (sacramento.libro) bold(sacramento.libro, xL + 9, y);
+
+            txt('Folio:', xL + 48, y);
+            doc.line(xL + 62, y + 1, xL + 100, y + 1);
+            if (sacramento.folio) bold(String(sacramento.folio), xL + 64, y);
+
+            txt('Partida:', xL + 103, y);
+            doc.line(xL + 120, y + 1, xR, y + 1);
+            if (sacramento.partida) bold(String(sacramento.partida), xL + 122, y);
+            y += lh + 2;
+
+            // ── Anotación marginal ──
+            campo('Anotación marginal:', '', y); y += lhS;
+            linea(y); y += lhS;
+            linea(y + lh); y += lh * 2 + 2;
         }
 
-        // ── FECHA DE EMISIÓN ──
-        const [dia, mes, anio] = fechaEmision.split(' de ');
-        doc.setFont('helvetica', 'normal');
-        doc.setTextColor(30, 30, 30);
-        doc.text('Guatemala', 14, y);
-        doc.line(38, y + 1, 80, y + 1);
-        doc.text('de', 83, y);
-        doc.setFont('helvetica', 'bold');
-        doc.setTextColor(color.r, color.g, color.b);
-        doc.text(mesSacramento, 90, y);
-        doc.setFont('helvetica', 'normal');
-        doc.setTextColor(30, 30, 30);
-        doc.text('del año', 138, y);
-        doc.setFont('helvetica', 'bold');
-        doc.setTextColor(color.r, color.g, color.b);
-        doc.text(String(new Date().getFullYear()), 158, y);
-        y += lineH * 3;
+        // ─────────────────────────────────────────────────
+        // FECHA DE EMISIÓN  — Guatemala ___ de ___ del año ___
+        // ─────────────────────────────────────────────────
+        doc.setFontSize(10);
+        txt('Guatemala', xL, y);
+        const xGuate = xL + doc.getTextWidth('Guatemala') + 2;
+        doc.setDrawColor(color.r, color.g, color.b);
+        doc.setLineWidth(0.3);
+        doc.line(xGuate, y + 1, xGuate + 22, y + 1);
+        bold(String(diaEmision), xGuate + 1, y);
 
-        // ── FIRMA ──
+        const xDe4 = xGuate + 24;
+        txt('de', xDe4, y);
+        const xME = xDe4 + doc.getTextWidth('de') + 2;
+        doc.line(xME, y + 1, xME + 38, y + 1);
+        bold(mesEmision, xME + 1, y);
+
+        const xDA = xME + 40;
+        txt('del año', xDA, y);
+        const xAE = xDA + doc.getTextWidth('del año') + 2;
+        doc.line(xAE, y + 1, xAE + 20, y + 1);
+        bold(String(anioEmision), xAE + 1, y);
+        y += lh * 3.5;
+
+        // ─────────────────────────────────────────────────
+        // FIRMA
+        // ─────────────────────────────────────────────────
         doc.setDrawColor(color.r, color.g, color.b);
         doc.setLineWidth(0.5);
-        doc.line(74, y, 148, y);
+        doc.line(76, y, 148, y);
         y += 5;
         doc.setFont('helvetica', 'bold');
         doc.setTextColor(color.r, color.g, color.b);
-        doc.setFontSize(11);
-        doc.text('Párroco', 106, y, { align: 'center' });
+        doc.setFontSize(10);
+        doc.text('Párroco', 112, y, { align: 'center' });
 
-        // ── PIE DE PÁGINA ──
+        // ─────────────────────────────────────────────────
+        // PIE DE PÁGINA
+        // ─────────────────────────────────────────────────
         doc.setLineWidth(0.8);
         doc.setDrawColor(color.r, color.g, color.b);
         doc.line(14, 258, 204, 258);
         doc.setLineWidth(0.3);
         doc.line(14, 260, 204, 260);
 
-        doc.setFontSize(8);
+        doc.setFontSize(7.5);
         doc.setFont('helvetica', 'normal');
         doc.setTextColor(color.r, color.g, color.b);
-        doc.text('0 Calle 0-14 Zona 4, Sumpango Sacatepéquez, Guatemala C.A.', 106, 264, { align: 'center' });
-        doc.text('Teléfono: 7833-1366  •  E-mail: sanagustinparroquiasumpangosac@gmail.com', 106, 269, { align: 'center' });
+        doc.text('0 Calle 0-14 Zona 4, Sumpango Sacatepéquez. Guatemala C.A.', 109, 264, { align: 'center' });
+        doc.text('Teléfono: 7833-1366  •  E-mail: sanagustinparroquiasumpangosac@gmail.com', 109, 269, { align: 'center' });
 
-        // ── MARCA DE AGUA SUTIL ──
+        // ─────────────────────────────────────────────────
+        // MARCA DE AGUA SUTIL
+        // ─────────────────────────────────────────────────
         doc.setTextColor(color.r, color.g, color.b);
-        doc.setFontSize(48);
+        doc.setFontSize(50);
         doc.setFont('helvetica', 'bold');
         doc.setGState(new doc.GState({ opacity: 0.04 }));
-        doc.text('PARROQUIA', 106, 150, { align: 'center', angle: 45 });
+        doc.text('PARROQUIA', 109, 150, { align: 'center', angle: 45 });
         doc.setGState(new doc.GState({ opacity: 1 }));
 
-        // ── NÚMERO DE SERIE ──
+        // ─────────────────────────────────────────────────
+        // NÚMERO DE SERIE
+        // ─────────────────────────────────────────────────
         doc.setFontSize(7);
         doc.setFont('helvetica', 'normal');
         doc.setTextColor(150, 150, 150);
@@ -430,9 +477,9 @@ export default function Certificados() {
     };
 
     const tipoColor = {
-        bautismo: { bg: '#ebf8ff', color: '#2b6cb0' },
-        confirmacion: { bg: '#faf5ff', color: '#6b46c1' },
-        matrimonio: { bg: '#fff5f0', color: '#c05621' }
+        bautismo:     { bg: '#ebf8ff', color: '#2b6cb0' },
+        confirmacion: { bg: '#f0fff4', color: '#276749' },
+        matrimonio:   { bg: '#fff8f0', color: '#c05621' }
     };
 
     return (
