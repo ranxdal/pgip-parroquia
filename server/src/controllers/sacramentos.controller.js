@@ -96,7 +96,7 @@ const validarPrerrequisitos = async (feligresId, tipoSacramento) => {
 const registrarSacramento = async (req, res) => {
     const {
         feligres_id, tipo, fecha, libro,
-        folio, partida, ministro, padrino_1, padrino_2
+        folio, partida, ministro, padrino_1, padrino_2, conyuge
     } = req.body;
 
     try {
@@ -118,11 +118,11 @@ const registrarSacramento = async (req, res) => {
         const { rows } = await pool.query(
             `INSERT INTO pgip.sacramento
              (feligres_id, tipo, fecha, libro, folio, partida,
-              ministro, padrino_1, padrino_2, usuario_id)
-             VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+              ministro, padrino_1, padrino_2, conyuge, usuario_id)
+             VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
              RETURNING *`,
             [feligres_id, tipo, fecha, libro, folio, partida,
-             ministro, padrino_1, padrino_2, req.usuario.id]
+             ministro, padrino_1, padrino_2, conyuge || null, req.usuario.id]
         );
 
         await pool.query(
@@ -177,7 +177,7 @@ const obtenerSacramentosFeligres = async (req, res) => {
 // Actualizar sacramento
 const actualizarSacramento = async (req, res) => {
     const { id } = req.params;
-    const { fecha, libro, folio, partida, ministro, padrino_1, padrino_2 } = req.body;
+    const { fecha, libro, folio, partida, ministro, padrino_1, padrino_2, conyuge } = req.body;
 
     try {
         const { rows: existe } = await pool.query(
@@ -197,21 +197,56 @@ const actualizarSacramento = async (req, res) => {
 
         const { rows } = await pool.query(
             `UPDATE pgip.sacramento
-             SET fecha    = COALESCE($1, fecha),
-                 libro    = COALESCE($2, libro),
-                 folio    = COALESCE($3, folio),
-                 partida  = COALESCE($4, partida),
-                 ministro = COALESCE($5, ministro),
+             SET fecha     = COALESCE($1, fecha),
+                 libro     = COALESCE($2, libro),
+                 folio     = COALESCE($3, folio),
+                 partida   = COALESCE($4, partida),
+                 ministro  = COALESCE($5, ministro),
                  padrino_1 = COALESCE($6, padrino_1),
-                 padrino_2 = COALESCE($7, padrino_2)
-             WHERE id = $8
+                 padrino_2 = COALESCE($7, padrino_2),
+                 conyuge   = COALESCE($8, conyuge)
+             WHERE id = $9
              RETURNING *`,
-            [fecha, libro, folio, partida, ministro, padrino_1, padrino_2, id]
+            [fecha, libro, folio, partida, ministro, padrino_1, padrino_2, conyuge || null, id]
         );
 
         res.json({
             mensaje: 'Sacramento actualizado exitosamente',
             sacramento: rows[0]
+        });
+
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+// Actualizar datos básicos de un feligrés (nombre de padres, etc.)
+const actualizarFeligres = async (req, res) => {
+    const { feligres_id } = req.params;
+    const { nombre_padre, nombre_madre } = req.body;
+
+    try {
+        const { rows: existe } = await pool.query(
+            `SELECT id FROM pgip.feligres WHERE id = $1`,
+            [feligres_id]
+        );
+
+        if (existe.length === 0) {
+            return res.status(404).json({ error: 'Feligrés no encontrado' });
+        }
+
+        const { rows } = await pool.query(
+            `UPDATE pgip.feligres
+             SET nombre_padre = COALESCE($1, nombre_padre),
+                 nombre_madre = COALESCE($2, nombre_madre)
+             WHERE id = $3
+             RETURNING *`,
+            [nombre_padre || null, nombre_madre || null, feligres_id]
+        );
+
+        res.json({
+            mensaje: 'Feligrés actualizado exitosamente',
+            feligres: rows[0]
         });
 
     } catch (error) {
@@ -248,5 +283,6 @@ module.exports = {
     registrarSacramento,
     obtenerSacramentosFeligres,
     actualizarSacramento,
+    actualizarFeligres,
     eliminarSacramento
 };

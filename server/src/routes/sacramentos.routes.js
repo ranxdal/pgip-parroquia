@@ -6,6 +6,7 @@ const {
     registrarSacramento,
     obtenerSacramentosFeligres,
     actualizarSacramento,
+    actualizarFeligres,
     eliminarSacramento
 } = require('../controllers/sacramentos.controller');
 const { verificarToken, verificarRol } = require('../middleware/auth.middleware');
@@ -17,6 +18,7 @@ router.use(verificarToken);
 router.post('/feligres', verificarRol(['admin', 'operador']), registrarFeligres);
 router.get('/feligres/buscar', verificarRol(['admin', 'operador']), buscarFeligres);
 router.get('/feligres/:feligres_id', verificarRol(['admin', 'operador']), obtenerSacramentosFeligres);
+router.put('/feligres/:feligres_id', verificarRol(['admin', 'operador']), actualizarFeligres);
 
 // Rutas de sacramentos
 router.post('/', verificarRol(['admin', 'operador']), registrarSacramento);
