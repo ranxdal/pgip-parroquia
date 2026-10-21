@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Navbar from '../components/Navbar';
 import styles from './Intenciones.module.css';
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:3000';
@@ -214,102 +215,105 @@ export default function Intenciones() {
     };
 
     return (
-        <div className={styles.contenedor}>
-            {/* Encabezado */}
-            <div className={styles.encabezado}>
-                <div>
-                    <h1 className={styles.titulo}>Intenciones de Misa</h1>
-                    <p className={styles.subtitulo}>Gestión y exportación de intenciones para el celebrante</p>
-                </div>
-                <button className={styles.btnPrimario} onClick={() => { setEditando(null); setMostrarForm(true); }}>
-                    + Nueva Intención
-                </button>
-            </div>
-
-            {/* Barra de herramientas */}
-            <div className={styles.toolbar}>
-                <div className={styles.filtroFecha}>
-                    <label>Fecha de misa:</label>
-                    <input
-                        type="date"
-                        value={fechaFiltro}
-                        onChange={(e) => setFechaFiltro(e.target.value)}
-                    />
-                </div>
-                <div className={styles.toolbarDerecha}>
-                    <span className={styles.conteo}>
-                        {intenciones.length} intención{intenciones.length !== 1 ? 'es' : ''}
-                        {' '}para el {formatearFecha(fechaFiltro)}
-                    </span>
-                    <button
-                        className={styles.btnExportar}
-                        onClick={exportarWord}
-                        disabled={exportando || intenciones.length === 0}
-                        title={intenciones.length === 0 ? 'No hay intenciones para esta fecha' : 'Descargar documento Word'}
-                    >
-                        {exportando ? '⏳ Generando...' : '📄 Exportar a Word'}
+        <div>
+            <Navbar />
+            <div className={styles.contenedor}>
+                {/* Encabezado */}
+                <div className={styles.encabezado}>
+                    <div>
+                        <h1 className={styles.titulo}>Intenciones de Misa</h1>
+                        <p className={styles.subtitulo}>Gestión y exportación de intenciones para el celebrante</p>
+                    </div>
+                    <button className={styles.btnPrimario} onClick={() => { setEditando(null); setMostrarForm(true); }}>
+                        + Nueva Intención
                     </button>
                 </div>
-            </div>
 
-            {/* Alertas */}
-            {mensaje && <div className={styles.alertaOk}>{mensaje}</div>}
-            {error   && <div className={styles.alertaError}>{error}</div>}
-
-            {/* Lista de intenciones */}
-            {cargando ? (
-                <div className={styles.cargando}>Cargando intenciones...</div>
-            ) : intenciones.length === 0 ? (
-                <div className={styles.vacio}>
-                    <span className={styles.iconoVacio}>📋</span>
-                    <p>No hay intenciones registradas para esta fecha.</p>
-                    <button className={styles.btnPrimario} onClick={() => setMostrarForm(true)}>
-                        Registrar primera intención
-                    </button>
+                {/* Barra de herramientas */}
+                <div className={styles.toolbar}>
+                    <div className={styles.filtroFecha}>
+                        <label>Fecha de misa:</label>
+                        <input
+                            type="date"
+                            value={fechaFiltro}
+                            onChange={(e) => setFechaFiltro(e.target.value)}
+                        />
+                    </div>
+                    <div className={styles.toolbarDerecha}>
+                        <span className={styles.conteo}>
+                            {intenciones.length} intención{intenciones.length !== 1 ? 'es' : ''}
+                            {' '}para el {formatearFecha(fechaFiltro)}
+                        </span>
+                        <button
+                            className={styles.btnExportar}
+                            onClick={exportarWord}
+                            disabled={exportando || intenciones.length === 0}
+                            title={intenciones.length === 0 ? 'No hay intenciones para esta fecha' : 'Descargar documento Word'}
+                        >
+                            {exportando ? '⏳ Generando...' : '📄 Exportar a Word'}
+                        </button>
+                    </div>
                 </div>
-            ) : (
-                <div className={styles.lista}>
-                    {intenciones.map((item, idx) => (
-                        <div key={item.id} className={styles.tarjeta}>
-                            <div className={styles.tarjetaHeader}>
-                                <span className={styles.numero}>{idx + 1}</span>
-                                <div className={styles.tarjetaInfo}>
-                                    <strong className={styles.familia}>{item.nombre_familia}</strong>
-                                    <span className={styles.intencionTexto}>{item.intencion}</span>
+
+                {/* Alertas */}
+                {mensaje && <div className={styles.alertaOk}>{mensaje}</div>}
+                {error   && <div className={styles.alertaError}>{error}</div>}
+
+                {/* Lista de intenciones */}
+                {cargando ? (
+                    <div className={styles.cargando}>Cargando intenciones...</div>
+                ) : intenciones.length === 0 ? (
+                    <div className={styles.vacio}>
+                        <span className={styles.iconoVacio}>📋</span>
+                        <p>No hay intenciones registradas para esta fecha.</p>
+                        <button className={styles.btnPrimario} onClick={() => setMostrarForm(true)}>
+                            Registrar primera intención
+                        </button>
+                    </div>
+                ) : (
+                    <div className={styles.lista}>
+                        {intenciones.map((item, idx) => (
+                            <div key={item.id} className={styles.tarjeta}>
+                                <div className={styles.tarjetaHeader}>
+                                    <span className={styles.numero}>{idx + 1}</span>
+                                    <div className={styles.tarjetaInfo}>
+                                        <strong className={styles.familia}>{item.nombre_familia}</strong>
+                                        <span className={styles.intencionTexto}>{item.intencion}</span>
+                                    </div>
+                                    <div className={styles.tarjetaAcciones}>
+                                        <button
+                                            className={styles.btnEditar}
+                                            onClick={() => { setEditando(item); setMostrarForm(true); }}
+                                            title="Editar"
+                                        >✏️</button>
+                                        <button
+                                            className={styles.btnEliminar}
+                                            onClick={() => eliminar(item.id)}
+                                            title="Eliminar"
+                                        >🗑️</button>
+                                    </div>
                                 </div>
-                                <div className={styles.tarjetaAcciones}>
-                                    <button
-                                        className={styles.btnEditar}
-                                        onClick={() => { setEditando(item); setMostrarForm(true); }}
-                                        title="Editar"
-                                    >✏️</button>
-                                    <button
-                                        className={styles.btnEliminar}
-                                        onClick={() => eliminar(item.id)}
-                                        title="Eliminar"
-                                    >🗑️</button>
-                                </div>
+
+                                {item.texto_lectura && (
+                                    <div className={styles.textoLectura}>
+                                        <span className={styles.etiquetaTexto}>Texto para la misa:</span>
+                                        <p className={styles.textoLecturaContenido}>{item.texto_lectura}</p>
+                                    </div>
+                                )}
                             </div>
+                        ))}
+                    </div>
+                )}
 
-                            {item.texto_lectura && (
-                                <div className={styles.textoLectura}>
-                                    <span className={styles.etiquetaTexto}>Texto para la misa:</span>
-                                    <p className={styles.textoLecturaContenido}>{item.texto_lectura}</p>
-                                </div>
-                            )}
-                        </div>
-                    ))}
-                </div>
-            )}
-
-            {/* Modal formulario */}
-            {mostrarForm && (
-                <FormIntencion
-                    editar={editando}
-                    onGuardado={alGuardar}
-                    onCancelar={() => { setMostrarForm(false); setEditando(null); }}
-                />
-            )}
+                {/* Modal formulario */}
+                {mostrarForm && (
+                    <FormIntencion
+                        editar={editando}
+                        onGuardado={alGuardar}
+                        onCancelar={() => { setMostrarForm(false); setEditando(null); }}
+                    />
+                )}
+            </div>
         </div>
     );
 }

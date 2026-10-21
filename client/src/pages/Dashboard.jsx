@@ -1,162 +1,192 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {
+    LineChart, Line, BarChart, Bar,
+    XAxis, YAxis, CartesianGrid, Tooltip,
+    ResponsiveContainer
+} from 'recharts';
 import api from '../services/api';
 import Navbar from '../components/Navbar';
 import styles from './Dashboard.module.css';
-import {
-    LineChart, Line, BarChart, Bar,
-    XAxis, YAxis, CartesianGrid,
-    Tooltip, ResponsiveContainer, Legend
-} from 'recharts';
+
+const PERIODOS = [
+    { valor: 'semana', etiqueta: 'Semana' },
+    { valor: 'mes',    etiqueta: 'Mes' },
+    { valor: 'año',    etiqueta: 'Año' },
+];
 
 export default function Dashboard() {
-    const navigate = useNavigate();
+    const [datos, setDatos]     = useState(null);
     const [periodo, setPeriodo] = useState('mes');
-    const [datos, setDatos] = useState(null);
-    const [alertas, setAlertas] = useState([]);
     const [cargando, setCargando] = useState(true);
+    const [errorApi, setErrorApi] = useState(false);
 
     useEffect(() => {
-        cargarDatos();
-        cargarAlertas();
-    }, [periodo]);
-
-    const cargarDatos = async () => {
-        try {
+        const cargar = async () => {
             setCargando(true);
-            const { data } = await api.get(`/analytics/dashboard?periodo=${periodo}`);
-            setDatos(data);
-        } catch (error) {
-            console.error('Error cargando dashboard:', error);
-        } finally {
-            setCargando(false);
-        }
-    };
-
-    const cargarAlertas = async () => {
-        try {
-            const { data } = await api.get('/analytics/alertas');
-            setAlertas(data.alertas);
-        } catch (error) {
-            console.error('Error cargando alertas:', error);
-        }
-    };
-
-    const claseAlerta = {
-        urgente: styles.alertaUrgente,
-        advertencia: styles.alertaAdvertencia,
-        informacion: styles.alertaInformacion
-    };
+            setErrorApi(false);
+            try {
+                const { data } = await api.get(`/analytics/dashboard?periodo=${periodo}`);
+                setDatos(data);
+            } catch {
+                setErrorApi(true);
+                setDatos(null);
+            } finally {
+                setCargando(false);
+            }
+        };
+        cargar();
+    }, [periodo]);
 
     return (
         <div className={styles.contenedor}>
             <Navbar />
-
             <div className={styles.contenido}>
+
+                {/* Encabezado + filtros */}
                 <div className={styles.encabezado}>
-                    <h1 className={styles.titulo}>Dashboard Ejecutivo</h1>
+                    <h1 className={styles.titulo}>Panel de Analítica</h1>
                     <div className={styles.filtros}>
-                        {['dia', 'semana', 'mes', 'anio'].map(p => (
+                        {PERIODOS.map(p => (
                             <button
-                                key={p}
-                                onClick={() => setPeriodo(p)}
-                                className={`${styles.filtroBton} ${periodo === p ? styles.filtroBtonActivo : ''}`}
+                                key={p.valor}
+                                className={`${styles.filtroBton} ${periodo === p.valor ? styles.filtroBtonActivo : ''}`}
+                                onClick={() => setPeriodo(p.valor)}
                             >
-                                {p === 'dia' ? 'Hoy' :
-                                    p === 'semana' ? 'Semana' :
-                                        p === 'mes' ? 'Mes' : 'Año'}
+                                {p.etiqueta}
                             </button>
                         ))}
                     </div>
                 </div>
 
-                {alertas.length > 0 && (
+                {/* Alertas */}
+                {datos?.alertas?.length > 0 && (
                     <div className={styles.alertasContenedor}>
-                        {alertas.map((alerta, i) => (
-                            <div key={i} className={`${styles.alerta} ${claseAlerta[alerta.nivel]}`}>
-                                ⚠️ {alerta.mensaje}
+                        {datos.alertas.map((a, i) => (
+                            <div
+                                key={i}
+                                className={`${styles.alerta} ${
+                                    a.nivel === 'urgente'     ? styles.alertaUrgente :
+                                    a.nivel === 'advertencia' ? styles.alertaAdvertencia :
+                                    styles.alertaInformacion
+                                }`}
+                            >
+                                {a.mensaje}
                             </div>
                         ))}
                     </div>
                 )}
 
-                {cargando ? (
-                    <div className={styles.cargando}>Cargando indicadores...</div>
-                ) : datos && (
+                {/* Estado de carga */}
+                {cargando && (
+                    <div className={styles.cargando}>Cargando datos…</div>
+                )}
+
+                {/* Error de API (backend dormido en Render free tier) */}
+                {!cargando && errorApi && (
+                    <div className={styles.graficaContenedor} style={{ textAlign: 'center', padding: '40px' }}>
+                        <p style={{ color: 'var(--texto-tenue)', marginBottom: 8 }}>
+                            ⚠️ No se pudo conectar con el servidor.
+                        </p>
+                        <p style={{ color: 'var(--texto-tenue)', fontSize: '0.85rem' }}>
+                            El backend puede estar iniciando (Render free tier). Intenta de nuevo en unos segundos.
+                        </p>
+                        <button
+                            className={styles.filtroBton}
+                            style={{ marginTop: 16 }}
+                            onClick={() => setPeriodo(p => p)}
+                        >
+                            🔄 Reintentar
+                        </button>
+                    </div>
+                )}
+
+                {/* KPIs */}
+                {!cargando && datos && (
                     <>
                         <div className={styles.kpiGrid}>
                             <div className={styles.kpiTarjeta}>
-                                <p className={styles.kpiEtiqueta}>Ingresos del período</p>
-                                <p className={styles.kpiValor}>
-                                    Q{datos.kpis.ingresos.total.toFixed(2)}
-                                </p>
-                                <p className={styles.kpiSub}>
-                                    {datos.kpis.ingresos.cantidad_transacciones} transacciones
-                                </p>
+                                <p className={styles.kpiEtiqueta}>Intenciones de Misa</p>
+                                <p className={styles.kpiValor}>{datos.kpis?.intenciones ?? '—'}</p>
+                                <p className={styles.kpiSub}>en el período</p>
                             </div>
                             <div className={styles.kpiTarjeta}>
-                                <p className={styles.kpiEtiqueta}>Promedio diario</p>
-                                <p className={styles.kpiValor}>
-                                    Q{datos.kpis.promedio_diario.toFixed(2)}
-                                </p>
-                                <p className={styles.kpiSub}>por día</p>
+                                <p className={styles.kpiEtiqueta}>Sacramentos</p>
+                                <p className={styles.kpiValor}>{datos.kpis?.sacramentos ?? '—'}</p>
+                                <p className={styles.kpiSub}>registrados</p>
                             </div>
                             <div className={styles.kpiTarjeta}>
-                                <p className={styles.kpiEtiqueta}>Proyección próximo mes</p>
+                                <p className={styles.kpiEtiqueta}>Ingresos (Q)</p>
                                 <p className={styles.kpiValorExito}>
-                                    Q{datos.proyeccion.proyeccion?.toFixed(2) || 'N/D'}
+                                    {datos.kpis?.ingresos != null
+                                        ? `Q${parseFloat(datos.kpis.ingresos).toFixed(2)}`
+                                        : '—'}
                                 </p>
-                                <p className={styles.kpiSub}>
-                                    {datos.proyeccion.meses_analizados} meses analizados
-                                </p>
+                                <p className={styles.kpiSub}>recaudado</p>
                             </div>
                             <div className={styles.kpiTarjeta}>
-                                <p className={styles.kpiEtiqueta}>Catecúmenos activos</p>
-                                <p className={styles.kpiValor}>
-                                    {datos.kpis.catecumenos_activos}
-                                </p>
-                                <p className={styles.kpiSub}>en proceso</p>
+                                <p className={styles.kpiEtiqueta}>Feligreses</p>
+                                <p className={styles.kpiValor}>{datos.kpis?.feligreses ?? '—'}</p>
+                                <p className={styles.kpiSub}>registrados</p>
                             </div>
                         </div>
 
-                        <div className={styles.graficaContenedor}>
-                            <h2 className={styles.graficaTitulo}>
-                                Tendencia de Ingresos — Últimos 6 meses
-                            </h2>
-                            <ResponsiveContainer width="100%" height={300}>
-                                <LineChart data={datos.tendencias}>
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="mes" />
-                                    <YAxis />
-                                    <Tooltip formatter={(value) => [`Q${value}`, 'Ingresos']} />
-                                    <Legend />
-                                    <Line
-                                        type="monotone"
-                                        dataKey="total_ingresos"
-                                        stroke="#1a365d"
-                                        strokeWidth={2}
-                                        name="Ingresos (Q)"
-                                    />
-                                </LineChart>
-                            </ResponsiveContainer>
-                        </div>
-
-                        {datos.kpis.sacramentos.length > 0 && (
+                        {/* Gráfica de línea — tendencia de intenciones */}
+                        {datos.tendenciaIntenciones?.length > 0 && (
                             <div className={styles.graficaContenedor}>
-                                <h2 className={styles.graficaTitulo}>Sacramentos por Tipo</h2>
-                                <ResponsiveContainer width="100%" height={250}>
-                                    <BarChart data={datos.kpis.sacramentos}>
-                                        <CartesianGrid strokeDasharray="3 3" />
-                                        <XAxis dataKey="tipo" />
-                                        <YAxis />
-                                        <Tooltip />
-                                        <Bar dataKey="cantidad" fill="#2b6cb0" name="Cantidad" />
+                                <h2 className={styles.graficaTitulo}>Tendencia de Intenciones</h2>
+                                <ResponsiveContainer width="100%" height={220}>
+                                    <LineChart data={datos.tendenciaIntenciones}>
+                                        <CartesianGrid strokeDasharray="3 3" stroke="var(--borde)" />
+                                        <XAxis dataKey="fecha" stroke="var(--texto-tenue)" tick={{ fontSize: 11 }} />
+                                        <YAxis stroke="var(--texto-tenue)" tick={{ fontSize: 11 }} />
+                                        <Tooltip
+                                            contentStyle={{
+                                                background: 'var(--fondo-card)',
+                                                border: '1px solid var(--borde)',
+                                                borderRadius: 'var(--radio)',
+                                                color: 'var(--texto-principal)',
+                                                fontSize: 12
+                                            }}
+                                        />
+                                        <Line
+                                            type="monotone"
+                                            dataKey="cantidad"
+                                            stroke="#C9973A"
+                                            strokeWidth={2}
+                                            dot={{ fill: '#C9973A', strokeWidth: 0, r: 3 }}
+                                            activeDot={{ r: 5 }}
+                                        />
+                                    </LineChart>
+                                </ResponsiveContainer>
+                            </div>
+                        )}
+
+                        {/* Gráfica de barras — ingresos por período */}
+                        {datos.ingresosPorPeriodo?.length > 0 && (
+                            <div className={styles.graficaContenedor}>
+                                <h2 className={styles.graficaTitulo}>Ingresos por Período</h2>
+                                <ResponsiveContainer width="100%" height={220}>
+                                    <BarChart data={datos.ingresosPorPeriodo}>
+                                        <CartesianGrid strokeDasharray="3 3" stroke="var(--borde)" />
+                                        <XAxis dataKey="periodo" stroke="var(--texto-tenue)" tick={{ fontSize: 11 }} />
+                                        <YAxis stroke="var(--texto-tenue)" tick={{ fontSize: 11 }} />
+                                        <Tooltip
+                                            contentStyle={{
+                                                background: 'var(--fondo-card)',
+                                                border: '1px solid var(--borde)',
+                                                borderRadius: 'var(--radio)',
+                                                color: 'var(--texto-principal)',
+                                                fontSize: 12
+                                            }}
+                                        />
+                                        <Bar dataKey="total" fill="#C9973A" radius={[3, 3, 0, 0]} />
                                     </BarChart>
                                 </ResponsiveContainer>
                             </div>
                         )}
                     </>
                 )}
+
             </div>
         </div>
     );

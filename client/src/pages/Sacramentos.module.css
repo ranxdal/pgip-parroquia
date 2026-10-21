@@ -1,73 +1,88 @@
+/* ─── Sacramentos — PGIP ──────────────────────────────────────────── */
 
 .contenedor {
     min-height: 100vh;
-    background-color: var(--color-fondo);
+    background: var(--bg-page);
+    transition: background 0.3s;
 }
 
 .contenido {
-    padding: 16px;
-    max-width: 1200px;
+    padding: 24px 20px;
+    max-width: 900px;
     margin: 0 auto;
 }
 
+/* ─── Encabezado ─────────────────────────────────────────────────── */
 .encabezado {
-    margin-bottom: 16px;
+    margin-bottom: 20px;
 }
 
 .titulo {
+    font-family: var(--fuente-display);
     font-size: 1.5rem;
-    color: var(--color-primario);
-    margin-bottom: 12px;
-    margin-top: 0;
+    font-weight: 600;
+    color: var(--texto-principal);
+    letter-spacing: 0.02em;
+    margin: 0 0 16px;
 }
 
+/* ─── Tabs ───────────────────────────────────────────────────────── */
 .tabs {
     display: flex;
-    border-bottom: 1px solid var(--color-borde);
+    border-bottom: 1px solid var(--borde);
     gap: 0;
 }
 
 .tab {
-    padding: 10px 16px;
+    padding: 10px 18px;
     background: none;
     border: none;
     border-bottom: 2px solid transparent;
     cursor: pointer;
     font-size: 0.875rem;
     font-weight: 600;
-    color: var(--color-texto-suave);
+    color: var(--texto-tenue);
+    font-family: var(--fuente-cuerpo);
     transition: color 0.2s, border-color 0.2s;
+    white-space: nowrap;
 }
 
 .tab:hover {
-    color: var(--color-primario);
+    color: var(--texto-suave);
 }
 
 .tabActivo {
-    border-bottom: 2px solid var(--color-primario);
-    color: var(--color-primario);
+    border-bottom: 2px solid var(--oro);
+    color: var(--oro);
 }
 
+/* ─── Panel ──────────────────────────────────────────────────────── */
 .panel {
-    background-color: var(--color-blanco);
+    background: var(--fondo-card);
+    border: 1px solid var(--borde);
     padding: 20px;
-    border-radius: var(--radio);
-    box-shadow: var(--sombra);
+    border-radius: var(--radio-lg);
+    box-shadow: var(--sombra-card);
     margin-bottom: 16px;
+    transition: background 0.3s, border-color 0.3s;
 }
 
 .panelTitulo {
+    font-family: var(--fuente-display);
     font-size: 1rem;
-    color: var(--color-texto);
-    margin-bottom: 16px;
-    margin-top: 0;
+    font-weight: 600;
+    color: var(--texto-principal);
+    margin: 0 0 16px;
 }
 
+/* ─── Búsqueda ───────────────────────────────────────────────────── */
 .busquedaFila {
     display: flex;
     gap: 12px;
+    align-items: center;
 }
 
+/* ─── Formulario ─────────────────────────────────────────────────── */
 .formulario {
     display: flex;
     flex-direction: column;
@@ -81,101 +96,225 @@
 }
 
 .etiqueta {
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     font-weight: 600;
-    color: var(--color-texto);
+    color: var(--texto-tenue);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-family: var(--fuente-cuerpo);
 }
 
+/* ─── Inputs ─────────────────────────────────────────────────────── */
 .input {
     padding: 10px 14px;
-    border: 1px solid var(--color-borde);
-    border-radius: var(--radio-mediano);
-    font-size: 1rem;
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    font-size: 0.9rem;
+    font-family: var(--fuente-cuerpo);
     width: 100%;
     box-sizing: border-box;
     outline: none;
-    transition: border-color 0.2s;
+    background: var(--fondo-input);
+    color: var(--texto-principal);
+    transition: border-color 0.2s, background 0.2s;
+    /* Forzar colores en inputs de fecha/select para todos los temas */
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.input::placeholder {
+    color: var(--texto-tenue);
 }
 
 .input:focus {
-    border-color: var(--color-primario);
+    border-color: var(--borde-activo);
+    background: var(--fondo-hover);
 }
 
+/* Date picker — forzar colores correctos en ambos modos */
+.input[type="date"] {
+    color-scheme: dark;
+}
+
+[data-theme="light"] .input[type="date"] {
+    color-scheme: light;
+}
+
+/* Select — quitar fondo blanco nativo */
+select.input {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C9973A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+    cursor: pointer;
+}
+
+[data-theme="light"] select.input {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A5E10' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+/* ─── Botón primario ─────────────────────────────────────────────── */
 .botonPrimario {
-    background-color: var(--color-primario);
-    color: #fff;
-    padding: 12px;
+    background: var(--oro);
+    color: var(--fondo-oscuro);
+    padding: 11px 20px;
     border: none;
-    border-radius: var(--radio-mediano);
-    font-size: 1rem;
-    font-weight: 600;
+    border-radius: var(--radio);
+    font-family: var(--fuente-display);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     cursor: pointer;
     width: 100%;
-    transition: background-color 0.2s;
+    transition: background 0.2s;
 }
 
-.botonPrimario:hover {
-    background-color: var(--color-primario-hover);
+.botonPrimario:hover:not(:disabled) {
+    background: var(--oro-claro);
 }
 
 .botonPrimario:disabled {
-    opacity: 0.7;
+    opacity: 0.55;
     cursor: not-allowed;
 }
 
+/* ─── Mensajes ───────────────────────────────────────────────────── */
 .exito {
-    background-color: #f0fff4;
-    border: 1px solid #68d391;
-    color: var(--color-exito);
+    background: var(--exito-bg);
+    border: 1px solid rgba(94, 203, 138, 0.3);
+    color: var(--exito);
     padding: 12px 16px;
-    border-radius: var(--radio-mediano);
+    border-radius: var(--radio);
     margin-bottom: 16px;
+    font-size: 0.875rem;
     cursor: pointer;
 }
 
 .errorDiv {
-    background-color: #fff5f5;
-    border: 1px solid #fc8181;
-    color: var(--color-peligro);
+    background: var(--error-bg);
+    border: 1px solid rgba(240, 128, 128, 0.3);
+    color: var(--error);
     padding: 12px 16px;
-    border-radius: var(--radio-mediano);
+    border-radius: var(--radio);
     margin-bottom: 16px;
+    font-size: 0.875rem;
     cursor: pointer;
 }
 
+/* ─── Texto gris / suave ─────────────────────────────────────────── */
 .textoGris {
-    color: var(--color-texto-suave);
+    color: var(--texto-tenue);
     font-size: 0.875rem;
     margin-bottom: 4px;
 }
 
+/* ─── Resultado de búsqueda ──────────────────────────────────────── */
 .resultadoItem {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 12px 16px;
-    border: 1px solid var(--color-borde);
-    border-radius: var(--radio-mediano);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
     margin-bottom: 8px;
     cursor: pointer;
-    transition: background-color 0.2s;
+    background: var(--fondo-panel);
+    transition: background 0.2s, border-color 0.2s;
 }
 
 .resultadoItem:hover {
-    background-color: var(--color-fondo);
+    background: var(--fondo-hover);
+    border-color: var(--borde-activo);
 }
 
 .verBtn {
-    color: var(--color-primario);
+    color: var(--oro);
     font-weight: 600;
+    font-size: 0.875rem;
 }
 
+/* ─── Sacramento item ────────────────────────────────────────────── */
 .sacramentoItem {
     padding: 12px 16px;
-    border-radius: var(--radio-mediano);
+    border-radius: var(--radio);
     margin-bottom: 8px;
+    border: 1px solid var(--borde);
+    background: var(--fondo-panel);
+    transition: background 0.3s;
 }
 
+/* Variantes por tipo de sacramento — sin colores hardcodeados blancos */
+.sacramentoBautismo {
+    border-left: 3px solid #5BA4D4;
+    background: rgba(91, 164, 212, 0.08);
+}
+
+.sacramentoConfirmacion {
+    border-left: 3px solid var(--vino);
+    background: var(--vino-suave);
+}
+
+.sacramentoMatrimonio {
+    border-left: 3px solid var(--oro);
+    background: var(--oro-suave);
+}
+
+/* ─── Feligrés tag ───────────────────────────────────────────────── */
+.feligresTag {
+    background: var(--oro-suave);
+    color: var(--oro);
+    border: 1px solid var(--borde-activo);
+    padding: 8px 16px;
+    border-radius: var(--radio);
+    margin-bottom: 16px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    font-family: var(--fuente-display);
+}
+
+/* ─── Separador ──────────────────────────────────────────────────── */
+.separador {
+    position: relative;
+    text-align: center;
+    margin: 4px 0;
+}
+
+.separador::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--borde);
+}
+
+.separadorTexto {
+    position: relative;
+    background: var(--fondo-card);
+    padding: 0 12px;
+    font-size: 0.75rem;
+    color: var(--texto-tenue);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+/* ─── Checkbox ───────────────────────────────────────────────────── */
+.checkboxFila {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.checkboxFila input[type="checkbox"] {
+    accent-color: var(--oro);
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+/* ─── Grid ───────────────────────────────────────────────────────── */
 .grid2 {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -188,30 +327,9 @@
     gap: 12px;
 }
 
-.checkboxFila {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.feligresTag {
-    background-color: #ebf8ff;
-    color: var(--color-secundario);
-    padding: 8px 16px;
-    border-radius: var(--radio-mediano);
-    margin-bottom: 16px;
-    font-size: 0.875rem;
-    font-weight: 600;
-}
-
+/* ─── Responsive ─────────────────────────────────────────────────── */
 @media (max-width: 480px) {
-    .tabs {
-        overflow-x: auto;
-    }
-
-    .tab {
-        white-space: nowrap;
-        font-size: 0.8rem;
-        padding: 10px 12px;
-    }
+    .tabs { overflow-x: auto; }
+    .tab { white-space: nowrap; font-size: 0.8rem; padding: 10px 12px; }
+    .busquedaFila { flex-direction: column; }
 }

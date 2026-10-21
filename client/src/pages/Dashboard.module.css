@@ -1,30 +1,37 @@
+/* ─── Dashboard — PGIP ────────────────────────────────────────────── */
 
 .contenedor {
     min-height: 100vh;
-    background-color: var(--color-fondo);
+    background: var(--bg-page);
+    transition: background 0.3s;
 }
 
 .contenido {
-    padding: 16px;
+    padding: 24px 20px;
     max-width: 1200px;
     margin: 0 auto;
 }
 
+/* ─── Encabezado ─────────────────────────────────────────────────── */
 .encabezado {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 16px;
+    margin-bottom: 24px;
     flex-wrap: wrap;
     gap: 12px;
 }
 
 .titulo {
+    font-family: var(--fuente-display);
     font-size: 1.5rem;
-    color: var(--color-primario);
+    font-weight: 600;
+    color: var(--texto-principal);
+    letter-spacing: 0.02em;
     margin: 0;
 }
 
+/* ─── Filtros de período ─────────────────────────────────────────── */
 .filtros {
     display: flex;
     gap: 6px;
@@ -32,112 +39,141 @@
 }
 
 .filtroBton {
-    padding: 6px 14px;
-    border: none;
+    padding: 7px 16px;
+    border: 1px solid var(--borde);
     border-radius: 20px;
     font-size: 0.8rem;
+    font-family: var(--fuente-cuerpo);
+    font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.2s, color 0.2s;
-    background-color: var(--color-borde);
-    color: var(--color-texto);
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    background: var(--fondo-panel);
+    color: var(--texto-suave);
 }
 
+.filtroBton:hover {
+    border-color: var(--borde-activo);
+    color: var(--texto-principal);
+    background: var(--fondo-hover);
+}
+
+/* Activo: fondo dorado, texto oscuro — visible en ambos modos */
 .filtroBtonActivo {
-    background-color: var(--color-primario);
-    color: #fff;
+    background: var(--oro) !important;
+    color: var(--fondo-oscuro) !important;
+    border-color: var(--oro) !important;
+    font-weight: 700;
 }
 
+/* ─── Alertas ────────────────────────────────────────────────────── */
 .alertasContenedor {
-    margin-bottom: 16px;
+    margin-bottom: 20px;
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
 .alerta {
-    background-color: var(--color-blanco);
+    background: var(--fondo-card);
     border-left: 4px solid;
+    border-top: 1px solid var(--borde);
+    border-right: 1px solid var(--borde);
+    border-bottom: 1px solid var(--borde);
     padding: 10px 14px;
-    border-radius: var(--radio-pequeno);
+    border-radius: var(--radio);
     font-size: 0.875rem;
-    box-shadow: var(--sombra);
+    color: var(--texto-suave);
+    box-shadow: var(--sombra-card);
+    transition: background 0.3s;
 }
 
-.alertaUrgente { border-left-color: #fc8181; }
-.alertaAdvertencia { border-left-color: #f6ad55; }
+.alertaUrgente    { border-left-color: var(--error); }
+.alertaAdvertencia { border-left-color: var(--advertencia); }
 .alertaInformacion { border-left-color: #63b3ed; }
 
+/* ─── Cargando ───────────────────────────────────────────────────── */
 .cargando {
     text-align: center;
-    padding: 40px;
-    color: var(--color-texto-suave);
+    padding: 60px;
+    color: var(--texto-tenue);
+    font-size: 0.9rem;
 }
 
+/* ─── KPI Grid ───────────────────────────────────────────────────── */
 .kpiGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 12px;
-    margin-bottom: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin-bottom: 20px;
 }
 
 .kpiTarjeta {
-    background-color: var(--color-blanco);
-    padding: 16px;
-    border-radius: var(--radio);
-    box-shadow: var(--sombra);
+    background: var(--fondo-card);
+    border: 1px solid var(--borde);
+    padding: 20px;
+    border-radius: var(--radio-lg);
+    box-shadow: var(--sombra-card);
+    transition: background 0.3s, border-color 0.3s;
 }
 
 .kpiEtiqueta {
-    font-size: 0.75rem;
-    color: var(--color-texto-suave);
-    margin-bottom: 6px;
-    margin-top: 0;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--texto-tenue);
+    margin: 0 0 10px;
+    font-family: var(--fuente-cuerpo);
 }
 
 .kpiValor {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: var(--color-primario);
+    font-size: 1.6rem;
+    font-weight: 700;
+    font-family: var(--fuente-display);
+    color: var(--oro);
     margin: 0;
+    line-height: 1.1;
 }
 
 .kpiValorExito {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: var(--color-exito);
+    font-size: 1.6rem;
+    font-weight: 700;
+    font-family: var(--fuente-display);
+    color: var(--exito);
     margin: 0;
+    line-height: 1.1;
 }
 
 .kpiSub {
-    font-size: 0.7rem;
-    color: var(--color-texto-muy-suave);
-    margin-top: 4px;
-    margin-bottom: 0;
+    font-size: 0.72rem;
+    color: var(--texto-tenue);
+    margin: 6px 0 0;
 }
 
+/* ─── Gráficas ───────────────────────────────────────────────────── */
 .graficaContenedor {
-    background-color: var(--color-blanco);
-    padding: 16px;
-    border-radius: var(--radio);
-    box-shadow: var(--sombra);
+    background: var(--fondo-card);
+    border: 1px solid var(--borde);
+    padding: 20px;
+    border-radius: var(--radio-lg);
+    box-shadow: var(--sombra-card);
     margin-bottom: 16px;
     overflow-x: auto;
+    transition: background 0.3s, border-color 0.3s;
 }
 
 .graficaTitulo {
+    font-family: var(--fuente-display);
     font-size: 0.95rem;
-    color: var(--color-texto);
-    margin-bottom: 12px;
-    margin-top: 0;
+    font-weight: 600;
+    color: var(--texto-principal);
+    margin: 0 0 16px;
+    letter-spacing: 0.02em;
 }
 
+/* ─── Responsive ─────────────────────────────────────────────────── */
 @media (max-width: 480px) {
-    .encabezado {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .kpiGrid {
-        grid-template-columns: 1fr 1fr;
-    }
+    .encabezado { flex-direction: column; align-items: flex-start; }
+    .kpiGrid { grid-template-columns: 1fr 1fr; }
+    .titulo { font-size: 1.25rem; }
 }
