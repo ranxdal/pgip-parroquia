@@ -7,7 +7,8 @@ const {
     subirFolio,
     buscarFolios,
     obtenerFolios,
-    obtenerFolio
+    obtenerFolio,
+    guardarFolioCompleto
 } = require('../controllers/archivo.controller');
 const { verificarToken, verificarRol } = require('../middleware/auth.middleware');
 
@@ -41,20 +42,17 @@ const upload = multer({
 });
 
 // Todas las rutas requieren token
-//router.use(verificarToken);
+router.use(verificarToken);
 
 // Rutas
-// Quita esta línea:
-//router.use(verificarToken);
-
-// Y agrega verificarToken explícito en cada ruta:
-router.post('/subir', verificarToken, verificarRol(['admin', 'operador']),
+router.post('/subir', verificarRol(['admin', 'operador']),
     upload.single('imagen'), subirFolio);
-router.get('/buscar', verificarToken, verificarRol(['admin', 'operador']), buscarFolios);
-router.get('/', verificarToken, verificarRol(['admin', 'operador']), obtenerFolios);
-router.get('/:id', verificarToken, verificarRol(['admin', 'operador']), obtenerFolio);
+router.post('/guardar', verificarRol(['admin', 'operador']), guardarFolioCompleto);
+router.get('/buscar', verificarRol(['admin', 'operador']), buscarFolios);
+router.get('/', verificarRol(['admin', 'operador']), obtenerFolios);
+router.get('/:id', verificarRol(['admin', 'operador']), obtenerFolio);
 
-
+// Middleware de errores para multer (v2 no propaga al handler de Express automáticamente)
 router.use((err, req, res, next) => {
     if (err instanceof multer.MulterError) {
         if (err.code === 'LIMIT_FILE_SIZE') {

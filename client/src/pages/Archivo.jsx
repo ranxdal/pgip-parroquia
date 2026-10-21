@@ -3,6 +3,28 @@ import api from '../services/api';
 import Navbar from '../components/Navbar';
 import styles from './Archivo.module.css';
 
+const FORM_INICIAL = {
+    tipo_sacramento:  'bautismo',
+    fecha_sacramento: '',
+    numero_libro:     '',
+    numero_folio:     '',
+    numero_partida:   '',
+    // Feligrés
+    nombres:          '',
+    apellidos:        '',
+    fecha_nacimiento: '',
+    // Padres
+    nombre_padre:     '',
+    nombre_madre:     '',
+    // Padrinos / testigos
+    padrino_1:        '',
+    padrino_2:        '',
+    // Ministro / obispo
+    ministro:         '',
+    // Matrimonio
+    conyuge:          '',
+};
+
 export default function Archivo() {
     const [imagen, setImagen] = useState(null);
     const [previstaImagen, setPrevistaImagen] = useState(null);
@@ -10,16 +32,16 @@ export default function Archivo() {
     const [textoExtraido, setTextoExtraido] = useState('');
     const [confianza, setConfianza] = useState(null);
     const [motor, setMotor] = useState('');
-    const [form, setForm] = useState({
-        numero_libro: '', numero_folio: '', numero_partida: '',
-        tipo_sacramento: 'bautismo', fecha_sacramento: '',
-        nombres: '', apellidos: ''
-    });
+    const [form, setForm] = useState(FORM_INICIAL);
     const [mensaje, setMensaje] = useState('');
     const [error, setError] = useState('');
     const [vista, setVista] = useState('subir');
     const [folios, setFolios] = useState([]);
+    const [guardando, setGuardando] = useState(false);
 
+    const set = (campo, valor) => setForm(prev => ({ ...prev, [campo]: valor }));
+
+    // ── Imagen ──────────────────────────────────────────────
     const handleImagenChange = (e) => {
         const archivo = e.target.files[0];
         if (!archivo) return;
@@ -29,6 +51,7 @@ export default function Archivo() {
         setConfianza(null);
     };
 
+    // ── OCR ─────────────────────────────────────────────────
     const procesarImagen = async () => {
         if (!imagen) return setError('Seleccione una imagen primero');
         setProcesando(true);
@@ -36,9 +59,9 @@ export default function Archivo() {
         try {
             const formData = new FormData();
             formData.append('imagen', imagen);
-            formData.append('numero_libro', form.numero_libro);
-            formData.append('numero_folio', form.numero_folio);
-            formData.append('numero_partida', form.numero_partida);
+            formData.append('numero_libro',    form.numero_libro);
+            formData.append('numero_folio',    form.numero_folio);
+            formData.append('numero_partida',  form.numero_partida);
             formData.append('tipo_sacramento', form.tipo_sacramento);
 
             const { data } = await api.post('/archivo/subir', formData, {
@@ -49,7 +72,7 @@ export default function Archivo() {
             setConfianza(data.ocr.confianza);
             setMotor(data.ocr.motor);
             extraerDatosDelTexto(data.folio.texto_extraido);
-            setMensaje('Imagen procesada exitosamente');
+            setMensaje('Imagen procesada — verifique y complete los datos');
         } catch (err) {
             setError(err.response?.data?.error || 'Error al procesar la imagen');
         } finally {
@@ -57,47 +80,64 @@ export default function Archivo() {
         }
     };
 
+    // ── Extracción automática de texto OCR ───────────────────
     const extraerDatosDelTexto = (texto) => {
-        const patronNombre = /Nombre[:\s]+([A-ZÁÉÍÓÚÑ][a-záéíóúñA-ZÁÉÍÓÚÑ\s]+?)(?:\n|Pidió|Recibió|$)/i;
-        const matchNombre = texto.match(patronNombre);
-        if (matchNombre) {
-            const partes = matchNombre[1].trim().split(' ');
+        // Nombre
+        const mNombre = texto.match(/Nombre[:\s]+([A-ZÁÉÍÓÚÑ][a-záéíóúñA-ZÁÉÍÓÚÑ\s]+?)(?:\n|Pidió|Recibió|$)/i);
+        if (mNombre) {
+            const partes = mNombre[1].trim().split(' ');
             setForm(prev => ({
                 ...prev,
-                nombres: partes.slice(0, 2).join(' '),
+                nombres:   partes.slice(0, 2).join(' '),
                 apellidos: partes.slice(2).join(' ') || ''
             }));
         }
 
-        const patronFecha = /(\d{1,2})\s+(?:de\s+)?([a-záéíóúñ]+)\s+(?:de\s+)?(\d{4})/i;
-        const matchFecha = texto.match(patronFecha);
-        if (matchFecha) {
+        // Fecha del sacramento
+        const mFecha = texto.match(/(\d{1,2})\s+(?:de\s+)?([a-záéíóúñ]+)\s+(?:de\s+)?(\d{4})/i);
+        if (mFecha) {
             const meses = {
-                'enero': '01', 'febrero': '02', 'marzo': '03',
-                'abril': '04', 'mayo': '05', 'junio': '06',
-                'julio': '07', 'agosto': '08', 'septiembre': '09',
-                'octubre': '10', 'noviembre': '11', 'diciembre': '12'
+                'enero':'01','febrero':'02','marzo':'03','abril':'04',
+                'mayo':'05','junio':'06','julio':'07','agosto':'08',
+                'septiembre':'09','octubre':'10','noviembre':'11','diciembre':'12'
             };
-            const mes = meses[matchFecha[2].toLowerCase()];
+            const mes = meses[mFecha[2].toLowerCase()];
             if (mes) {
                 setForm(prev => ({
                     ...prev,
-                    fecha_sacramento: `${matchFecha[3]}-${mes}-${matchFecha[1].padStart(2, '0')}`
+                    fecha_sacramento: `${mFecha[3]}-${mes}-${mFecha[1].padStart(2,'0')}`
                 }));
             }
         }
 
-        const textoLower = texto.toLowerCase();
-        if (textoLower.includes('confirmacion') || textoLower.includes('confirmación')) {
+        // Tipo
+        const tl = texto.toLowerCase();
+        if (tl.includes('confirmacion') || tl.includes('confirmación')) {
             setForm(prev => ({ ...prev, tipo_sacramento: 'confirmacion' }));
-        } else if (textoLower.includes('matrimonio')) {
+        } else if (tl.includes('matrimonio')) {
             setForm(prev => ({ ...prev, tipo_sacramento: 'matrimonio' }));
-        } else if (textoLower.includes('bautismo') || textoLower.includes('bautizo')) {
+        } else if (tl.includes('bautismo') || tl.includes('bautizo')) {
             setForm(prev => ({ ...prev, tipo_sacramento: 'bautismo' }));
         }
     };
 
-    const guardarFolio = () => setMensaje('Datos guardados exitosamente');
+    // ── Guardar ──────────────────────────────────────────────
+    const guardarFolio = async () => {
+        setGuardando(true);
+        try {
+            await api.post('/archivo/guardar', form);
+            setMensaje('Datos guardados exitosamente');
+            setForm(FORM_INICIAL);
+            setImagen(null);
+            setPrevistaImagen(null);
+            setTextoExtraido('');
+            setConfianza(null);
+        } catch (err) {
+            setError(err.response?.data?.error || 'Error al guardar');
+        } finally {
+            setGuardando(false);
+        }
+    };
 
     const cargarFolios = async () => {
         try {
@@ -108,6 +148,10 @@ export default function Archivo() {
             setError('Error al cargar el historial');
         }
     };
+
+    const esMatrimonio   = form.tipo_sacramento === 'matrimonio';
+    const esConfirmacion = form.tipo_sacramento === 'confirmacion';
+    const esBautismo     = form.tipo_sacramento === 'bautismo';
 
     return (
         <div className={styles.contenedor}>
@@ -127,11 +171,16 @@ export default function Archivo() {
                     </div>
                 </div>
 
-                {mensaje && <div className={styles.exito} onClick={() => setMensaje('')}>✅ {mensaje}</div>}
-                {error && <div className={styles.errorDiv} onClick={() => setError('')}>❌ {error}</div>}
+                {mensaje && <div className={styles.exito}    onClick={() => setMensaje('')}>✅ {mensaje}</div>}
+                {error   && <div className={styles.errorDiv} onClick={() => setError('')}>❌ {error}</div>}
 
+                {/* ══════════════════════════════════════════
+                    VISTA: DIGITALIZAR
+                ══════════════════════════════════════════ */}
                 {vista === 'subir' && (
                     <div className={styles.grid2}>
+
+                        {/* Columna izquierda — imagen + OCR */}
                         <div>
                             <div className={styles.panel}>
                                 <h2 className={styles.panelTitulo}>1. Subir imagen del folio</h2>
@@ -178,70 +227,178 @@ export default function Archivo() {
                             )}
                         </div>
 
+                        {/* Columna derecha — formulario completo */}
                         <div className={styles.panel}>
                             <h2 className={styles.panelTitulo}>2. Verificar y guardar datos</h2>
                             <p className={styles.textoGris}>Los campos se llenan automáticamente. Corrija si es necesario.</p>
+
                             <div className={styles.formulario}>
+
+                                {/* Tipo de sacramento */}
                                 <div className={styles.campo}>
                                     <label className={styles.etiqueta}>Tipo de sacramento</label>
                                     <select value={form.tipo_sacramento}
-                                        onChange={e => setForm({ ...form, tipo_sacramento: e.target.value })}
+                                        onChange={e => set('tipo_sacramento', e.target.value)}
                                         className={styles.input}>
                                         <option value="bautismo">Bautismo</option>
                                         <option value="confirmacion">Confirmación</option>
                                         <option value="matrimonio">Matrimonio</option>
                                     </select>
                                 </div>
+
+                                {/* ── Datos del feligrés ── */}
+                                <div className={styles.separador}>
+                                    <span className={styles.separadorTexto}>Datos del feligrés</span>
+                                </div>
                                 <div className={styles.grid2Inner}>
                                     <div className={styles.campo}>
                                         <label className={styles.etiqueta}>Nombres</label>
                                         <input type="text" value={form.nombres}
-                                            onChange={e => setForm({ ...form, nombres: e.target.value })}
+                                            onChange={e => set('nombres', e.target.value)}
                                             className={styles.input} placeholder="Extraído del folio" />
                                     </div>
                                     <div className={styles.campo}>
                                         <label className={styles.etiqueta}>Apellidos</label>
                                         <input type="text" value={form.apellidos}
-                                            onChange={e => setForm({ ...form, apellidos: e.target.value })}
+                                            onChange={e => set('apellidos', e.target.value)}
                                             className={styles.input} placeholder="Extraído del folio" />
                                     </div>
                                 </div>
+
+                                {/* Fecha de nacimiento — bautismo y confirmación */}
+                                {!esMatrimonio && (
+                                    <div className={styles.campo}>
+                                        <label className={styles.etiqueta}>Fecha de nacimiento</label>
+                                        <input type="date" value={form.fecha_nacimiento}
+                                            onChange={e => set('fecha_nacimiento', e.target.value)}
+                                            className={styles.input} />
+                                    </div>
+                                )}
+
+                                {/* Fecha del sacramento */}
                                 <div className={styles.campo}>
                                     <label className={styles.etiqueta}>Fecha del sacramento</label>
                                     <input type="date" value={form.fecha_sacramento}
-                                        onChange={e => setForm({ ...form, fecha_sacramento: e.target.value })}
+                                        onChange={e => set('fecha_sacramento', e.target.value)}
                                         className={styles.input} />
+                                </div>
+
+                                {/* ── Libro / Folio / Partida ── */}
+                                <div className={styles.separador}>
+                                    <span className={styles.separadorTexto}>Referencia de archivo</span>
                                 </div>
                                 <div className={styles.grid3}>
                                     <div className={styles.campo}>
                                         <label className={styles.etiqueta}>Libro</label>
                                         <input type="text" value={form.numero_libro}
-                                            onChange={e => setForm({ ...form, numero_libro: e.target.value })}
-                                            className={styles.input} placeholder="Libro 5" />
+                                            onChange={e => set('numero_libro', e.target.value)}
+                                            className={styles.input} placeholder="14" />
                                     </div>
                                     <div className={styles.campo}>
                                         <label className={styles.etiqueta}>Folio</label>
                                         <input type="text" value={form.numero_folio}
-                                            onChange={e => setForm({ ...form, numero_folio: e.target.value })}
-                                            className={styles.input} placeholder="45" />
+                                            onChange={e => set('numero_folio', e.target.value)}
+                                            className={styles.input} placeholder="54" />
                                     </div>
                                     <div className={styles.campo}>
                                         <label className={styles.etiqueta}>Partida</label>
                                         <input type="text" value={form.numero_partida}
-                                            onChange={e => setForm({ ...form, numero_partida: e.target.value })}
-                                            className={styles.input} placeholder="120" />
+                                            onChange={e => set('numero_partida', e.target.value)}
+                                            className={styles.input} placeholder="115" />
                                     </div>
                                 </div>
+
+                                {/* ── Padres — bautismo y confirmación ── */}
+                                {!esMatrimonio && (
+                                    <>
+                                        <div className={styles.separador}>
+                                            <span className={styles.separadorTexto}>Datos de los padres</span>
+                                        </div>
+                                        <div className={styles.grid2Inner}>
+                                            <div className={styles.campo}>
+                                                <label className={styles.etiqueta}>Nombre del padre</label>
+                                                <input type="text" value={form.nombre_padre}
+                                                    onChange={e => set('nombre_padre', e.target.value)}
+                                                    className={styles.input} placeholder="Nombre completo" />
+                                            </div>
+                                            <div className={styles.campo}>
+                                                <label className={styles.etiqueta}>Nombre de la madre</label>
+                                                <input type="text" value={form.nombre_madre}
+                                                    onChange={e => set('nombre_madre', e.target.value)}
+                                                    className={styles.input} placeholder="Nombre completo" />
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+
+                                {/* ── Cónyuge — solo matrimonio ── */}
+                                {esMatrimonio && (
+                                    <>
+                                        <div className={styles.separador}>
+                                            <span className={styles.separadorTexto}>Cónyuge</span>
+                                        </div>
+                                        <div className={styles.campo}>
+                                            <label className={styles.etiqueta}>Nombre del cónyuge</label>
+                                            <input type="text" value={form.conyuge}
+                                                onChange={e => set('conyuge', e.target.value)}
+                                                className={styles.input} placeholder="Nombre completo del cónyuge" />
+                                        </div>
+                                    </>
+                                )}
+
+                                {/* ── Padrinos — bautismo y confirmación ── */}
+                                {!esMatrimonio && (
+                                    <>
+                                        <div className={styles.separador}>
+                                            <span className={styles.separadorTexto}>
+                                                {esBautismo ? 'Padrinos de bautismo' : 'Padrinos de confirmación'}
+                                            </span>
+                                        </div>
+                                        <div className={styles.grid2Inner}>
+                                            <div className={styles.campo}>
+                                                <label className={styles.etiqueta}>Padrino / Madrina 1</label>
+                                                <input type="text" value={form.padrino_1}
+                                                    onChange={e => set('padrino_1', e.target.value)}
+                                                    className={styles.input} placeholder="Nombre completo" />
+                                            </div>
+                                            <div className={styles.campo}>
+                                                <label className={styles.etiqueta}>Padrino / Madrina 2</label>
+                                                <input type="text" value={form.padrino_2}
+                                                    onChange={e => set('padrino_2', e.target.value)}
+                                                    className={styles.input} placeholder="Nombre completo" />
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+
+                                {/* ── Ministro ── */}
+                                <div className={styles.separador}>
+                                    <span className={styles.separadorTexto}>
+                                        {esConfirmacion ? 'Obispo confirmante' : 'Ministro celebrante'}
+                                    </span>
+                                </div>
+                                <div className={styles.campo}>
+                                    <label className={styles.etiqueta}>
+                                        {esConfirmacion ? 'Nombre del obispo' : 'Nombre del ministro / párroco'}
+                                    </label>
+                                    <input type="text" value={form.ministro}
+                                        onChange={e => set('ministro', e.target.value)}
+                                        className={styles.input} placeholder="Nombre completo" />
+                                </div>
+
                                 <button onClick={guardarFolio}
                                     className={styles.botonPrimario}
-                                    disabled={!textoExtraido}>
-                                    💾 Guardar en el sistema
+                                    disabled={guardando}>
+                                    {guardando ? '⏳ Guardando...' : '💾 Guardar en el sistema'}
                                 </button>
                             </div>
                         </div>
                     </div>
                 )}
 
+                {/* ══════════════════════════════════════════
+                    VISTA: HISTORIAL
+                ══════════════════════════════════════════ */}
                 {vista === 'historial' && (
                     <div className={styles.panel}>
                         <h2 className={styles.panelTitulo}>
@@ -257,6 +414,7 @@ export default function Archivo() {
                                             <th className={styles.th}>Libro</th>
                                             <th className={styles.th}>Folio</th>
                                             <th className={styles.th}>Sacramento</th>
+                                            <th className={styles.th}>Feligrés</th>
                                             <th className={styles.th}>Motor</th>
                                             <th className={styles.th}>Confianza</th>
                                             <th className={styles.th}>Fecha</th>
@@ -265,9 +423,14 @@ export default function Archivo() {
                                     <tbody>
                                         {folios.map(f => (
                                             <tr key={f.id}>
-                                                <td className={styles.td}>{f.numero_libro || '—'}</td>
-                                                <td className={styles.td}>{f.numero_folio || '—'}</td>
-                                                <td className={styles.td}>{f.tipo_sacramento || '—'}</td>
+                                                <td className={styles.td}>{f.numero_libro  || '—'}</td>
+                                                <td className={styles.td}>{f.numero_folio  || '—'}</td>
+                                                <td className={styles.td} style={{ textTransform: 'capitalize' }}>
+                                                    {f.tipo_sacramento || '—'}
+                                                </td>
+                                                <td className={styles.td}>
+                                                    {f.nombres ? `${f.nombres} ${f.apellidos}` : '—'}
+                                                </td>
                                                 <td className={styles.td}>{f.procesado_por}</td>
                                                 <td className={styles.td}>
                                                     <span className={f.confianza_ocr >= 80 ? styles.confianzaAltaTd : styles.confianzaBajaTd}>

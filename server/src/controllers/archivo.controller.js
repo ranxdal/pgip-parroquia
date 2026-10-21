@@ -16,20 +16,27 @@ const subirFolio = async (req, res) => {
 
         const resultado = await procesarFolio(req.file.path);
 
+        // Verificar duplicado: mismo libro + folio + partida
         const numeroLibro = req.body.numero_libro || null;
         const numeroFolio = req.body.numero_folio || null;
         const numeroPartida = req.body.numero_partida || null;
 
-        // ✅ CORRECCIÓN CB-01-05: verificar duplicado antes del INSERT
         if (numeroLibro && numeroFolio && numeroPartida) {
             const { rows: existentes } = await pool.query(
                 `SELECT id FROM pgip.folio_historico
-                 WHERE numero_libro = $1 AND numero_folio = $2 AND numero_partida = $3`,
+                 WHERE numero_libro = $1
+                   AND numero_folio = $2
+                   AND numero_partida = $3`,
                 [numeroLibro, numeroFolio, numeroPartida]
             );
+
             if (existentes.length > 0) {
-                if (fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
-                return res.status(409).json({ error: 'Ya existe un folio con el mismo libro, folio y partida' });
+                if (fs.existsSync(req.file.path)) {
+                    fs.unlinkSync(req.file.path);
+                }
+                return res.status(409).json({
+                    error: 'Ya existe un folio con el mismo libro, folio y partida'
+                });
             }
         }
 
@@ -76,9 +83,11 @@ const subirFolio = async (req, res) => {
 const buscarFolios = async (req, res) => {
     const { termino } = req.query;
 
-    // ✅ CORRECCIÓN CB-01-02: validar término antes de consultar PostgreSQL
+    // Validar que el término no esté vacío
     if (!termino || termino.trim() === '') {
-        return res.status(400).json({ error: 'El término de búsqueda es requerido' });
+        return res.status(400).json({
+            error: 'El término de búsqueda es requerido'
+        });
     }
 
     try {
@@ -93,7 +102,7 @@ const buscarFolios = async (req, res) => {
                    @@ plainto_tsquery('spanish', $1)
              ORDER BY created_at DESC
              LIMIT 20`,
-            [termino]
+            [termino.trim()]
         );
 
         res.json({
@@ -112,7 +121,8 @@ const obtenerFolios = async (req, res) => {
         const { rows } = await pool.query(
             `SELECT id, numero_libro, numero_folio, numero_partida,
                     tipo_sacramento, fecha_sacramento, confianza_ocr,
-                    procesado_por, created_at
+                    procesado_por, created_at,
+                    nombres, apellidos
              FROM pgip.folio_historico
              ORDER BY created_at DESC
              LIMIT 50`
@@ -151,9 +161,64 @@ const obtenerFolio = async (req, res) => {
     }
 };
 
+// Guardar folio con todos los datos verificados (sin subir imagen nueva)
+const guardarFolioCompleto = async (req, res) => {
+    const {
+        tipo_sacramento, fecha_sacramento,
+        numero_libro, numero_folio, numero_partida,
+        nombres, apellidos, fecha_nacimiento,
+        nombre_padre, nombre_madre,
+        padrino_1, padrino_2,
+        ministro, conyuge
+    } = req.body;
+
+    try {
+        const { rows } = await pool.query(
+            `INSERT INTO pgip.folio_historico
+             (tipo_sacramento, fecha_sacramento,
+              numero_libro, numero_folio, numero_partida,
+              nombres, apellidos, fecha_nacimiento,
+              nombre_padre, nombre_madre,
+              padrino_1, padrino_2,
+              ministro, conyuge,
+              confianza_ocr, procesado_por, usuario_id)
+             VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)
+             RETURNING *`,
+            [
+                tipo_sacramento || null,
+                fecha_sacramento || null,
+                numero_libro    || null,
+                numero_folio    || null,
+                numero_partida  || null,
+                nombres         || null,
+                apellidos       || null,
+                fecha_nacimiento || null,
+                nombre_padre    || null,
+                nombre_madre    || null,
+                padrino_1       || null,
+                padrino_2       || null,
+                ministro        || null,
+                conyuge         || null,
+                100,           // guardado manual = confianza 100
+                'manual',
+                req.usuario.id
+            ]
+        );
+
+        res.status(201).json({
+            mensaje: 'Folio guardado exitosamente',
+            folio: rows[0]
+        });
+
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 module.exports = {
     subirFolio,
     buscarFolios,
     obtenerFolios,
-    obtenerFolio
+    obtenerFolio,
+    guardarFolioCompleto
 };
