@@ -1,41 +1,252 @@
+/* ══════════════════════════════════════════════════════════════
+   PGIP — Parroquia San Agustín de Sumpango
+   Design System Tokens
+   ══════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ── Tokens de color ── */
 :root {
-    --color-primario: #1a365d;
-    --color-primario-hover: #2a4a7f;
-    --color-secundario: #2b6cb0;
-    --color-exito: #2f855a;
-    --color-peligro: #c53030;
-    --color-advertencia: #c05621;
-    --color-fondo: #f0f4f8;
-    --color-blanco: #ffffff;
-    --color-texto: #2d3748;
-    --color-texto-suave: #718096;
-    --color-texto-muy-suave: #a0aec0;
-    --color-borde: #e2e8f0;
-    --color-fondo-tabla: #f7fafc;
-    --sombra: 0 1px 3px rgba(0,0,0,0.1);
-    --radio: 10px;
-    --radio-pequeno: 6px;
-    --radio-mediano: 8px;
+    /* Paleta litúrgica */
+    --oro:          #C9973A;
+    --oro-claro:    #dba94a;
+    --oro-suave:    rgba(201, 151, 58, 0.15);
+    --vino:         #6B1A2A;
+    --vino-suave:   rgba(107, 26, 42, 0.15);
+
+    /* Fondos (modo oscuro base para el sistema) */
+    --fondo-oscuro:    #1A0A00;
+    --fondo-panel:     #1F0E02;
+    --fondo-card:      #261205;
+    --fondo-input:     rgba(245, 240, 232, 0.06);
+    --fondo-hover:     rgba(201, 151, 58, 0.08);
+
+    /* Texto */
+    --texto-principal: #F5F0E8;
+    --texto-suave:     rgba(245, 240, 232, 0.6);
+    --texto-tenue:     rgba(245, 240, 232, 0.35);
+
+    /* Bordes */
+    --borde:           rgba(201, 151, 58, 0.2);
+    --borde-activo:    rgba(201, 151, 58, 0.6);
+
+    /* Semánticos */
+    --exito:           #4ade80;
+    --exito-bg:        rgba(74, 222, 128, 0.1);
+    --error:           #f87171;
+    --error-bg:        rgba(248, 113, 113, 0.1);
+    --advertencia:     #fbbf24;
+
+    /* Tipografía */
+    --fuente-display: 'Cinzel', 'Georgia', serif;
+    --fuente-cuerpo:  'Inter', system-ui, sans-serif;
+
+    /* Espaciado */
+    --radio-sm: 4px;
+    --radio:    8px;
+    --radio-lg: 12px;
+
+    /* Sombras */
+    --sombra-card: 0 4px 24px rgba(0, 0, 0, 0.4);
+    --sombra-lg:   0 8px 40px rgba(0, 0, 0, 0.6);
 }
 
-* {
+/* ── Reset base ── */
+*, *::before, *::after {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI',
-                 Roboto, Oxygen, sans-serif;
-    background-color: var(--color-fondo);
-    color: var(--color-texto);
+    font-family: var(--fuente-cuerpo);
+    background-color: var(--fondo-oscuro);
+    color: var(--texto-principal);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-button {
+/* ── Scrollbar discreta ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--fondo-panel); }
+::-webkit-scrollbar-thumb { background: rgba(201, 151, 58, 0.3); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(201, 151, 58, 0.5); }
+
+/* ── Focus visible accesible ── */
+:focus-visible {
+    outline: 2px solid var(--oro);
+    outline-offset: 2px;
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ── Utilidades globales compartidas ── */
+.pgip-page {
+    min-height: 100vh;
+    background: var(--fondo-oscuro);
+    color: var(--texto-principal);
+}
+
+.pgip-contenido {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 28px 20px;
+}
+
+/* Encabezado de sección */
+.pgip-encabezado {
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--borde);
+}
+
+.pgip-titulo {
+    font-family: var(--fuente-display);
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--texto-principal);
+    letter-spacing: 0.02em;
+}
+
+.pgip-subtitulo {
+    font-size: 0.8rem;
+    color: var(--texto-tenue);
+    margin-top: 4px;
+    letter-spacing: 0.04em;
+}
+
+/* Card base */
+.pgip-card {
+    background: var(--fondo-card);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio-lg);
+    padding: 24px;
+}
+
+/* Botones base */
+.pgip-btn-primario {
+    padding: 10px 20px;
+    background: var(--oro);
+    color: var(--fondo-oscuro);
+    border: none;
+    border-radius: var(--radio);
+    font-family: var(--fuente-display);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     cursor: pointer;
+    transition: background 0.2s;
+}
+.pgip-btn-primario:hover:not(:disabled) { background: var(--oro-claro); }
+.pgip-btn-primario:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.pgip-btn-secundario {
+    padding: 10px 20px;
+    background: transparent;
+    color: var(--texto-suave);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+}
+.pgip-btn-secundario:hover:not(:disabled) {
+    border-color: var(--borde-activo);
+    color: var(--texto-principal);
 }
 
-input:focus, select:focus, textarea:focus {
-    outline: 2px solid var(--color-primario);
-    outline-offset: 1px;
+/* Input base */
+.pgip-input {
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--fondo-input);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    font-family: var(--fuente-cuerpo);
+    font-size: 0.9rem;
+    color: var(--texto-principal);
+    transition: border-color 0.2s, background 0.2s;
+    outline: none;
+}
+.pgip-input::placeholder { color: var(--texto-tenue); }
+.pgip-input:focus {
+    border-color: var(--borde-activo);
+    background: var(--fondo-hover);
+}
+
+/* Badge */
+.pgip-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 99px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+.pgip-badge-oro    { background: rgba(201,151,58,0.15); color: var(--oro-claro); }
+.pgip-badge-vino   { background: rgba(107,26,42,0.3);   color: #e8a0ac; }
+.pgip-badge-verde  { background: var(--exito-bg);       color: var(--exito); }
+.pgip-badge-rojo   { background: var(--error-bg);       color: var(--error); }
+.pgip-badge-gris   { background: rgba(255,255,255,0.07); color: var(--texto-suave); }
+
+/* Tabla base */
+.pgip-tabla {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+.pgip-tabla th {
+    text-align: left;
+    padding: 10px 14px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--texto-tenue);
+    border-bottom: 1px solid var(--borde);
+    font-family: var(--fuente-display);
+}
+.pgip-tabla td {
+    padding: 13px 14px;
+    border-bottom: 1px solid rgba(201, 151, 58, 0.08);
+    color: var(--texto-suave);
+    vertical-align: middle;
+}
+.pgip-tabla tr:hover td {
+    background: var(--fondo-hover);
+    color: var(--texto-principal);
+}
+
+/* Mensajes de estado */
+.pgip-exito {
+    background: var(--exito-bg);
+    border: 1px solid rgba(74, 222, 128, 0.3);
+    color: var(--exito);
+    padding: 10px 14px;
+    border-radius: var(--radio);
+    font-size: 0.85rem;
+}
+.pgip-error {
+    background: var(--error-bg);
+    border: 1px solid rgba(248, 113, 113, 0.3);
+    color: var(--error);
+    padding: 10px 14px;
+    border-radius: var(--radio);
+    font-size: 0.85rem;
 }
