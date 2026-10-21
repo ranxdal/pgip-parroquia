@@ -331,7 +331,7 @@ export default function Archivo() {
                                     </>
                                 )}
 
-                                {/* ── Cónyuge — solo matrimonio ── */}
+                                {/* ── Cónyuge + padrinos — solo matrimonio ── */}
                                 {esMatrimonio && (
                                     <>
                                         <div className={styles.separador}>
@@ -342,6 +342,23 @@ export default function Archivo() {
                                             <input type="text" value={form.conyuge}
                                                 onChange={e => set('conyuge', e.target.value)}
                                                 className={styles.input} placeholder="Nombre completo del cónyuge" />
+                                        </div>
+                                        <div className={styles.separador}>
+                                            <span className={styles.separadorTexto}>Padrinos de boda</span>
+                                        </div>
+                                        <div className={styles.grid2Inner}>
+                                            <div className={styles.campo}>
+                                                <label className={styles.etiqueta}>Padrino / Madrina 1</label>
+                                                <input type="text" value={form.padrino_1}
+                                                    onChange={e => set('padrino_1', e.target.value)}
+                                                    className={styles.input} placeholder="Nombre completo" />
+                                            </div>
+                                            <div className={styles.campo}>
+                                                <label className={styles.etiqueta}>Padrino / Madrina 2</label>
+                                                <input type="text" value={form.padrino_2}
+                                                    onChange={e => set('padrino_2', e.target.value)}
+                                                    className={styles.input} placeholder="Nombre completo" />
+                                            </div>
                                         </div>
                                     </>
                                 )}
