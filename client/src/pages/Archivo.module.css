@@ -328,11 +328,168 @@ select.input {
     margin-left: 8px;
 }
 
-/* ─── Grid ───────────────────────────────────────────────────────── */
+/* ─── Grid principal 2 columnas ──────────────────────────────────── */
 .grid2 {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    align-items: start;
+}
+
+/* ─── Grids internos del formulario ──────────────────────────────── */
+.grid2Inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 12px;
+}
+
+.grid3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+}
+
+/* ─── Separador de sección ───────────────────────────────────────── */
+.separador {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 4px 0 2px;
+}
+
+.separadorTexto {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--oro);
+    font-family: var(--fuente-cuerpo);
+    white-space: nowrap;
+}
+
+.separador::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--borde);
+}
+
+/* ─── Zona de upload ─────────────────────────────────────────────── */
+.uploadZona {
+    margin-bottom: 0;
+}
+
+/* ─── Textarea OCR ───────────────────────────────────────────────── */
+.textarea {
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--fondo-input);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    font-size: 0.85rem;
+    font-family: var(--fuente-cuerpo);
+    color: var(--texto-principal);
+    resize: vertical;
+    outline: none;
+    box-sizing: border-box;
+    line-height: 1.5;
+    transition: border-color 0.2s;
+}
+
+.textarea:focus {
+    border-color: var(--borde-activo);
+}
+
+/* ─── Preview de imagen ──────────────────────────────────────────── */
+.preview {
+    width: 100%;
+    max-height: 280px;
+    object-fit: contain;
+    border-radius: var(--radio);
+    border: 1px solid var(--borde);
+    background: var(--fondo-panel);
+    margin-bottom: 16px;
+}
+
+/* ─── Separador visual entre preview y botón IA ──────────────────── */
+.dividerIA {
+    height: 1px;
+    background: var(--borde);
+    margin: 16px 0;
+}
+
+/* ─── Info OCR ───────────────────────────────────────────────────── */
+.ocrInfo {
+    margin-top: 14px;
+    padding: 10px 14px;
+    background: var(--fondo-panel);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    font-size: 0.8rem;
+    color: var(--texto-suave);
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.ocrInfo p {
+    margin: 0;
+}
+
+.confianzaAlta {
+    color: var(--exito);
+    font-weight: 700;
+}
+
+.confianzaBaja {
+    color: var(--advertencia);
+    font-weight: 700;
+}
+
+/* ─── Tabla historial ─────────────────────────────────────────────── */
+.tablaContenedor {
+    overflow-x: auto;
+    border-radius: var(--radio);
+}
+
+.tabla {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    font-family: var(--fuente-cuerpo);
+}
+
+.th {
+    padding: 10px 12px;
+    text-align: left;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--texto-tenue);
+    background: var(--fondo-panel);
+    border-bottom: 1px solid var(--borde);
+    white-space: nowrap;
+}
+
+.td {
+    padding: 10px 12px;
+    color: var(--texto-suave);
+    border-bottom: 1px solid var(--borde);
+    vertical-align: middle;
+}
+
+.tabla tr:last-child .td { border-bottom: none; }
+.tabla tr:hover .td { background: var(--fondo-hover); }
+
+.confianzaAltaTd {
+    color: var(--exito);
+    font-weight: 600;
+}
+
+.confianzaBajaTd {
+    color: var(--advertencia);
+    font-weight: 600;
 }
 
 /* ─── Responsive ─────────────────────────────────────────────────── */

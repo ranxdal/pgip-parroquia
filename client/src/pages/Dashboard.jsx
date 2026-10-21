@@ -15,10 +15,11 @@ const PERIODOS = [
 ];
 
 export default function Dashboard() {
-    const [datos, setDatos]     = useState(null);
-    const [periodo, setPeriodo] = useState('mes');
+    const [datos, setDatos]       = useState(null);
+    const [periodo, setPeriodo]   = useState('mes');
     const [cargando, setCargando] = useState(true);
     const [errorApi, setErrorApi] = useState(false);
+    const [intento, setIntento]   = useState(0);
 
     useEffect(() => {
         const cargar = async () => {
@@ -35,7 +36,7 @@ export default function Dashboard() {
             }
         };
         cargar();
-    }, [periodo]);
+    }, [periodo, intento]);
 
     return (
         <div className={styles.contenedor}>
@@ -93,7 +94,7 @@ export default function Dashboard() {
                         <button
                             className={styles.filtroBton}
                             style={{ marginTop: 16 }}
-                            onClick={() => setPeriodo(p => p)}
+                            onClick={() => setIntento(n => n + 1)}
                         >
                             🔄 Reintentar
                         </button>

@@ -182,8 +182,10 @@ export default function Archivo() {
 
                         {/* Columna izquierda — imagen + OCR */}
                         <div>
+                            {/* Panel 1: seleccionar imagen */}
                             <div className={styles.panel}>
                                 <h2 className={styles.panelTitulo}>1. Subir imagen del folio</h2>
+
                                 <div className={styles.uploadZona}>
                                     <input type="file" accept="image/jpeg,image/png"
                                         onChange={handleImagenChange}
@@ -191,20 +193,34 @@ export default function Archivo() {
                                     <label htmlFor="inputImagen" className={styles.uploadLabel}>
                                         {previstaImagen ? '📄 Cambiar imagen' : '📤 Seleccionar imagen'}
                                     </label>
-                                    {imagen && <p className={styles.textoGris}>{imagen.name}</p>}
+                                    {imagen && (
+                                        <p className={styles.textoGris} style={{ marginTop: 8, marginBottom: 0 }}>
+                                            📎 {imagen.name}
+                                        </p>
+                                    )}
                                 </div>
 
+                                {/* Vista previa — separada del upload */}
                                 {previstaImagen && (
-                                    <img src={previstaImagen} alt="Vista previa" className={styles.preview} />
+                                    <>
+                                        <div className={styles.dividerIA} />
+                                        <img src={previstaImagen} alt="Vista previa" className={styles.preview} />
+                                    </>
                                 )}
 
-                                <button onClick={procesarImagen}
-                                    className={styles.botonPrimario}
-                                    style={{ opacity: procesando ? 0.7 : 1 }}
-                                    disabled={procesando || !imagen}>
-                                    {procesando ? '⏳ Procesando con OCR...' : '🔍 Extraer texto con IA'}
-                                </button>
+                                {/* Botón IA — solo cuando hay imagen, con separación clara */}
+                                {imagen && (
+                                    <>
+                                        <div className={styles.dividerIA} />
+                                        <button onClick={procesarImagen}
+                                            className={styles.botonPrimario}
+                                            disabled={procesando}>
+                                            {procesando ? '⏳ Procesando con OCR...' : '🔍 Extraer texto con IA'}
+                                        </button>
+                                    </>
+                                )}
 
+                                {/* Resultado OCR */}
                                 {confianza !== null && (
                                     <div className={styles.ocrInfo}>
                                         <p>Motor: <strong>{motor}</strong></p>
@@ -215,6 +231,7 @@ export default function Archivo() {
                                 )}
                             </div>
 
+                            {/* Panel 2: texto crudo OCR — solo si hay resultado */}
                             {textoExtraido && (
                                 <div className={styles.panel}>
                                     <h2 className={styles.panelTitulo}>Texto extraído por OCR</h2>

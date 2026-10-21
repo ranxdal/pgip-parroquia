@@ -1,44 +1,77 @@
+/* ─── Tesorería — PGIP ────────────────────────────────────────────── */
 
 .contenedor {
     min-height: 100vh;
-    background-color: var(--color-fondo);
+    background: var(--bg-page);
+    transition: background 0.3s;
 }
 
 .contenido {
-    padding: 16px;
-    max-width: 1200px;
+    padding: 24px 20px;
+    max-width: 1000px;
     margin: 0 auto;
 }
 
+/* ─── Encabezado ─────────────────────────────────────────────────── */
 .titulo {
+    font-family: var(--fuente-display);
     font-size: 1.5rem;
-    color: var(--color-primario);
-    margin-bottom: 16px;
-    margin-top: 0;
+    font-weight: 600;
+    color: var(--texto-principal);
+    letter-spacing: 0.02em;
+    margin: 0 0 20px;
 }
 
+/* ─── Mensajes ───────────────────────────────────────────────────── */
+.exito {
+    background: var(--exito-bg);
+    border: 1px solid rgba(94, 203, 138, 0.3);
+    color: var(--exito);
+    padding: 12px 16px;
+    border-radius: var(--radio);
+    margin-bottom: 16px;
+    font-size: 0.875rem;
+    cursor: pointer;
+}
+
+.errorDiv {
+    background: var(--error-bg);
+    border: 1px solid rgba(240, 128, 128, 0.3);
+    color: var(--error);
+    padding: 12px 16px;
+    border-radius: var(--radio);
+    margin-bottom: 16px;
+    font-size: 0.875rem;
+    cursor: pointer;
+}
+
+/* ─── Grid de paneles ────────────────────────────────────────────── */
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: 1fr 1fr;
     gap: 16px;
     margin-bottom: 16px;
 }
 
+/* ─── Panel ──────────────────────────────────────────────────────── */
 .panel {
-    background-color: var(--color-blanco);
+    background: var(--fondo-card);
+    border: 1px solid var(--borde);
     padding: 20px;
-    border-radius: var(--radio);
-    box-shadow: var(--sombra);
-    margin-bottom: 16px;
+    border-radius: var(--radio-lg);
+    box-shadow: var(--sombra-card);
+    transition: background 0.3s, border-color 0.3s;
 }
 
 .panelTitulo {
+    font-family: var(--fuente-display);
     font-size: 1rem;
-    color: var(--color-texto);
-    margin-bottom: 16px;
-    margin-top: 0;
+    font-weight: 600;
+    color: var(--texto-principal);
+    margin: 0 0 16px;
 }
 
+/* ─── Formulario ─────────────────────────────────────────────────── */
 .formulario {
     display: flex;
     flex-direction: column;
@@ -52,162 +85,211 @@
 }
 
 .etiqueta {
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     font-weight: 600;
-    color: var(--color-texto);
+    color: var(--texto-tenue);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-family: var(--fuente-cuerpo);
 }
 
+/* ─── Inputs ─────────────────────────────────────────────────────── */
 .input {
     padding: 10px 14px;
-    border: 1px solid var(--color-borde);
-    border-radius: var(--radio-mediano);
-    font-size: 1rem;
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    font-size: 0.9rem;
+    font-family: var(--fuente-cuerpo);
     width: 100%;
     box-sizing: border-box;
     outline: none;
-    transition: border-color 0.2s;
+    background: var(--fondo-input);
+    color: var(--texto-principal);
+    transition: border-color 0.2s, background 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.input::placeholder {
+    color: var(--texto-tenue);
 }
 
 .input:focus {
-    border-color: var(--color-primario);
+    border-color: var(--borde-activo);
+    background: var(--fondo-hover);
 }
 
-.botonPrimario {
-    background-color: var(--color-primario);
-    color: #fff;
-    padding: 12px;
-    border: none;
-    border-radius: var(--radio-mediano);
-    font-size: 1rem;
-    font-weight: 600;
+/* Select — flecha dorada temática */
+select.input {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C9973A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
     cursor: pointer;
-    margin-top: 8px;
-    width: 100%;
-    transition: background-color 0.2s;
 }
 
-.botonPrimario:hover {
-    background-color: var(--color-primario-hover);
+[data-theme="light"] select.input {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A5E10' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+/* ─── Botón primario — visible en ambos modos ────────────────────── */
+.botonPrimario {
+    background: var(--oro);
+    color: #2C1A0E;
+    padding: 11px 20px;
+    border: none;
+    border-radius: var(--radio);
+    font-family: var(--fuente-display);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 8px;
+    transition: background 0.2s;
+}
+
+.botonPrimario:hover:not(:disabled) {
+    background: var(--oro-claro);
 }
 
 .botonPrimario:disabled {
-    opacity: 0.7;
+    opacity: 0.55;
     cursor: not-allowed;
 }
 
+/* ─── Botón recibo ───────────────────────────────────────────────── */
 .botonRecibo {
-    background-color: var(--color-exito);
-    color: #fff;
-    border: none;
-    padding: 4px 10px;
-    border-radius: var(--radio-pequeno);
-    font-size: 0.8rem;
+    background: var(--fondo-panel);
+    border: 1px solid var(--borde);
+    color: var(--texto-suave);
+    padding: 5px 10px;
+    border-radius: var(--radio);
+    font-size: 0.75rem;
+    font-family: var(--fuente-cuerpo);
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background 0.2s, border-color 0.2s;
+    white-space: nowrap;
 }
 
 .botonRecibo:hover {
-    background-color: #276749;
+    background: var(--fondo-hover);
+    border-color: var(--borde-activo);
+    color: var(--texto-principal);
 }
 
-.exito {
-    background-color: #f0fff4;
-    border: 1px solid #68d391;
-    color: var(--color-exito);
-    padding: 12px 16px;
-    border-radius: var(--radio-mediano);
-    margin-bottom: 16px;
-    cursor: pointer;
-}
-
-.errorDiv {
-    background-color: #fff5f5;
-    border: 1px solid #fc8181;
-    color: var(--color-peligro);
-    padding: 12px 16px;
-    border-radius: var(--radio-mediano);
-    margin-bottom: 16px;
-    cursor: pointer;
-}
-
-.textoGris {
-    color: var(--color-texto-suave);
-    font-size: 0.875rem;
-}
-
+/* ─── Estado de caja ─────────────────────────────────────────────── */
 .estadoCaja {
     margin-bottom: 16px;
 }
 
 .badge {
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 0.875rem;
-    font-weight: 600;
     display: inline-block;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-family: var(--fuente-cuerpo);
 }
 
+/* Badges con colores semánticos propios del sistema */
 .badgeAbierta {
-    background-color: #c6f6d5;
-    color: var(--color-exito);
+    background: rgba(94, 203, 138, 0.15);
+    color: var(--exito);
+    border: 1px solid rgba(94, 203, 138, 0.35);
 }
 
 .badgeCerrada {
-    background-color: #fed7d7;
-    color: var(--color-peligro);
+    background: rgba(240, 128, 128, 0.12);
+    color: var(--error);
+    border: 1px solid rgba(240, 128, 128, 0.3);
 }
 
+/* ─── Info grid ──────────────────────────────────────────────────── */
 .infoGrid {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     gap: 12px;
+    margin-top: 12px;
 }
 
 .infoItem {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    gap: 4px;
+    background: var(--fondo-panel);
+    border: 1px solid var(--borde);
+    padding: 12px;
+    border-radius: var(--radio);
 }
 
 .infoEtiqueta {
-    font-size: 0.875rem;
-    color: var(--color-texto-suave);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--texto-tenue);
+    font-family: var(--fuente-cuerpo);
 }
 
 .infoValor {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--color-texto);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--oro);
+    font-family: var(--fuente-display);
 }
 
+/* ─── Texto auxiliar ─────────────────────────────────────────────── */
+.textoGris {
+    color: var(--texto-tenue);
+    font-size: 0.875rem;
+    margin-bottom: 12px;
+}
+
+/* ─── Tabla ──────────────────────────────────────────────────────── */
 .tablaContenedor {
     overflow-x: auto;
+    border-radius: var(--radio);
 }
 
 .tabla {
     width: 100%;
     border-collapse: collapse;
-    min-width: 500px;
+    font-size: 0.85rem;
+    font-family: var(--fuente-cuerpo);
 }
 
 .th {
-    text-align: left;
     padding: 10px 12px;
-    background-color: var(--color-fondo-tabla);
-    font-size: 0.8rem;
-    color: var(--color-texto-suave);
-    border-bottom: 1px solid var(--color-borde);
+    text-align: left;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--texto-tenue);
+    background: var(--fondo-panel);
+    border-bottom: 1px solid var(--borde);
+    white-space: nowrap;
 }
 
 .td {
     padding: 10px 12px;
-    font-size: 0.875rem;
-    border-bottom: 1px solid var(--color-fondo);
-    color: var(--color-texto);
+    color: var(--texto-suave);
+    border-bottom: 1px solid var(--borde);
+    vertical-align: middle;
 }
 
-@media (max-width: 768px) {
-    .grid {
-        grid-template-columns: 1fr;
-    }
+.tabla tr:last-child .td {
+    border-bottom: none;
+}
+
+.tabla tr:hover .td {
+    background: var(--fondo-hover);
+}
+
+/* ─── Responsive ─────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+    .grid { grid-template-columns: 1fr; }
+    .infoGrid { grid-template-columns: 1fr 1fr; }
 }
