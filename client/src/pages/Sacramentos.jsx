@@ -16,7 +16,7 @@ export default function Sacramentos() {
     const [formSacramento, setFormSacramento] = useState({
         tipo: 'bautismo', fecha: '', libro: '',
         folio: '', partida: '', ministro: '',
-        padrino_1: '', padrino_2: ''
+        padrino_1: '', padrino_2: '', conyuge: ''
     });
     const [mensaje, setMensaje] = useState('');
     const [error, setError] = useState('');
@@ -82,7 +82,7 @@ export default function Sacramentos() {
             setFormSacramento({
                 tipo: 'bautismo', fecha: '', libro: '',
                 folio: '', partida: '', ministro: '',
-                padrino_1: '', padrino_2: ''
+                padrino_1: '', padrino_2: '', conyuge: ''
             });
         } catch (err) {
             setError(err.response?.data?.error || 'Error al registrar sacramento');
@@ -294,6 +294,18 @@ export default function Sacramentos() {
                                                 className={styles.input} required />
                                         </div>
                                     </div>
+
+                                    {/* Campo cónyuge — solo matrimonio */}
+                                    {formSacramento.tipo === 'matrimonio' && (
+                                        <div className={styles.campo}>
+                                            <label className={styles.etiqueta}>Nombre del cónyuge / pareja</label>
+                                            <input type="text" value={formSacramento.conyuge}
+                                                onChange={e => setFormSacramento({ ...formSacramento, conyuge: e.target.value })}
+                                                className={styles.input}
+                                                placeholder="Nombre completo de la pareja" />
+                                        </div>
+                                    )}
+
                                     <div className={styles.grid3}>
                                         <div className={styles.campo}>
                                             <label className={styles.etiqueta}>Libro</label>
@@ -322,13 +334,17 @@ export default function Sacramentos() {
                                     </div>
                                     <div className={styles.grid2}>
                                         <div className={styles.campo}>
-                                            <label className={styles.etiqueta}>Padrino 1</label>
+                                            <label className={styles.etiqueta}>
+                                                {formSacramento.tipo === 'matrimonio' ? 'Padrino / Testigo 1' : 'Padrino 1'}
+                                            </label>
                                             <input type="text" value={formSacramento.padrino_1}
                                                 onChange={e => setFormSacramento({ ...formSacramento, padrino_1: e.target.value })}
                                                 className={styles.input} />
                                         </div>
                                         <div className={styles.campo}>
-                                            <label className={styles.etiqueta}>Padrino 2</label>
+                                            <label className={styles.etiqueta}>
+                                                {formSacramento.tipo === 'matrimonio' ? 'Madrina / Testigo 2' : 'Padrino 2'}
+                                            </label>
                                             <input type="text" value={formSacramento.padrino_2}
                                                 onChange={e => setFormSacramento({ ...formSacramento, padrino_2: e.target.value })}
                                                 className={styles.input} />
