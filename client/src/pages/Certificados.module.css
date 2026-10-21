@@ -1,24 +1,10 @@
-/* ─── Variables ──────────────────────────────────────────────────────────── */
-:root {
-    --azul:        #2b6cb0;
-    --azul-dark:   #1a365d;
-    --azul-light:  #ebf8ff;
-    --verde:       #276749;
-    --verde-light: #f0fff4;
-    --rojo:        #c53030;
-    --rojo-light:  #fff5f5;
-    --gris:        #718096;
-    --gris-light:  #f7f8fa;
-    --borde:       #e2e8f0;
-    --radio:       10px;
-    --sombra:      0 2px 8px rgba(0,0,0,.08);
-}
+/* ─── Certificados — PGIP ─────────────────────────────────────── */
 
-/* ─── Layout ─────────────────────────────────────────────────────────────── */
 .contenedor {
     min-height: 100vh;
-    background: #f7f8fa;
-    font-family: 'Segoe UI', Arial, sans-serif;
+    background: var(--bg-page);
+    color: var(--texto-principal);
+    transition: background 0.3s, color 0.3s;
 }
 
 .contenido {
@@ -28,53 +14,60 @@
 }
 
 .titulo {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: var(--azul-dark);
-    margin: 0 0 24px;
-}
-
-/* ─── Panel ──────────────────────────────────────────────────────────────── */
-.panel {
-    background: #fff;
-    border: 1px solid var(--borde);
-    border-radius: var(--radio);
-    padding: 24px;
-    margin-bottom: 20px;
-    box-shadow: var(--sombra);
-}
-
-.panelTitulo {
-    font-size: 1.1rem;
+    font-family: var(--fuente-display);
+    font-size: 1.5rem;
     font-weight: 600;
-    color: var(--azul-dark);
-    margin: 0 0 16px;
+    color: var(--texto-principal);
+    letter-spacing: 0.02em;
+    margin: 0 0 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--borde);
 }
 
-/* ─── Alertas ────────────────────────────────────────────────────────────── */
+/* ─── Alertas ─────────────────────────────────────────────────── */
 .errorDiv {
-    background: var(--rojo-light);
-    border: 1px solid #fed7d7;
-    color: var(--rojo);
+    background: var(--error-bg);
+    border: 1px solid rgba(248, 113, 113, 0.3);
+    color: var(--error);
     padding: 12px 16px;
-    border-radius: 8px;
+    border-radius: var(--radio);
     margin-bottom: 16px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 0.875rem;
 }
 
 .exitoDiv {
-    background: var(--verde-light);
-    border: 1px solid #c6f6d5;
-    color: var(--verde);
+    background: var(--exito-bg);
+    border: 1px solid rgba(74, 222, 128, 0.3);
+    color: var(--exito);
     padding: 12px 16px;
-    border-radius: 8px;
+    border-radius: var(--radio);
     margin-bottom: 16px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 0.875rem;
 }
 
-/* ─── Búsqueda ───────────────────────────────────────────────────────────── */
+/* ─── Panel ───────────────────────────────────────────────────── */
+.panel {
+    background: var(--fondo-card);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio-lg);
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: var(--sombra-card);
+    transition: background 0.3s, border-color 0.3s;
+}
+
+.panelTitulo {
+    font-family: var(--fuente-display);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--texto-principal);
+    letter-spacing: 0.02em;
+    margin: 0 0 16px;
+}
+
+/* ─── Búsqueda ────────────────────────────────────────────────── */
 .busquedaFila {
     display: flex;
     gap: 10px;
@@ -84,50 +77,54 @@
 .input {
     width: 100%;
     padding: 10px 14px;
+    background: var(--fondo-input);
     border: 1px solid var(--borde);
-    border-radius: 8px;
-    font-size: 14px;
-    transition: border-color .2s;
+    border-radius: var(--radio);
+    font-size: 0.9rem;
+    font-family: var(--fuente-cuerpo);
+    color: var(--texto-principal);
+    transition: border-color 0.2s, background 0.2s;
     box-sizing: border-box;
-}
-
-.input:focus {
     outline: none;
-    border-color: var(--azul);
-    box-shadow: 0 0 0 3px rgba(43,108,176,.15);
+}
+.input::placeholder { color: var(--texto-tenue); }
+.input:focus {
+    border-color: var(--borde-activo);
+    background: var(--fondo-hover);
 }
 
-/* ─── Resultados de búsqueda ─────────────────────────────────────────────── */
+/* ─── Resultados ──────────────────────────────────────────────── */
 .resultadoItem {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 12px 16px;
     border: 1px solid var(--borde);
-    border-radius: 8px;
+    border-radius: var(--radio);
     margin-bottom: 8px;
     cursor: pointer;
-    transition: background .15s, border-color .15s;
+    transition: background 0.15s, border-color 0.15s;
+    background: var(--fondo-panel);
 }
 
 .resultadoItem:hover {
-    background: var(--azul-light);
-    border-color: var(--azul);
+    background: var(--fondo-hover);
+    border-color: var(--borde-activo);
 }
 
 .textoGris {
-    color: var(--gris);
-    font-size: 13px;
+    color: var(--texto-tenue);
+    font-size: 0.8rem;
     margin: 2px 0 0;
 }
 
 .verBtn {
-    color: var(--azul);
-    font-size: 13px;
-    font-weight: 500;
+    color: var(--oro);
+    font-size: 0.8rem;
+    font-weight: 600;
 }
 
-/* ─── Grid de sacramentos ────────────────────────────────────────────────── */
+/* ─── Grid de sacramentos ─────────────────────────────────────── */
 .sacramentosGrid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -136,25 +133,29 @@
 }
 
 .sacramentoCard {
-    border-radius: 10px;
+    background: var(--fondo-panel);
+    border: 2px solid transparent;
+    border-radius: var(--radio-lg);
     padding: 16px;
-    transition: box-shadow .2s, transform .15s;
-    position: relative;
+    cursor: pointer;
+    transition: box-shadow 0.2s, transform 0.15s, border-color 0.15s;
 }
 
 .sacramentoCard:hover {
-    box-shadow: 0 4px 14px rgba(0,0,0,.12);
-    transform: translateY(-1px);
+    box-shadow: var(--sombra-lg);
+    transform: translateY(-2px);
+    border-color: var(--borde-activo) !important;
 }
 
 .sacramentoTipo {
-    font-size: 16px;
+    font-family: var(--fuente-display);
+    font-size: 1rem;
     font-weight: 700;
     text-transform: capitalize;
     margin: 0 0 4px;
+    color: var(--oro);
 }
 
-/* Botones editar/eliminar dentro de la card */
 .cardAcciones {
     display: flex;
     gap: 8px;
@@ -164,146 +165,138 @@
 .botonEditar {
     flex: 1;
     padding: 6px 10px;
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: 500;
-    background: #fff;
-    border: 1px solid #bee3f8;
-    color: var(--azul);
-    border-radius: 6px;
+    background: var(--fondo-hover);
+    border: 1px solid var(--borde);
+    color: var(--texto-suave);
+    border-radius: var(--radio-sm);
     cursor: pointer;
-    transition: background .15s;
+    transition: background 0.15s, color 0.15s;
+    font-family: var(--fuente-cuerpo);
 }
-
 .botonEditar:hover {
-    background: var(--azul-light);
+    background: var(--oro-suave);
+    color: var(--texto-principal);
+    border-color: var(--borde-activo);
 }
 
 .botonEliminar {
     flex: 1;
     padding: 6px 10px;
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: 500;
-    background: #fff;
-    border: 1px solid #fed7d7;
-    color: var(--rojo);
-    border-radius: 6px;
+    background: transparent;
+    border: 1px solid var(--borde);
+    color: var(--error);
+    border-radius: var(--radio-sm);
     cursor: pointer;
-    transition: background .15s;
+    transition: background 0.15s;
+    font-family: var(--fuente-cuerpo);
 }
-
 .botonEliminar:hover {
-    background: var(--rojo-light);
+    background: var(--error-bg);
 }
 
-/* ─── Botones principales ────────────────────────────────────────────────── */
+/* ─── Botones ─────────────────────────────────────────────────── */
 .botonPrimario {
     padding: 10px 20px;
-    background: var(--azul);
-    color: #fff;
+    background: var(--oro);
+    color: var(--fondo-oscuro);
     border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
+    border-radius: var(--radio);
+    font-family: var(--fuente-display);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     cursor: pointer;
-    transition: background .2s;
+    transition: background 0.2s;
     white-space: nowrap;
 }
-
-.botonPrimario:hover:not(:disabled) {
-    background: var(--azul-dark);
-}
-
-.botonPrimario:disabled {
-    opacity: .5;
-    cursor: not-allowed;
-}
+.botonPrimario:hover:not(:disabled) { background: var(--oro-claro); }
+.botonPrimario:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .botonVerde {
     padding: 12px 24px;
-    background: var(--verde);
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-size: 15px;
+    background: var(--exito-bg);
+    color: var(--exito);
+    border: 1px solid rgba(74, 222, 128, 0.4);
+    border-radius: var(--radio);
+    font-size: 0.9rem;
     font-weight: 600;
     cursor: pointer;
-    transition: background .2s;
+    transition: background 0.2s, color 0.2s;
     margin-top: 8px;
+    font-family: var(--fuente-cuerpo);
 }
-
 .botonVerde:hover {
-    background: #1a4731;
+    background: var(--exito);
+    color: var(--fondo-oscuro);
 }
 
 .botonSecundario {
     padding: 10px 20px;
-    background: var(--gris-light);
-    color: #4a5568;
+    background: transparent;
+    color: var(--texto-suave);
     border: 1px solid var(--borde);
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
+    border-radius: var(--radio);
+    font-size: 0.875rem;
+    font-weight: 500;
     cursor: pointer;
-    transition: background .2s;
+    transition: border-color 0.2s, color 0.2s;
 }
-
 .botonSecundario:hover:not(:disabled) {
-    background: #edf2f7;
+    border-color: var(--borde-activo);
+    color: var(--texto-principal);
 }
-
-.botonSecundario:disabled {
-    opacity: .5;
-    cursor: not-allowed;
-}
+.botonSecundario:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .botonRojo {
     padding: 10px 20px;
-    background: var(--rojo);
+    background: var(--error);
     color: #fff;
     border: none;
-    border-radius: 8px;
-    font-size: 14px;
+    border-radius: var(--radio);
+    font-size: 0.875rem;
     font-weight: 600;
     cursor: pointer;
-    transition: background .2s;
+    transition: opacity 0.2s;
 }
+.botonRojo:hover:not(:disabled) { opacity: 0.85; }
+.botonRojo:disabled { opacity: 0.5; cursor: not-allowed; }
 
-.botonRojo:hover:not(:disabled) {
-    background: #9b2c2c;
-}
-
-.botonRojo:disabled {
-    opacity: .5;
-    cursor: not-allowed;
-}
-
-/* ─── Modal ──────────────────────────────────────────────────────────────── */
+/* ─── Modal ───────────────────────────────────────────────────── */
 .modalOverlay {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,.45);
+    background: rgba(0, 0, 0, 0.65);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 1000;
     padding: 16px;
+    backdrop-filter: blur(4px);
 }
 
 .modal {
-    background: #fff;
-    border-radius: 12px;
+    background: var(--fondo-card);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio-lg);
     padding: 28px;
     width: 100%;
     max-width: 520px;
-    box-shadow: 0 20px 60px rgba(0,0,0,.25);
+    box-shadow: var(--sombra-lg);
     max-height: 90vh;
     overflow-y: auto;
+    transition: background 0.3s;
 }
 
 .modalTitulo {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--azul-dark);
+    font-family: var(--fuente-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--texto-principal);
     margin: 0 0 20px;
 }
 
@@ -318,9 +311,12 @@
     display: flex;
     flex-direction: column;
     gap: 5px;
-    font-size: 13px;
-    font-weight: 500;
-    color: #4a5568;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--texto-tenue);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-family: var(--fuente-cuerpo);
 }
 
 .modalAcciones {
@@ -329,9 +325,9 @@
     gap: 10px;
 }
 
-/* ─── Responsive ─────────────────────────────────────────────────────────── */
+/* ─── Responsive ─────────────────────────────────────────────── */
 @media (max-width: 600px) {
-    .titulo { font-size: 1.4rem; }
+    .titulo { font-size: 1.3rem; }
     .sacramentosGrid { grid-template-columns: 1fr; }
     .formGrid { grid-template-columns: 1fr; }
     .busquedaFila { flex-wrap: wrap; }

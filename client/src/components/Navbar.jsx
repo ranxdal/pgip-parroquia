@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import styles from './Navbar.module.css';
 
 export default function Navbar() {
     const { usuario, logout } = useAuth();
+    const { tema, toggleTema } = useTheme();
     const navigate = useNavigate();
     const [menuAbierto, setMenuAbierto] = useState(false);
     const [esMovil, setEsMovil] = useState(window.innerWidth <= 768);
@@ -29,6 +31,8 @@ export default function Navbar() {
     };
 
     const avatarLetra = (usuario?.nombre?.[0] || '?').toUpperCase();
+    const iconoTema = tema === 'dark' ? '☀️' : '🌙';
+    const labelTema = tema === 'dark' ? 'Modo día' : 'Modo noche';
 
     return (
         <nav className={styles.navbar}>
@@ -55,6 +59,15 @@ export default function Navbar() {
                             className={styles.navBtn}>Certificados</button>
                         <button onClick={() => navegar('/intenciones')}
                             className={styles.navBtn}>Intenciones</button>
+
+                        {/* Toggle tema */}
+                        <button
+                            className={styles.temaToggle}
+                            onClick={toggleTema}
+                            title={labelTema}
+                            aria-label={labelTema}>
+                            {iconoTema}
+                        </button>
 
                         {/* Avatar / perfil */}
                         <button onClick={() => navegar('/perfil')}
@@ -126,6 +139,12 @@ export default function Navbar() {
                         className={styles.menuItem}>
                         👤 Mi Perfil
                     </button>
+                    <div className={styles.menuTemaFila}>
+                        <span className={styles.menuTemaLabel}>Apariencia</span>
+                        <button className={styles.menuTemaBtnMovil} onClick={toggleTema}>
+                            {iconoTema} {labelTema}
+                        </button>
+                    </div>
                     <button onClick={handleLogout}
                         className={styles.menuItemRojo}>
                         🚪 Cerrar Sesión

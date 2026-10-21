@@ -4,9 +4,10 @@
     position: sticky;
     top: 0;
     z-index: 50;
-    background: #1F0E02;
-    border-bottom: 1px solid rgba(201, 151, 58, 0.2);
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+    background: var(--navbar-bg);
+    border-bottom: 1px solid var(--navbar-border);
+    box-shadow: var(--sombra-card);
+    transition: background 0.3s, border-color 0.3s;
 }
 
 .navContenido {
@@ -33,14 +34,14 @@
     font-family: 'Cinzel', 'Georgia', serif;
     font-size: 1.1rem;
     font-weight: 700;
-    color: #C9973A;
+    color: var(--oro);
     letter-spacing: 0.1em;
 }
 
 .navLogoSep {
     width: 1px;
     height: 16px;
-    background: rgba(201, 151, 58, 0.3);
+    background: var(--borde);
     flex-shrink: 0;
     align-self: center;
 }
@@ -49,7 +50,7 @@
     font-size: 0.65rem;
     font-weight: 400;
     letter-spacing: 0.08em;
-    color: rgba(245, 240, 232, 0.35);
+    color: var(--texto-tenue);
     white-space: nowrap;
     text-transform: uppercase;
 }
@@ -66,7 +67,7 @@
     padding: 6px 12px;
     background: transparent;
     border: none;
-    color: rgba(245, 240, 232, 0.55);
+    color: var(--texto-suave);
     font-family: 'Inter', sans-serif;
     font-size: 0.8rem;
     font-weight: 500;
@@ -78,15 +79,15 @@
 }
 
 .navBtn:hover {
-    color: #F5F0E8;
-    background: rgba(201, 151, 58, 0.1);
+    color: var(--texto-principal);
+    background: var(--fondo-hover);
 }
 
 .navBtnRojo {
     padding: 6px 12px;
     background: transparent;
     border: 1px solid rgba(248, 113, 113, 0.25);
-    color: rgba(248, 113, 113, 0.7);
+    color: var(--error);
     font-family: 'Inter', sans-serif;
     font-size: 0.8rem;
     font-weight: 500;
@@ -97,9 +98,31 @@
 }
 
 .navBtnRojo:hover {
-    color: #f87171;
-    border-color: rgba(248, 113, 113, 0.6);
-    background: rgba(248, 113, 113, 0.08);
+    border-color: var(--error);
+    background: var(--error-bg);
+}
+
+/* ── Toggle tema ── */
+.temaToggle {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--fondo-hover);
+    border: 1px solid var(--borde);
+    color: var(--oro);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    transition: background 0.2s, border-color 0.2s, transform 0.2s;
+    flex-shrink: 0;
+    margin-left: 2px;
+}
+
+.temaToggle:hover {
+    border-color: var(--borde-activo);
+    transform: rotate(15deg);
 }
 
 /* ── Avatar ── */
@@ -107,8 +130,8 @@
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background: rgba(201, 151, 58, 0.2);
-    border: 1.5px solid rgba(201, 151, 58, 0.4);
+    background: var(--oro-suave);
+    border: 1.5px solid var(--borde);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -121,7 +144,7 @@
 }
 
 .navAvatar:hover {
-    border-color: #C9973A;
+    border-color: var(--oro);
     transform: scale(1.06);
 }
 
@@ -132,7 +155,7 @@
 }
 
 .avatarLetra {
-    color: #C9973A;
+    color: var(--oro);
     font-family: 'Cinzel', serif;
     font-size: 13px;
     font-weight: 700;
@@ -143,8 +166,8 @@
 .hamburguesa {
     display: none;
     background: transparent;
-    border: 1px solid rgba(201, 151, 58, 0.3);
-    color: #C9973A;
+    border: 1px solid var(--borde);
+    color: var(--oro);
     width: 36px;
     height: 36px;
     border-radius: 6px;
@@ -157,7 +180,7 @@
 }
 
 .hamburguesa:hover {
-    border-color: #C9973A;
+    border-color: var(--borde-activo);
 }
 
 @media (max-width: 860px) {
@@ -168,12 +191,13 @@
 
 /* ── Menú móvil ── */
 .menuMovil {
-    border-top: 1px solid rgba(201, 151, 58, 0.15);
-    background: #1A0A00;
+    border-top: 1px solid var(--borde);
+    background: var(--fondo-panel);
     padding: 8px 12px 16px;
     display: flex;
     flex-direction: column;
     gap: 2px;
+    transition: background 0.3s;
 }
 
 .menuUsuario {
@@ -181,13 +205,13 @@
     align-items: center;
     gap: 10px;
     padding: 12px 12px 14px;
-    border-bottom: 1px solid rgba(201, 151, 58, 0.12);
+    border-bottom: 1px solid var(--borde);
     margin-bottom: 6px;
 }
 
 .menuUsuario span {
     font-size: 0.8rem;
-    color: rgba(245, 240, 232, 0.5);
+    color: var(--texto-tenue);
 }
 
 .menuAvatarImg {
@@ -195,16 +219,16 @@
     height: 30px;
     border-radius: 50%;
     object-fit: cover;
-    border: 1.5px solid rgba(201, 151, 58, 0.4);
+    border: 1.5px solid var(--borde);
 }
 
 .menuAvatarLetra {
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    background: rgba(201, 151, 58, 0.2);
-    border: 1.5px solid rgba(201, 151, 58, 0.4);
-    color: #C9973A;
+    background: var(--oro-suave);
+    border: 1.5px solid var(--borde);
+    color: var(--oro);
     font-family: 'Cinzel', serif;
     font-size: 12px;
     font-weight: 700;
@@ -220,7 +244,7 @@
     padding: 10px 12px;
     background: transparent;
     border: none;
-    color: rgba(245, 240, 232, 0.6);
+    color: var(--texto-suave);
     font-family: 'Inter', sans-serif;
     font-size: 0.875rem;
     font-weight: 400;
@@ -230,8 +254,8 @@
 }
 
 .menuItem:hover {
-    color: #F5F0E8;
-    background: rgba(201, 151, 58, 0.1);
+    color: var(--texto-principal);
+    background: var(--fondo-hover);
 }
 
 .menuItemRojo {
@@ -240,7 +264,7 @@
     padding: 10px 12px;
     background: transparent;
     border: none;
-    color: rgba(248, 113, 113, 0.6);
+    color: var(--error);
     font-family: 'Inter', sans-serif;
     font-size: 0.875rem;
     font-weight: 400;
@@ -251,6 +275,31 @@
 }
 
 .menuItemRojo:hover {
-    color: #f87171;
-    background: rgba(248, 113, 113, 0.08);
+    background: var(--error-bg);
+}
+
+.menuTemaFila {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border-top: 1px solid var(--borde);
+    margin-top: 6px;
+}
+
+.menuTemaLabel {
+    font-size: 0.8rem;
+    color: var(--texto-tenue);
+    font-family: 'Inter', sans-serif;
+}
+
+.menuTemaBtnMovil {
+    background: var(--fondo-hover);
+    border: 1px solid var(--borde);
+    color: var(--oro);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background 0.2s;
 }

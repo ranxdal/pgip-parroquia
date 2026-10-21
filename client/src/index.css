@@ -1,40 +1,43 @@
 /* ══════════════════════════════════════════════════════════════
    PGIP — Parroquia San Agustín de Sumpango
-   Design System Tokens
+   Design System — Tokens + Modo Oscuro y Día
    ══════════════════════════════════════════════════════════════ */
 
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* ── Tokens de color ── */
-:root {
+/* ══════════════════════════════════════════════════════════════
+   MODO OSCURO (por defecto — tema litúrgico)
+   ══════════════════════════════════════════════════════════════ */
+:root,
+[data-theme="dark"] {
     /* Paleta litúrgica */
     --oro:          #C9973A;
     --oro-claro:    #dba94a;
-    --oro-suave:    rgba(201, 151, 58, 0.15);
+    --oro-suave:    rgba(201, 151, 58, 0.18);
     --vino:         #6B1A2A;
-    --vino-suave:   rgba(107, 26, 42, 0.15);
+    --vino-suave:   rgba(107, 26, 42, 0.2);
 
-    /* Fondos (modo oscuro base para el sistema) */
+    /* Fondos — más luminosos para mejor contraste */
     --fondo-oscuro:    #1A0A00;
-    --fondo-panel:     #1F0E02;
-    --fondo-card:      #261205;
-    --fondo-input:     rgba(245, 240, 232, 0.06);
-    --fondo-hover:     rgba(201, 151, 58, 0.08);
+    --fondo-panel:     #251208;
+    --fondo-card:      #2E1608;
+    --fondo-input:     rgba(245, 240, 232, 0.08);
+    --fondo-hover:     rgba(201, 151, 58, 0.1);
 
-    /* Texto */
+    /* Texto — más brillante */
     --texto-principal: #F5F0E8;
-    --texto-suave:     rgba(245, 240, 232, 0.6);
-    --texto-tenue:     rgba(245, 240, 232, 0.35);
+    --texto-suave:     rgba(245, 240, 232, 0.75);
+    --texto-tenue:     rgba(245, 240, 232, 0.45);
 
     /* Bordes */
-    --borde:           rgba(201, 151, 58, 0.2);
-    --borde-activo:    rgba(201, 151, 58, 0.6);
+    --borde:           rgba(201, 151, 58, 0.25);
+    --borde-activo:    rgba(201, 151, 58, 0.7);
 
     /* Semánticos */
-    --exito:           #4ade80;
-    --exito-bg:        rgba(74, 222, 128, 0.1);
-    --error:           #f87171;
-    --error-bg:        rgba(248, 113, 113, 0.1);
+    --exito:           #6ee7a0;
+    --exito-bg:        rgba(74, 222, 128, 0.12);
+    --error:           #fca5a5;
+    --error-bg:        rgba(248, 113, 113, 0.12);
     --advertencia:     #fbbf24;
 
     /* Tipografía */
@@ -47,8 +50,74 @@
     --radio-lg: 12px;
 
     /* Sombras */
-    --sombra-card: 0 4px 24px rgba(0, 0, 0, 0.4);
-    --sombra-lg:   0 8px 40px rgba(0, 0, 0, 0.6);
+    --sombra-card: 0 4px 24px rgba(0, 0, 0, 0.5);
+    --sombra-lg:   0 8px 40px rgba(0, 0, 0, 0.7);
+
+    /* Color de página */
+    --bg-page: var(--fondo-oscuro);
+    --navbar-bg: #1F0E02;
+    --navbar-border: rgba(201, 151, 58, 0.2);
+
+    /* Scroll */
+    --scrollbar-track: var(--fondo-panel);
+    --scrollbar-thumb: rgba(201, 151, 58, 0.3);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MODO DÍA — cálido, pergamino claro, acentos dorado y vino
+   ══════════════════════════════════════════════════════════════ */
+[data-theme="light"] {
+    /* Paleta litúrgica — igual, funciona sobre claro también */
+    --oro:          #A07020;
+    --oro-claro:    #C08830;
+    --oro-suave:    rgba(160, 112, 32, 0.12);
+    --vino:         #7B2030;
+    --vino-suave:   rgba(123, 32, 48, 0.1);
+
+    /* Fondos cálidos tipo pergamino */
+    --fondo-oscuro:    #FAF6EF;
+    --fondo-panel:     #F5EFE4;
+    --fondo-card:      #EDE5D8;
+    --fondo-input:     rgba(60, 30, 10, 0.06);
+    --fondo-hover:     rgba(160, 112, 32, 0.08);
+
+    /* Texto oscuro con buen contraste */
+    --texto-principal: #1C0E02;
+    --texto-suave:     rgba(28, 14, 2, 0.65);
+    --texto-tenue:     rgba(28, 14, 2, 0.4);
+
+    /* Bordes */
+    --borde:           rgba(160, 112, 32, 0.25);
+    --borde-activo:    rgba(160, 112, 32, 0.6);
+
+    /* Semánticos */
+    --exito:           #166534;
+    --exito-bg:        rgba(22, 101, 52, 0.1);
+    --error:           #991b1b;
+    --error-bg:        rgba(153, 27, 27, 0.1);
+    --advertencia:     #92400e;
+
+    /* Tipografía */
+    --fuente-display: 'Cinzel', 'Georgia', serif;
+    --fuente-cuerpo:  'Inter', system-ui, sans-serif;
+
+    /* Espaciado */
+    --radio-sm: 4px;
+    --radio:    8px;
+    --radio-lg: 12px;
+
+    /* Sombras */
+    --sombra-card: 0 2px 12px rgba(80, 40, 10, 0.12);
+    --sombra-lg:   0 6px 28px rgba(80, 40, 10, 0.18);
+
+    /* Color de página */
+    --bg-page: var(--fondo-oscuro);
+    --navbar-bg: #EDE5D8;
+    --navbar-border: rgba(160, 112, 32, 0.25);
+
+    /* Scroll */
+    --scrollbar-track: var(--fondo-panel);
+    --scrollbar-thumb: rgba(160, 112, 32, 0.3);
 }
 
 /* ── Reset base ── */
@@ -65,18 +134,19 @@ html {
 
 body {
     font-family: var(--fuente-cuerpo);
-    background-color: var(--fondo-oscuro);
+    background-color: var(--bg-page);
     color: var(--texto-principal);
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 /* ── Scrollbar discreta ── */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: var(--fondo-panel); }
-::-webkit-scrollbar-thumb { background: rgba(201, 151, 58, 0.3); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(201, 151, 58, 0.5); }
+::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--borde-activo); }
 
 /* ── Focus visible accesible ── */
 :focus-visible {
@@ -92,10 +162,12 @@ body {
     }
 }
 
-/* ── Utilidades globales compartidas ── */
+/* ══════════════════════════════════════════════════════════════
+   UTILIDADES GLOBALES COMPARTIDAS
+   ══════════════════════════════════════════════════════════════ */
 .pgip-page {
     min-height: 100vh;
-    background: var(--fondo-oscuro);
+    background: var(--bg-page);
     color: var(--texto-principal);
 }
 
@@ -133,6 +205,7 @@ body {
     border: 1px solid var(--borde);
     border-radius: var(--radio-lg);
     padding: 24px;
+    box-shadow: var(--sombra-card);
 }
 
 /* Botones base */
@@ -199,11 +272,11 @@ body {
     font-weight: 600;
     letter-spacing: 0.04em;
 }
-.pgip-badge-oro    { background: rgba(201,151,58,0.15); color: var(--oro-claro); }
-.pgip-badge-vino   { background: rgba(107,26,42,0.3);   color: #e8a0ac; }
-.pgip-badge-verde  { background: var(--exito-bg);       color: var(--exito); }
-.pgip-badge-rojo   { background: var(--error-bg);       color: var(--error); }
-.pgip-badge-gris   { background: rgba(255,255,255,0.07); color: var(--texto-suave); }
+.pgip-badge-oro    { background: var(--oro-suave);  color: var(--oro-claro); }
+.pgip-badge-vino   { background: var(--vino-suave); color: var(--vino); }
+.pgip-badge-verde  { background: var(--exito-bg);   color: var(--exito); }
+.pgip-badge-rojo   { background: var(--error-bg);   color: var(--error); }
+.pgip-badge-gris   { background: rgba(128,128,128,0.12); color: var(--texto-suave); }
 
 /* Tabla base */
 .pgip-tabla {
@@ -224,7 +297,7 @@ body {
 }
 .pgip-tabla td {
     padding: 13px 14px;
-    border-bottom: 1px solid rgba(201, 151, 58, 0.08);
+    border-bottom: 1px solid rgba(128, 128, 128, 0.1);
     color: var(--texto-suave);
     vertical-align: middle;
 }
