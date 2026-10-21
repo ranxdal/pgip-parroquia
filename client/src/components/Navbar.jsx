@@ -34,7 +34,8 @@ export default function Navbar() {
         <nav className={styles.navbar}>
             <div className={styles.navContenido}>
                 <div className={styles.navLogo}>
-                    <strong>PGIP</strong>
+                    <span className={styles.navLogoPrincipal}>PGIP</span>
+                    <span className={styles.navLogoSep} />
                     <span className={styles.navSub}>Parroquia San Agustín</span>
                 </div>
 
