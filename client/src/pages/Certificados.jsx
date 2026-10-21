@@ -10,7 +10,7 @@ const TIPO_COLOR = {
     matrimonio:   { bg: '#fff8f0', color: '#c05621' }
 };
 
-const CAMPOS_EDITABLES = ['fecha', 'libro', 'folio', 'partida', 'ministro', 'padrino_1', 'padrino_2'];
+const CAMPOS_EDITABLES = ['fecha', 'libro', 'folio', 'partida', 'ministro', 'padrino_1', 'padrino_2', 'conyuge'];
 
 export default function Certificados() {
     const [busqueda, setBusqueda] = useState('');
@@ -53,13 +53,15 @@ export default function Certificados() {
     };
 
     const seleccionarFeligres = async (f) => {
-        setFeligres(f);
         setResultados([]);
         setSacramentoSeleccionado(null);
         try {
             const { data } = await api.get(`/sacramentos/feligres/${f.id}`);
+            // Usar el feligres del detalle (tiene nombre_padre, nombre_madre completos)
+            setFeligres(data.feligres || f);
             setSacramentos(data.sacramentos);
         } catch {
+            setFeligres(f);
             setSacramentos([]);
         }
     };
@@ -78,13 +80,16 @@ export default function Certificados() {
     const abrirEditar = (s) => {
         setSacramentoEditando(s);
         setFormEditar({
-            fecha:     s.fecha ? s.fecha.slice(0, 10) : '',
-            libro:     s.libro     || '',
-            folio:     s.folio     || '',
-            partida:   s.partida   || '',
-            ministro:  s.ministro  || '',
-            padrino_1: s.padrino_1 || '',
-            padrino_2: s.padrino_2 || '',
+            fecha:        s.fecha ? s.fecha.slice(0, 10) : '',
+            libro:        s.libro        || '',
+            folio:        s.folio        || '',
+            partida:      s.partida      || '',
+            ministro:     s.ministro     || '',
+            padrino_1:    s.padrino_1    || '',
+            padrino_2:    s.padrino_2    || '',
+            conyuge:      s.conyuge      || '',
+            nombre_padre: feligres?.nombre_padre || '',
+            nombre_madre: feligres?.nombre_madre || '',
         });
         setModalEditar(true);
     };
@@ -92,7 +97,19 @@ export default function Certificados() {
     const guardarEdicion = async () => {
         setGuardando(true);
         try {
-            await api.put(`/sacramentos/${sacramentoEditando.id}`, formEditar);
+            // Actualizar el sacramento
+            const { nombre_padre, nombre_madre, ...datosSacramento } = formEditar;
+            await api.put(`/sacramentos/${sacramentoEditando.id}`, datosSacramento);
+
+            // Si es bautismo y se editaron los padres, actualizar el feligrés también
+            if (sacramentoEditando.tipo === 'bautismo' && feligres) {
+                try {
+                    await api.put(`/sacramentos/feligres/${feligres.id}`, { nombre_padre, nombre_madre });
+                    // Actualizar el objeto local de feligrés
+                    setFeligres(prev => ({ ...prev, nombre_padre, nombre_madre }));
+                } catch { /* silencioso si el endpoint no existe */ }
+            }
+
             mostrarExito('Sacramento actualizado correctamente');
             setModalEditar(false);
             await recargarSacramentos();
@@ -258,7 +275,10 @@ export default function Certificados() {
         // ── BAUTISMO ──
         if (sacramento.tipo === 'bautismo') {
             campo('Nombre:', `${feligres.nombres} ${feligres.apellidos}`, y); y += lh;
-            const nombresPadres = [feligres.nombre_padre, feligres.nombre_madre].filter(Boolean).join(' y ');
+            // Intentar todos los posibles nombres de campo que puede devolver el backend
+            const nombrePadre = feligres.nombre_padre || feligres.padre || feligres.nombre_del_padre || '';
+            const nombreMadre = feligres.nombre_madre || feligres.madre || feligres.nombre_de_la_madre || '';
+            const nombresPadres = [nombrePadre, nombreMadre].filter(Boolean).join(' y ');
             campo('Nombre de los padres:', nombresPadres, y); y += lhS;
             linea(y); y += lh;
             y += 3;
@@ -305,7 +325,7 @@ export default function Certificados() {
             if (sacramento.partida) bold(String(sacramento.partida), xL + 110, y);
             txt('De esta', xL + 141, y);
             y += lh;
-            txt('Parroquia, consta que el', xL, y);
+            txt('Parroquia de San Agustín, consta que el', xL, y);
             const xDia = xL + doc.getTextWidth('Parroquia, consta que el') + 2;
             bold(String(diaSacramento), xDia, y);
             const xDe1 = xDia + doc.getTextWidth(String(diaSacramento)) + 2;
@@ -366,8 +386,20 @@ export default function Certificados() {
             doc.setFont('helvetica', 'normal');
             doc.setTextColor(30, 30, 30);
             linea(y); y += lh;
-            if (sacramento.conyugue) bold(sacramento.conyugue, xL, y);
-            linea(y); y += lh + 2;
+            // Siempre mostrar la segunda línea; si hay cónyuge, poner el nombre
+            if (sacramento.conyuge) bold(sacramento.conyuge, xL, y);
+            linea(y); y += lh;
+            // Si no hay cónyuge registrado, mostrar una nota discreta
+            if (!sacramento.conyuge) {
+                doc.setFont('helvetica', 'italic');
+                doc.setFontSize(8);
+                doc.setTextColor(150, 150, 150);
+                doc.text('(nombre del cónyuge no registrado)', xL, y - 2);
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(30, 30, 30);
+            }
+            y += 2;
             txt('Según consta el Libro:', xL, y); y += lh;
             txt('No.', xL, y);
             doc.setDrawColor(color.r, color.g, color.b); doc.setLineWidth(0.3);
@@ -649,6 +681,46 @@ export default function Certificados() {
                                     onChange={e => setFormEditar(p => ({ ...p, padrino_2: e.target.value }))}
                                 />
                             </label>
+
+                            {/* Campo cónyuge solo para matrimonio */}
+                            {sacramentoEditando.tipo === 'matrimonio' && (
+                                <label className={styles.label}>
+                                    Nombre del cónyuge / pareja
+                                    <input
+                                        type="text"
+                                        className={styles.input}
+                                        value={formEditar.conyuge || ''}
+                                        onChange={e => setFormEditar(p => ({ ...p, conyuge: e.target.value }))}
+                                        placeholder="Nombre completo del cónyuge"
+                                    />
+                                </label>
+                            )}
+
+                            {/* Campos padres solo para bautismo */}
+                            {sacramentoEditando.tipo === 'bautismo' && (
+                                <>
+                                    <label className={styles.label}>
+                                        Nombre del padre
+                                        <input
+                                            type="text"
+                                            className={styles.input}
+                                            value={formEditar.nombre_padre || ''}
+                                            onChange={e => setFormEditar(p => ({ ...p, nombre_padre: e.target.value }))}
+                                            placeholder="Nombre completo del padre"
+                                        />
+                                    </label>
+                                    <label className={styles.label}>
+                                        Nombre de la madre
+                                        <input
+                                            type="text"
+                                            className={styles.input}
+                                            value={formEditar.nombre_madre || ''}
+                                            onChange={e => setFormEditar(p => ({ ...p, nombre_madre: e.target.value }))}
+                                            placeholder="Nombre completo de la madre"
+                                        />
+                                    </label>
+                                </>
+                            )}
                         </div>
 
                         <div className={styles.modalAcciones}>
