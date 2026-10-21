@@ -176,7 +176,7 @@ select.input {
 /* ─── Botón primario ─────────────────────────────────────────────── */
 .botonPrimario {
     background: var(--oro);
-    color: var(--fondo-oscuro);
+    color: #2C1A0E;
     padding: 11px 20px;
     border: none;
     border-radius: var(--radio);

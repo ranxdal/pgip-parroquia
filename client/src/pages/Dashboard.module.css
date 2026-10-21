@@ -60,7 +60,7 @@
 /* Activo: fondo dorado, texto oscuro — visible en ambos modos */
 .filtroBtonActivo {
     background: var(--oro) !important;
-    color: var(--fondo-oscuro) !important;
+    color: #2C1A0E !important;
     border-color: var(--oro) !important;
     font-weight: 700;
 }
