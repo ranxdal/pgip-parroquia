@@ -28,6 +28,8 @@ export default function Navbar() {
         setMenuAbierto(false);
     };
 
+    const avatarLetra = (usuario?.nombre?.[0] || '?').toUpperCase();
+
     return (
         <nav className={styles.navbar}>
             <div className={styles.navContenido}>
@@ -52,7 +54,20 @@ export default function Navbar() {
                             className={styles.navBtn}>Certificados</button>
                         <button onClick={() => navegar('/intenciones')}
                             className={styles.navBtn}>Intenciones</button>
-                        <span className={styles.navUsuario}>{usuario?.nombre}</span>
+
+                        {/* Avatar / perfil */}
+                        <button onClick={() => navegar('/perfil')}
+                            className={styles.navAvatar}
+                            title={`${usuario?.nombre} — Mi perfil`}>
+                            {usuario?.foto_url ? (
+                                <img src={usuario.foto_url} alt="perfil"
+                                    className={styles.avatarImg}
+                                    onError={e => { e.target.style.display = 'none'; }} />
+                            ) : (
+                                <span className={styles.avatarLetra}>{avatarLetra}</span>
+                            )}
+                        </button>
+
                         <button onClick={handleLogout}
                             className={styles.navBtnRojo}>Salir</button>
                     </div>
@@ -71,7 +86,14 @@ export default function Navbar() {
             {esMovil && menuAbierto && (
                 <div className={styles.menuMovil}>
                     <div className={styles.menuUsuario}>
-                        👤 {usuario?.nombre} ({usuario?.rol})
+                        {usuario?.foto_url ? (
+                            <img src={usuario.foto_url} alt="perfil"
+                                className={styles.menuAvatarImg}
+                                onError={e => e.target.style.display='none'} />
+                        ) : (
+                            <span className={styles.menuAvatarLetra}>{avatarLetra}</span>
+                        )}
+                        <span>{usuario?.nombre} ({usuario?.rol})</span>
                     </div>
                     {usuario?.rol === 'admin' && (
                         <button onClick={() => navegar('/dashboard')}
@@ -98,6 +120,10 @@ export default function Navbar() {
                     <button onClick={() => navegar('/intenciones')}
                         className={styles.menuItem}>
                         🕊️ Intenciones de Misa
+                    </button>
+                    <button onClick={() => navegar('/perfil')}
+                        className={styles.menuItem}>
+                        👤 Mi Perfil
                     </button>
                     <button onClick={handleLogout}
                         className={styles.menuItemRojo}>

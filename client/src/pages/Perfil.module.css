@@ -1,0 +1,195 @@
+/* ── Layout ── */
+.contenedor { min-height: 100vh; background: #f7fafc; }
+.contenido  { max-width: 1100px; margin: 0 auto; padding: 24px 16px; }
+.titulo     { font-size: 22px; font-weight: 700; color: #1a202c; margin-bottom: 24px; }
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+@media (max-width: 768px) {
+    .grid { grid-template-columns: 1fr; }
+}
+
+/* ── Panel ── */
+.panel {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px;
+}
+.panelTitulo {
+    font-size: 16px;
+    font-weight: 600;
+    color: #2d3748;
+    margin: 0 0 20px;
+}
+
+/* ── Foto ── */
+.fotoSeccion   { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+.fotoContenedor { flex-shrink: 0; }
+.fotoImg {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e2e8f0;
+}
+.fotoPlaceholder {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: #667eea;
+    color: #fff;
+    font-size: 28px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+}
+.nombreGrande { font-size: 17px; font-weight: 600; color: #1a202c; margin: 0 0 4px; }
+.rolBadge {
+    display: inline-block;
+    font-size: 12px; font-weight: 600;
+    background: #ebf8ff; color: #2b6cb0;
+    padding: 2px 10px; border-radius: 99px;
+    margin-bottom: 4px;
+}
+.textoGris { font-size: 13px; color: #718096; margin: 0; }
+.ayuda     { font-size: 12px; color: #a0aec0; margin: 4px 0 0; }
+
+/* ── Formulario ── */
+.formulario { display: flex; flex-direction: column; gap: 14px; }
+.grid2      { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 480px) { .grid2 { grid-template-columns: 1fr; } }
+
+.campo  { display: flex; flex-direction: column; gap: 4px; }
+.etiqueta { font-size: 13px; font-weight: 600; color: #4a5568; }
+.input {
+    padding: 9px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #2d3748;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.15s;
+}
+.input:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.15); }
+
+.checkFila { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #4a5568; cursor: pointer; }
+
+/* ── Botones ── */
+.botonPrimario {
+    width: 100%;
+    padding: 10px 16px;
+    background: #667eea;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.botonPrimario:hover:not(:disabled) { background: #5a67d8; }
+.botonPrimario:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.botonCancelar {
+    padding: 10px 20px;
+    background: #f7fafc;
+    color: #4a5568;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.botonCancelar:hover { background: #edf2f7; }
+
+.botonDesactivar {
+    padding: 5px 10px; font-size: 12px; font-weight: 600;
+    background: #fff5f5; color: #c53030;
+    border: 1px solid #feb2b2; border-radius: 6px; cursor: pointer;
+}
+.botonActivar {
+    padding: 5px 10px; font-size: 12px; font-weight: 600;
+    background: #f0fff4; color: #276749;
+    border: 1px solid #9ae6b4; border-radius: 6px; cursor: pointer;
+}
+.botonReset {
+    padding: 5px 10px; font-size: 12px; font-weight: 600;
+    background: #fffaf0; color: #c05621;
+    border: 1px solid #fbd38d; border-radius: 6px; cursor: pointer;
+}
+
+/* ── Mensajes ── */
+.exito {
+    background: #f0fff4; color: #276749;
+    border: 1px solid #9ae6b4;
+    padding: 10px 14px; border-radius: 8px;
+    font-size: 13px; cursor: pointer; margin-bottom: 12px;
+}
+.errorDiv {
+    background: #fff5f5; color: #c53030;
+    border: 1px solid #feb2b2;
+    padding: 10px 14px; border-radius: 8px;
+    font-size: 13px; cursor: pointer; margin-bottom: 12px;
+}
+
+/* ── Tabla usuarios ── */
+.tablaContenedor { overflow-x: auto; margin-top: 16px; }
+.tabla { width: 100%; border-collapse: collapse; font-size: 14px; }
+.th {
+    text-align: left; padding: 10px 12px;
+    font-size: 11px; font-weight: 700;
+    color: #718096; text-transform: uppercase; letter-spacing: 0.05em;
+    background: #f7fafc; border-bottom: 1px solid #e2e8f0;
+}
+.td {
+    padding: 12px 12px;
+    border-bottom: 1px solid #f0f4f8;
+    color: #2d3748; vertical-align: middle;
+}
+.filaInactiva td { opacity: 0.5; }
+
+.usuarioFila { display: flex; align-items: center; gap: 8px; }
+.miniAvatar {
+    width: 28px; height: 28px;
+    border-radius: 50%; object-fit: cover;
+}
+.miniAvatarPlaceholder {
+    width: 28px; height: 28px;
+    border-radius: 50%; background: #667eea; color: #fff;
+    font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+}
+
+.accionesFila { display: flex; gap: 6px; flex-wrap: wrap; }
+
+/* ── Badges ── */
+.badgeAdmin   { background: #fef3c7; color: #92400e; font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 99px; }
+.badgeOp      { background: #e0e7ff; color: #3730a3; font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 99px; }
+.badgeActivo  { background: #d1fae5; color: #065f46; font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 99px; }
+.badgeInactivo{ background: #f1f5f9; color: #64748b; font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 99px; }
+
+/* ── Detalle/acordeón ── */
+.detalle { border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; }
+.detalleSummary { cursor: pointer; font-size: 14px; font-weight: 600; color: #4a5568; }
+.detalleSummary:hover { color: #667eea; }
+
+/* ── Modal ── */
+.modalOverlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 100; padding: 16px;
+}
+.modal {
+    background: #fff;
+    border-radius: 12px;
+    padding: 28px;
+    width: 100%; max-width: 420px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    display: flex; flex-direction: column; gap: 16px;
+}
+.modalTitulo { font-size: 16px; font-weight: 700; color: #1a202c; margin: 0; }
+.modalAcciones { display: flex; gap: 10px; justify-content: flex-end; }

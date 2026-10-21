@@ -1,20 +1,36 @@
 const express = require('express');
 const router = express.Router();
-const { registrar, login } = require('../controllers/auth.controller');
-const { verificarToken } = require('../middleware/auth.middleware');
+const {
+    registrar,
+    login,
+    obtenerPerfil,
+    actualizarPerfil,
+    cambiarContrasena,
+    listarUsuarios,
+    crearUsuario,
+    toggleActivo,
+    resetearContrasena
+} = require('../controllers/auth.controller');
+const { verificarToken, verificarRol } = require('../middleware/auth.middleware');
 
-// Ruta pública — iniciar sesión
-router.post('/login', login);
+// ── Rutas públicas ──────────────────────────────────────────
+router.post('/login',     login);
+router.post('/registrar', registrar); // solo desarrollo
 
-// Ruta pública — registrar usuario (solo en desarrollo)
-router.post('/registrar', registrar);
-
-// Ruta protegida — verificar token activo
+// Verificar token activo
 router.get('/verificar', verificarToken, (req, res) => {
-    res.json({ 
-        mensaje: 'Token válido',
-        usuario: req.usuario 
-    });
+    res.json({ mensaje: 'Token válido', usuario: req.usuario });
 });
+
+// ── Perfil propio (cualquier usuario autenticado) ───────────
+router.get ('/perfil',             verificarToken, obtenerPerfil);
+router.put ('/perfil',             verificarToken, actualizarPerfil);
+router.post('/perfil/contrasena',  verificarToken, cambiarContrasena);
+
+// ── Gestión de usuarios (solo admin) ───────────────────────
+router.get ('/usuarios',              verificarToken, verificarRol(['admin']), listarUsuarios);
+router.post('/usuarios',              verificarToken, verificarRol(['admin']), crearUsuario);
+router.patch('/usuarios/:id/activo', verificarToken, verificarRol(['admin']), toggleActivo);
+router.post('/usuarios/:id/reset',   verificarToken, verificarRol(['admin']), resetearContrasena);
 
 module.exports = router;
