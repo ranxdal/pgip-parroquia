@@ -1,44 +1,199 @@
+/* ── Login — Parroquia San Agustín ── */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
 
-.contenedor {
+/* ── Layout raíz ── */
+.pagina {
     min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: #1A0A00;
+    font-family: 'Inter', sans-serif;
+}
+
+@media (max-width: 860px) {
+    .pagina {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ══════════════════════════════════════
+   Panel izquierdo — imagen parroquial
+   ══════════════════════════════════════ */
+.panelImagen {
+    position: relative;
+    overflow: hidden;
+    background-image: url('/fotos/parroquia-exterior.jpg');
+    background-size: cover;
+    background-position: center 30%;
+    min-height: 300px;
+}
+
+/* Fallback si no hay imagen: gradiente evocador */
+.panelImagen::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        135deg,
+        #2D1810 0%,
+        #1A0A00 40%,
+        #3d1a08 100%
+    );
+    z-index: 0;
+}
+
+.imagenOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(10, 3, 0, 0.45) 0%,
+        rgba(10, 3, 0, 0.72) 60%,
+        rgba(10, 3, 0, 0.88) 100%
+    );
+    z-index: 1;
+}
+
+.imagenContenido {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 48px 40px;
+    text-align: center;
+    color: #F5F0E8;
+}
+
+.cruzdeco {
+    font-size: 2rem;
+    color: #C9973A;
+    margin-bottom: 16px;
+    opacity: 0.9;
+}
+
+.nombreParroquia {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0.04em;
+    margin: 0 0 8px;
+    color: #F5F0E8;
+}
+
+.lugarParroquia {
+    font-size: 0.8rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    color: #C9973A;
+    margin: 0 0 24px;
+    text-transform: uppercase;
+}
+
+.lineadeco {
+    width: 48px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #C9973A, transparent);
+    margin: 0 auto 24px;
+}
+
+.lemaParroquia {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(0.9rem, 1.4vw, 1.1rem);
+    font-weight: 400;
+    line-height: 1.6;
+    color: rgba(245, 240, 232, 0.7);
+    margin: 0;
+    letter-spacing: 0.02em;
+}
+
+@media (max-width: 860px) {
+    .panelImagen {
+        min-height: 220px;
+    }
+    .imagenContenido {
+        min-height: 220px;
+        padding: 32px 24px;
+        justify-content: flex-end;
+    }
+    .nombreParroquia { font-size: 1.5rem; }
+}
+
+/* ══════════════════════════════════════
+   Panel derecho — formulario
+   ══════════════════════════════════════ */
+.panelForm {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--color-fondo);
-    padding: 16px;
+    background: #1A0A00;
+    padding: 40px 24px;
 }
 
-.tarjeta {
-    background-color: var(--color-blanco);
-    border-radius: var(--radio);
-    padding: 40px;
+.formContenido {
     width: 100%;
-    max-width: 420px;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+    max-width: 360px;
 }
 
-.encabezado {
-    text-align: center;
-    margin-bottom: 32px;
+/* Logo / acrónimo */
+.logoBloque {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 40px;
 }
 
-.titulo {
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: var(--color-primario);
-    margin: 0 0 8px 0;
+.logoAcronimo {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #C9973A;
+    letter-spacing: 0.1em;
+    flex-shrink: 0;
 }
 
-.subtitulo {
-    color: var(--color-texto-suave);
-    font-size: 0.9rem;
-    margin: 0;
+.logoLinea {
+    width: 1px;
+    height: 28px;
+    background: rgba(201, 151, 58, 0.4);
+    flex-shrink: 0;
 }
 
+.logoDesc {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: rgba(245, 240, 232, 0.45);
+    text-transform: uppercase;
+    line-height: 1.4;
+}
+
+/* Encabezado del form */
+.formTitulo {
+    font-family: 'Cinzel', serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #F5F0E8;
+    margin: 0 0 6px;
+    letter-spacing: 0.02em;
+}
+
+.formSubtitulo {
+    font-size: 0.8rem;
+    color: rgba(245, 240, 232, 0.45);
+    margin: 0 0 32px;
+    font-weight: 400;
+}
+
+/* Formulario */
 .formulario {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 18px;
 }
 
 .campo {
@@ -48,63 +203,113 @@
 }
 
 .etiqueta {
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     font-weight: 600;
-    color: var(--color-texto);
+    letter-spacing: 0.06em;
+    color: rgba(245, 240, 232, 0.6);
+    text-transform: uppercase;
 }
 
 .input {
-    padding: 10px 14px;
-    border: 1px solid var(--color-borde);
-    border-radius: var(--radio-mediano);
-    font-size: 1rem;
-    outline: none;
-    transition: border-color 0.2s;
+    padding: 11px 14px;
+    background: rgba(245, 240, 232, 0.06);
+    border: 1px solid rgba(201, 151, 58, 0.25);
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-family: 'Inter', sans-serif;
+    color: #F5F0E8;
     width: 100%;
     box-sizing: border-box;
+    transition: border-color 0.2s, background 0.2s;
+    outline: none;
+}
+
+.input::placeholder {
+    color: rgba(245, 240, 232, 0.25);
 }
 
 .input:focus {
-    border-color: var(--color-primario);
+    border-color: #C9973A;
+    background: rgba(201, 151, 58, 0.08);
 }
 
+/* Error */
 .error {
-    background-color: #fff5f5;
-    border: 1px solid #fc8181;
-    color: var(--color-peligro);
+    background: rgba(180, 40, 40, 0.15);
+    border: 1px solid rgba(220, 60, 60, 0.4);
+    color: #f4a0a0;
     padding: 10px 14px;
-    border-radius: var(--radio-mediano);
-    font-size: 0.875rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    line-height: 1.4;
 }
 
+/* Botón principal */
 .boton {
-    background-color: var(--color-primario);
-    color: #fff;
-    padding: 12px;
+    margin-top: 6px;
+    padding: 13px 24px;
+    background: #C9973A;
+    color: #1A0A00;
     border: none;
-    border-radius: var(--radio-mediano);
-    font-size: 1rem;
-    font-weight: 600;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.08em;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background 0.2s, transform 0.1s;
     width: 100%;
+    text-transform: uppercase;
 }
 
-.boton:hover {
-    background-color: var(--color-primario-hover);
+.boton:hover:not(:disabled) {
+    background: #dba94a;
+}
+
+.boton:active:not(:disabled) {
+    transform: scale(0.99);
 }
 
 .boton:disabled {
-    opacity: 0.7;
+    opacity: 0.6;
     cursor: not-allowed;
 }
 
-@media (max-width: 480px) {
-    .tarjeta {
-        padding: 24px 16px;
-    }
+.botonCargando {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
 
-    .titulo {
-        font-size: 2rem;
+.spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(26, 10, 0, 0.3);
+    border-top-color: #1A0A00;
+    border-radius: 50%;
+    animation: girar 0.7s linear infinite;
+    flex-shrink: 0;
+}
+
+@keyframes girar {
+    to { transform: rotate(360deg); }
+}
+
+/* Pie */
+.pie {
+    margin-top: 36px;
+    font-size: 0.7rem;
+    color: rgba(245, 240, 232, 0.2);
+    text-align: center;
+    letter-spacing: 0.04em;
+}
+
+@media (max-width: 480px) {
+    .panelForm {
+        padding: 32px 20px;
+    }
+    .formTitulo {
+        font-size: 1.35rem;
     }
 }

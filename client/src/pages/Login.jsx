@@ -20,68 +20,102 @@ export default function Login() {
         setCargando(true);
         try {
             const usuario = await login(form.usuario, form.contrasena);
-            if (usuario.rol === 'admin') {
-                navigate('/dashboard');
-            } else {
-                navigate('/tesoreria');
-            }
+            navigate(usuario.rol === 'admin' ? '/dashboard' : '/tesoreria');
         } catch (err) {
-            setError(err.response?.data?.error || 'Error al iniciar sesión');
+            setError(err.response?.data?.error || 'Usuario o contraseña incorrectos');
         } finally {
             setCargando(false);
         }
     };
 
     return (
-        <div className={styles.contenedor}>
-            <div className={styles.tarjeta}>
-                <div className={styles.encabezado}>
-                    <h1 className={styles.titulo}>PGIP</h1>
-                    <p className={styles.subtitulo}>
-                        Parroquia San Agustín de Sumpango
+        <div className={styles.pagina}>
+            {/* Panel izquierdo — imagen */}
+            <div className={styles.panelImagen}>
+                <div className={styles.imagenOverlay} />
+                <div className={styles.imagenContenido}>
+                    <div className={styles.cruzdeco}>✝</div>
+                    <h2 className={styles.nombreParroquia}>
+                        Parroquia<br />San Agustín
+                    </h2>
+                    <p className={styles.lugarParroquia}>Sumpango, Sacatepéquez</p>
+                    <div className={styles.lineadeco} />
+                    <p className={styles.lemaParroquia}>
+                        Gestión Integral<br />Parroquial
                     </p>
                 </div>
+            </div>
 
-                <form onSubmit={handleSubmit} className={styles.formulario}>
-                    <div className={styles.campo}>
-                        <label className={styles.etiqueta}>Usuario</label>
-                        <input
-                            type="text"
-                            name="usuario"
-                            value={form.usuario}
-                            onChange={handleChange}
-                            className={styles.input}
-                            placeholder="Ingrese su usuario"
-                            autoFocus
-                            required
-                        />
+            {/* Panel derecho — formulario */}
+            <div className={styles.panelForm}>
+                <div className={styles.formContenido}>
+                    <div className={styles.logoBloque}>
+                        <span className={styles.logoAcronimo}>PGIP</span>
+                        <span className={styles.logoLinea} />
+                        <span className={styles.logoDesc}>Sistema de Gestión</span>
                     </div>
 
-                    <div className={styles.campo}>
-                        <label className={styles.etiqueta}>Contraseña</label>
-                        <input
-                            type="password"
-                            name="contrasena"
-                            value={form.contrasena}
-                            onChange={handleChange}
-                            className={styles.input}
-                            placeholder="Ingrese su contraseña"
-                            required
-                        />
-                    </div>
+                    <h1 className={styles.formTitulo}>Iniciar sesión</h1>
+                    <p className={styles.formSubtitulo}>Acceso exclusivo para personal autorizado</p>
 
-                    {error && (
-                        <div className={styles.error}>{error}</div>
-                    )}
+                    <form onSubmit={handleSubmit} className={styles.formulario}>
+                        <div className={styles.campo}>
+                            <label className={styles.etiqueta} htmlFor="usuario">
+                                Usuario
+                            </label>
+                            <input
+                                id="usuario"
+                                type="text"
+                                name="usuario"
+                                value={form.usuario}
+                                onChange={handleChange}
+                                className={styles.input}
+                                placeholder="Ingrese su usuario"
+                                autoComplete="username"
+                                autoFocus
+                                required
+                            />
+                        </div>
 
-                    <button
-                        type="submit"
-                        className={styles.boton}
-                        disabled={cargando}
-                    >
-                        {cargando ? 'Iniciando sesión...' : 'Iniciar Sesión'}
-                    </button>
-                </form>
+                        <div className={styles.campo}>
+                            <label className={styles.etiqueta} htmlFor="contrasena">
+                                Contraseña
+                            </label>
+                            <input
+                                id="contrasena"
+                                type="password"
+                                name="contrasena"
+                                value={form.contrasena}
+                                onChange={handleChange}
+                                className={styles.input}
+                                placeholder="Ingrese su contraseña"
+                                autoComplete="current-password"
+                                required
+                            />
+                        </div>
+
+                        {error && (
+                            <div className={styles.error} role="alert">{error}</div>
+                        )}
+
+                        <button
+                            type="submit"
+                            className={styles.boton}
+                            disabled={cargando}
+                        >
+                            {cargando ? (
+                                <span className={styles.botonCargando}>
+                                    <span className={styles.spinner} />
+                                    Verificando...
+                                </span>
+                            ) : 'Entrar'}
+                        </button>
+                    </form>
+
+                    <p className={styles.pie}>
+                        Parroquia San Agustín de Sumpango &mdash; {new Date().getFullYear()}
+                    </p>
+                </div>
             </div>
         </div>
     );
