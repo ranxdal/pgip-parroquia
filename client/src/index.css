@@ -7,42 +7,43 @@
 
 /* ══════════════════════════════════════════════════════════════
    MODO OSCURO (por defecto — tema litúrgico)
+   Fondo base: café oscuro medio — visible, no negro puro
    ══════════════════════════════════════════════════════════════ */
 :root,
 [data-theme="dark"] {
     /* Paleta litúrgica */
     --oro:          #C9973A;
-    --oro-claro:    #dba94a;
-    --oro-suave:    rgba(201, 151, 58, 0.18);
-    --vino:         #6B1A2A;
-    --vino-suave:   rgba(107, 26, 42, 0.2);
+    --oro-claro:    #DBA94A;
+    --oro-suave:    rgba(201, 151, 58, 0.15);
+    --vino:         #8B3A4A;
+    --vino-suave:   rgba(139, 58, 74, 0.2);
 
-    /* Fondos — más luminosos para mejor contraste */
-    --fondo-oscuro:    #1A0A00;
-    --fondo-panel:     #251208;
-    --fondo-card:      #2E1608;
-    --fondo-input:     rgba(245, 240, 232, 0.08);
-    --fondo-hover:     rgba(201, 151, 58, 0.1);
+    /* ─── Fondos — café marrón oscuro legible (NO negro puro) ─── */
+    --fondo-oscuro:    #2C1A0E;   /* café oscuro — fondo de página   */
+    --fondo-panel:     #3A2212;   /* café medio  — paneles           */
+    --fondo-card:      #4A2D18;   /* café claro  — tarjetas          */
+    --fondo-input:     rgba(255, 240, 220, 0.07);
+    --fondo-hover:     rgba(201, 151, 58, 0.12);
 
-    /* Texto — más brillante */
-    --texto-principal: #F5F0E8;
-    --texto-suave:     rgba(245, 240, 232, 0.75);
-    --texto-tenue:     rgba(245, 240, 232, 0.45);
+    /* ─── Texto — muy legible sobre fondos café ──────────────── */
+    --texto-principal: #F5EDD8;   /* crema cálido — títulos y datos  */
+    --texto-suave:     #C8B89A;   /* pergamino    — texto secundario */
+    --texto-tenue:     #8A7A68;   /* gris cálido  — placeholders     */
 
     /* Bordes */
-    --borde:           rgba(201, 151, 58, 0.25);
-    --borde-activo:    rgba(201, 151, 58, 0.7);
+    --borde:           rgba(201, 151, 58, 0.22);
+    --borde-activo:    rgba(201, 151, 58, 0.65);
 
     /* Semánticos */
-    --exito:           #6ee7a0;
-    --exito-bg:        rgba(74, 222, 128, 0.12);
-    --error:           #fca5a5;
-    --error-bg:        rgba(248, 113, 113, 0.12);
-    --advertencia:     #fbbf24;
+    --exito:           #5ecb8a;
+    --exito-bg:        rgba(94, 203, 138, 0.12);
+    --error:           #f08080;
+    --error-bg:        rgba(240, 128, 128, 0.12);
+    --advertencia:     #e8b84b;
 
-    /* Tipografía */
+    /* Tipografía — Inter como fuente base universal */
     --fuente-display: 'Cinzel', 'Georgia', serif;
-    --fuente-cuerpo:  'Inter', system-ui, sans-serif;
+    --fuente-cuerpo:  'Inter', system-ui, -apple-system, sans-serif;
 
     /* Espaciado */
     --radio-sm: 4px;
@@ -50,12 +51,12 @@
     --radio-lg: 12px;
 
     /* Sombras */
-    --sombra-card: 0 4px 24px rgba(0, 0, 0, 0.5);
-    --sombra-lg:   0 8px 40px rgba(0, 0, 0, 0.7);
+    --sombra-card: 0 2px 12px rgba(0, 0, 0, 0.35);
+    --sombra-lg:   0 6px 32px rgba(0, 0, 0, 0.55);
 
-    /* Color de página */
-    --bg-page: var(--fondo-oscuro);
-    --navbar-bg: #1F0E02;
+    /* Página y navbar */
+    --bg-page:       var(--fondo-oscuro);
+    --navbar-bg:     #241508;
     --navbar-border: rgba(201, 151, 58, 0.2);
 
     /* Scroll */
@@ -64,42 +65,42 @@
 }
 
 /* ══════════════════════════════════════════════════════════════
-   MODO DÍA — cálido, pergamino claro, acentos dorado y vino
+   MODO DÍA — pergamino cálido con texto muy oscuro
    ══════════════════════════════════════════════════════════════ */
 [data-theme="light"] {
-    /* Paleta litúrgica — igual, funciona sobre claro también */
-    --oro:          #A07020;
-    --oro-claro:    #C08830;
-    --oro-suave:    rgba(160, 112, 32, 0.12);
-    --vino:         #7B2030;
-    --vino-suave:   rgba(123, 32, 48, 0.1);
+    /* Paleta litúrgica adaptada al claro */
+    --oro:          #8A5E10;
+    --oro-claro:    #A07020;
+    --oro-suave:    rgba(138, 94, 16, 0.1);
+    --vino:         #6B1A2A;
+    --vino-suave:   rgba(107, 26, 42, 0.08);
 
-    /* Fondos cálidos tipo pergamino */
-    --fondo-oscuro:    #FAF6EF;
-    --fondo-panel:     #F5EFE4;
-    --fondo-card:      #EDE5D8;
-    --fondo-input:     rgba(60, 30, 10, 0.06);
-    --fondo-hover:     rgba(160, 112, 32, 0.08);
+    /* ─── Fondos pergamino — nunca blanco puro ─────────────── */
+    --fondo-oscuro:    #F2EBE0;   /* pergamino base — fondo de página */
+    --fondo-panel:     #E8DDD0;   /* pergamino medio — paneles        */
+    --fondo-card:      #DDD1C2;   /* pergamino oscuro — tarjetas      */
+    --fondo-input:     rgba(60, 30, 10, 0.05);
+    --fondo-hover:     rgba(138, 94, 16, 0.08);
 
-    /* Texto oscuro con buen contraste */
-    --texto-principal: #1C0E02;
-    --texto-suave:     rgba(28, 14, 2, 0.65);
-    --texto-tenue:     rgba(28, 14, 2, 0.4);
+    /* ─── Texto — marrón muy oscuro, NUNCA blanco ───────────── */
+    --texto-principal: #1E0E02;   /* marrón casi negro — máximo contraste */
+    --texto-suave:     #4A3520;   /* marrón medio — texto secundario      */
+    --texto-tenue:     #7A6550;   /* marrón claro — placeholders          */
 
     /* Bordes */
-    --borde:           rgba(160, 112, 32, 0.25);
-    --borde-activo:    rgba(160, 112, 32, 0.6);
+    --borde:           rgba(138, 94, 16, 0.22);
+    --borde-activo:    rgba(138, 94, 16, 0.55);
 
     /* Semánticos */
-    --exito:           #166534;
-    --exito-bg:        rgba(22, 101, 52, 0.1);
-    --error:           #991b1b;
-    --error-bg:        rgba(153, 27, 27, 0.1);
-    --advertencia:     #92400e;
+    --exito:           #1a6b3a;
+    --exito-bg:        rgba(26, 107, 58, 0.1);
+    --error:           #8b1a1a;
+    --error-bg:        rgba(139, 26, 26, 0.08);
+    --advertencia:     #7a4800;
 
-    /* Tipografía */
+    /* Tipografía — igual que oscuro */
     --fuente-display: 'Cinzel', 'Georgia', serif;
-    --fuente-cuerpo:  'Inter', system-ui, sans-serif;
+    --fuente-cuerpo:  'Inter', system-ui, -apple-system, sans-serif;
 
     /* Espaciado */
     --radio-sm: 4px;
@@ -107,20 +108,22 @@
     --radio-lg: 12px;
 
     /* Sombras */
-    --sombra-card: 0 2px 12px rgba(80, 40, 10, 0.12);
-    --sombra-lg:   0 6px 28px rgba(80, 40, 10, 0.18);
+    --sombra-card: 0 2px 8px rgba(80, 40, 10, 0.1);
+    --sombra-lg:   0 6px 24px rgba(80, 40, 10, 0.15);
 
-    /* Color de página */
-    --bg-page: var(--fondo-oscuro);
-    --navbar-bg: #EDE5D8;
-    --navbar-border: rgba(160, 112, 32, 0.25);
+    /* Página y navbar */
+    --bg-page:       var(--fondo-oscuro);
+    --navbar-bg:     #DDD1C2;
+    --navbar-border: rgba(138, 94, 16, 0.22);
 
     /* Scroll */
     --scrollbar-track: var(--fondo-panel);
-    --scrollbar-thumb: rgba(160, 112, 32, 0.3);
+    --scrollbar-thumb: rgba(138, 94, 16, 0.3);
 }
 
-/* ── Reset base ── */
+/* ══════════════════════════════════════════════════════════════
+   RESET BASE
+   ══════════════════════════════════════════════════════════════ */
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
@@ -136,10 +139,16 @@ body {
     font-family: var(--fuente-cuerpo);
     background-color: var(--bg-page);
     color: var(--texto-principal);
-    line-height: 1.5;
+    line-height: 1.55;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     transition: background-color 0.3s, color 0.3s;
+}
+
+/* Fuente base heredada en todos los inputs y botones */
+input, textarea, select, button {
+    font-family: var(--fuente-cuerpo);
+    color: var(--texto-principal);
 }
 
 /* ── Scrollbar discreta ── */
@@ -163,8 +172,10 @@ body {
 }
 
 /* ══════════════════════════════════════════════════════════════
-   UTILIDADES GLOBALES COMPARTIDAS
+   UTILIDADES GLOBALES — clases reutilizables en todos los módulos
    ══════════════════════════════════════════════════════════════ */
+
+/* Página completa */
 .pgip-page {
     min-height: 100vh;
     background: var(--bg-page);
@@ -193,10 +204,10 @@ body {
 }
 
 .pgip-subtitulo {
-    font-size: 0.8rem;
+    font-size: 0.82rem;
     color: var(--texto-tenue);
     margin-top: 4px;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.03em;
 }
 
 /* Card base */
@@ -206,20 +217,19 @@ body {
     border-radius: var(--radio-lg);
     padding: 24px;
     box-shadow: var(--sombra-card);
+    transition: background 0.3s, border-color 0.3s;
 }
 
-/* Botones base */
+/* ─── Botones globales ─────────────────────────────────────── */
 .pgip-btn-primario {
     padding: 10px 20px;
     background: var(--oro);
-    color: var(--fondo-oscuro);
+    color: #fff;
     border: none;
     border-radius: var(--radio);
-    font-family: var(--fuente-display);
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    font-family: var(--fuente-cuerpo);
+    font-size: 0.875rem;
+    font-weight: 600;
     cursor: pointer;
     transition: background 0.2s;
 }
@@ -268,15 +278,15 @@ body {
     gap: 4px;
     padding: 3px 10px;
     border-radius: 99px;
-    font-size: 0.7rem;
+    font-size: 0.72rem;
     font-weight: 600;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.03em;
 }
 .pgip-badge-oro    { background: var(--oro-suave);  color: var(--oro-claro); }
 .pgip-badge-vino   { background: var(--vino-suave); color: var(--vino); }
 .pgip-badge-verde  { background: var(--exito-bg);   color: var(--exito); }
 .pgip-badge-rojo   { background: var(--error-bg);   color: var(--error); }
-.pgip-badge-gris   { background: rgba(128,128,128,0.12); color: var(--texto-suave); }
+.pgip-badge-gris   { background: rgba(128,128,128,0.1); color: var(--texto-suave); }
 
 /* Tabla base */
 .pgip-tabla {
@@ -287,17 +297,16 @@ body {
 .pgip-tabla th {
     text-align: left;
     padding: 10px 14px;
-    font-size: 0.7rem;
+    font-size: 0.72rem;
     font-weight: 700;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.07em;
     text-transform: uppercase;
     color: var(--texto-tenue);
     border-bottom: 1px solid var(--borde);
-    font-family: var(--fuente-display);
 }
 .pgip-tabla td {
     padding: 13px 14px;
-    border-bottom: 1px solid rgba(128, 128, 128, 0.1);
+    border-bottom: 1px solid rgba(128, 128, 128, 0.08);
     color: var(--texto-suave);
     vertical-align: middle;
 }
@@ -309,17 +318,17 @@ body {
 /* Mensajes de estado */
 .pgip-exito {
     background: var(--exito-bg);
-    border: 1px solid rgba(74, 222, 128, 0.3);
+    border: 1px solid rgba(94, 203, 138, 0.3);
     color: var(--exito);
     padding: 10px 14px;
     border-radius: var(--radio);
-    font-size: 0.85rem;
+    font-size: 0.875rem;
 }
 .pgip-error {
     background: var(--error-bg);
-    border: 1px solid rgba(248, 113, 113, 0.3);
+    border: 1px solid rgba(240, 128, 128, 0.3);
     color: var(--error);
     padding: 10px 14px;
     border-radius: var(--radio);
-    font-size: 0.85rem;
+    font-size: 0.875rem;
 }

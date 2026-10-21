@@ -1,13 +1,13 @@
 /* ── Login — Parroquia San Agustín ── */
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
+/* Fuentes cargadas en index.css */
 
 /* ── Layout raíz ── */
 .pagina {
     min-height: 100vh;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    background: #1A0A00;
-    font-family: 'Inter', sans-serif;
+    background: #2C1A0E;
+    font-family: var(--fuente-cuerpo, 'Inter', sans-serif);
 }
 
 @media (max-width: 860px) {
@@ -35,9 +35,9 @@
     inset: 0;
     background: linear-gradient(
         135deg,
-        #2D1810 0%,
-        #1A0A00 40%,
-        #3d1a08 100%
+        #3A2212 0%,
+        #2C1A0E 40%,
+        #4A2D18 100%
     );
     z-index: 0;
 }
@@ -130,7 +130,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #1A0A00;
+    background: #2C1A0E;
     padding: 40px 24px;
 }
 
@@ -249,7 +249,7 @@
     margin-top: 6px;
     padding: 13px 24px;
     background: #C9973A;
-    color: #1A0A00;
+    color: #2C1A0E;
     border: none;
     border-radius: 6px;
     font-size: 0.9rem;
@@ -285,8 +285,8 @@
 .spinner {
     width: 14px;
     height: 14px;
-    border: 2px solid rgba(26, 10, 0, 0.3);
-    border-top-color: #1A0A00;
+    border: 2px solid rgba(44, 26, 14, 0.3);
+    border-top-color: #2C1A0E;
     border-radius: 50%;
     animation: girar 0.7s linear infinite;
     flex-shrink: 0;
