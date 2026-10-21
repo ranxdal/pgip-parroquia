@@ -1,199 +1,81 @@
-/* ── Login — Parroquia San Agustín ── */
-/* Fuentes cargadas en index.css */
+/* ─── Tesorería — PGIP ────────────────────────────────────────────── */
 
-/* ── Layout raíz ── */
-.pagina {
+.contenedor {
     min-height: 100vh;
+    background: var(--bg-page);
+    transition: background 0.3s;
+}
+
+.contenido {
+    padding: 24px 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* ─── Encabezado ─────────────────────────────────────────────────── */
+.titulo {
+    font-family: var(--fuente-display);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--texto-principal);
+    letter-spacing: 0.02em;
+    margin: 0 0 20px;
+}
+
+/* ─── Mensajes ───────────────────────────────────────────────────── */
+.exito {
+    background: var(--exito-bg);
+    border: 1px solid rgba(94, 203, 138, 0.3);
+    color: var(--exito);
+    padding: 12px 16px;
+    border-radius: var(--radio);
+    margin-bottom: 16px;
+    font-size: 0.875rem;
+    cursor: pointer;
+}
+
+.errorDiv {
+    background: var(--error-bg);
+    border: 1px solid rgba(240, 128, 128, 0.3);
+    color: var(--error);
+    padding: 12px 16px;
+    border-radius: var(--radio);
+    margin-bottom: 16px;
+    font-size: 0.875rem;
+    cursor: pointer;
+}
+
+/* ─── Grid de paneles ────────────────────────────────────────────── */
+.grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    background: #2C1A0E;
-    font-family: var(--fuente-cuerpo, 'Inter', sans-serif);
-}
-
-@media (max-width: 860px) {
-    .pagina {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* ══════════════════════════════════════
-   Panel izquierdo — imagen parroquial
-   ══════════════════════════════════════ */
-.panelImagen {
-    position: relative;
-    overflow: hidden;
-    background-image: url('/fotos/parroquia-exterior.jpg');
-    background-size: cover;
-    background-position: center 30%;
-    min-height: 300px;
-}
-
-/* Fallback si no hay imagen: gradiente evocador */
-.panelImagen::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-        135deg,
-        #3A2212 0%,
-        #2C1A0E 40%,
-        #4A2D18 100%
-    );
-    z-index: 0;
-}
-
-.imagenOverlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-        to bottom,
-        rgba(10, 3, 0, 0.45) 0%,
-        rgba(10, 3, 0, 0.72) 60%,
-        rgba(10, 3, 0, 0.88) 100%
-    );
-    z-index: 1;
-}
-
-.imagenContenido {
-    position: relative;
-    z-index: 2;
-    height: 100%;
-    min-height: 300px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-end;
-    padding: 48px 40px;
-    text-align: center;
-    color: #F5F0E8;
-}
-
-.cruzdeco {
-    font-size: 2rem;
-    color: #C9973A;
+    gap: 16px;
     margin-bottom: 16px;
-    opacity: 0.9;
 }
 
-.nombreParroquia {
-    font-family: 'Cinzel', serif;
-    font-size: clamp(1.75rem, 3vw, 2.5rem);
-    font-weight: 700;
-    line-height: 1.2;
-    letter-spacing: 0.04em;
-    margin: 0 0 8px;
-    color: #F5F0E8;
+/* ─── Panel ──────────────────────────────────────────────────────── */
+.panel {
+    background: var(--fondo-card);
+    border: 1px solid var(--borde);
+    padding: 20px;
+    border-radius: var(--radio-lg);
+    box-shadow: var(--sombra-card);
+    transition: background 0.3s, border-color 0.3s;
 }
 
-.lugarParroquia {
-    font-size: 0.8rem;
-    font-weight: 400;
-    letter-spacing: 0.12em;
-    color: #C9973A;
-    margin: 0 0 24px;
-    text-transform: uppercase;
-}
-
-.lineadeco {
-    width: 48px;
-    height: 1px;
-    background: linear-gradient(to right, transparent, #C9973A, transparent);
-    margin: 0 auto 24px;
-}
-
-.lemaParroquia {
-    font-family: 'Cinzel', serif;
-    font-size: clamp(0.9rem, 1.4vw, 1.1rem);
-    font-weight: 400;
-    line-height: 1.6;
-    color: rgba(245, 240, 232, 0.7);
-    margin: 0;
-    letter-spacing: 0.02em;
-}
-
-@media (max-width: 860px) {
-    .panelImagen {
-        min-height: 220px;
-    }
-    .imagenContenido {
-        min-height: 220px;
-        padding: 32px 24px;
-        justify-content: flex-end;
-    }
-    .nombreParroquia { font-size: 1.5rem; }
-}
-
-/* ══════════════════════════════════════
-   Panel derecho — formulario
-   ══════════════════════════════════════ */
-.panelForm {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #2C1A0E;
-    padding: 40px 24px;
-}
-
-.formContenido {
-    width: 100%;
-    max-width: 360px;
-}
-
-/* Logo / acrónimo */
-.logoBloque {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 40px;
-}
-
-.logoAcronimo {
-    font-family: 'Cinzel', serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #C9973A;
-    letter-spacing: 0.1em;
-    flex-shrink: 0;
-}
-
-.logoLinea {
-    width: 1px;
-    height: 28px;
-    background: rgba(201, 151, 58, 0.4);
-    flex-shrink: 0;
-}
-
-.logoDesc {
-    font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    color: rgba(245, 240, 232, 0.45);
-    text-transform: uppercase;
-    line-height: 1.4;
-}
-
-/* Encabezado del form */
-.formTitulo {
-    font-family: 'Cinzel', serif;
-    font-size: 1.6rem;
+.panelTitulo {
+    font-family: var(--fuente-display);
+    font-size: 1rem;
     font-weight: 600;
-    color: #F5F0E8;
-    margin: 0 0 6px;
-    letter-spacing: 0.02em;
+    color: var(--texto-principal);
+    margin: 0 0 16px;
 }
 
-.formSubtitulo {
-    font-size: 0.8rem;
-    color: rgba(245, 240, 232, 0.45);
-    margin: 0 0 32px;
-    font-weight: 400;
-}
-
-/* Formulario */
+/* ─── Formulario ─────────────────────────────────────────────────── */
 .formulario {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 14px;
 }
 
 .campo {
@@ -203,113 +85,211 @@
 }
 
 .etiqueta {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     font-weight: 600;
-    letter-spacing: 0.06em;
-    color: rgba(245, 240, 232, 0.6);
+    color: var(--texto-tenue);
+    letter-spacing: 0.04em;
     text-transform: uppercase;
+    font-family: var(--fuente-cuerpo);
 }
 
+/* ─── Inputs ─────────────────────────────────────────────────────── */
 .input {
-    padding: 11px 14px;
-    background: rgba(245, 240, 232, 0.06);
-    border: 1px solid rgba(201, 151, 58, 0.25);
-    border-radius: 6px;
-    font-size: 0.95rem;
-    font-family: 'Inter', sans-serif;
-    color: #F5F0E8;
+    padding: 10px 14px;
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    font-size: 0.9rem;
+    font-family: var(--fuente-cuerpo);
     width: 100%;
     box-sizing: border-box;
-    transition: border-color 0.2s, background 0.2s;
     outline: none;
+    background: var(--fondo-input);
+    color: var(--texto-principal);
+    transition: border-color 0.2s, background 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 .input::placeholder {
-    color: rgba(245, 240, 232, 0.25);
+    color: var(--texto-tenue);
 }
 
 .input:focus {
-    border-color: #C9973A;
-    background: rgba(201, 151, 58, 0.08);
+    border-color: var(--borde-activo);
+    background: var(--fondo-hover);
 }
 
-/* Error */
-.error {
-    background: rgba(180, 40, 40, 0.15);
-    border: 1px solid rgba(220, 60, 60, 0.4);
-    color: #f4a0a0;
-    padding: 10px 14px;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    line-height: 1.4;
-}
-
-/* Botón principal */
-.boton {
-    margin-top: 6px;
-    padding: 13px 24px;
-    background: #C9973A;
-    color: #2C1A0E;
-    border: none;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    font-weight: 700;
-    font-family: 'Cinzel', serif;
-    letter-spacing: 0.08em;
+/* Select — flecha dorada temática */
+select.input {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C9973A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
     cursor: pointer;
-    transition: background 0.2s, transform 0.1s;
-    width: 100%;
+}
+
+[data-theme="light"] select.input {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A5E10' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+/* ─── Botón primario — visible en ambos modos ────────────────────── */
+.botonPrimario {
+    background: var(--oro);
+    color: var(--fondo-oscuro);
+    padding: 11px 20px;
+    border: none;
+    border-radius: var(--radio);
+    font-family: var(--fuente-display);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 8px;
+    transition: background 0.2s;
 }
 
-.boton:hover:not(:disabled) {
-    background: #dba94a;
+.botonPrimario:hover:not(:disabled) {
+    background: var(--oro-claro);
 }
 
-.boton:active:not(:disabled) {
-    transform: scale(0.99);
-}
-
-.boton:disabled {
-    opacity: 0.6;
+.botonPrimario:disabled {
+    opacity: 0.55;
     cursor: not-allowed;
 }
 
-.botonCargando {
+/* ─── Botón recibo ───────────────────────────────────────────────── */
+.botonRecibo {
+    background: var(--fondo-panel);
+    border: 1px solid var(--borde);
+    color: var(--texto-suave);
+    padding: 5px 10px;
+    border-radius: var(--radio);
+    font-size: 0.75rem;
+    font-family: var(--fuente-cuerpo);
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    white-space: nowrap;
+}
+
+.botonRecibo:hover {
+    background: var(--fondo-hover);
+    border-color: var(--borde-activo);
+    color: var(--texto-principal);
+}
+
+/* ─── Estado de caja ─────────────────────────────────────────────── */
+.estadoCaja {
+    margin-bottom: 16px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-family: var(--fuente-cuerpo);
+}
+
+/* Badges con colores semánticos propios del sistema */
+.badgeAbierta {
+    background: rgba(94, 203, 138, 0.15);
+    color: var(--exito);
+    border: 1px solid rgba(94, 203, 138, 0.35);
+}
+
+.badgeCerrada {
+    background: rgba(240, 128, 128, 0.12);
+    color: var(--error);
+    border: 1px solid rgba(240, 128, 128, 0.3);
+}
+
+/* ─── Info grid ──────────────────────────────────────────────────── */
+.infoGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.infoItem {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+    flex-direction: column;
+    gap: 4px;
+    background: var(--fondo-panel);
+    border: 1px solid var(--borde);
+    padding: 12px;
+    border-radius: var(--radio);
 }
 
-.spinner {
-    width: 14px;
-    height: 14px;
-    border: 2px solid rgba(44, 26, 14, 0.3);
-    border-top-color: #2C1A0E;
-    border-radius: 50%;
-    animation: girar 0.7s linear infinite;
-    flex-shrink: 0;
-}
-
-@keyframes girar {
-    to { transform: rotate(360deg); }
-}
-
-/* Pie */
-.pie {
-    margin-top: 36px;
+.infoEtiqueta {
     font-size: 0.7rem;
-    color: rgba(245, 240, 232, 0.2);
-    text-align: center;
-    letter-spacing: 0.04em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--texto-tenue);
+    font-family: var(--fuente-cuerpo);
 }
 
-@media (max-width: 480px) {
-    .panelForm {
-        padding: 32px 20px;
-    }
-    .formTitulo {
-        font-size: 1.35rem;
-    }
+.infoValor {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--oro);
+    font-family: var(--fuente-display);
+}
+
+/* ─── Texto auxiliar ─────────────────────────────────────────────── */
+.textoGris {
+    color: var(--texto-tenue);
+    font-size: 0.875rem;
+    margin-bottom: 12px;
+}
+
+/* ─── Tabla ──────────────────────────────────────────────────────── */
+.tablaContenedor {
+    overflow-x: auto;
+    border-radius: var(--radio);
+}
+
+.tabla {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    font-family: var(--fuente-cuerpo);
+}
+
+.th {
+    padding: 10px 12px;
+    text-align: left;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--texto-tenue);
+    background: var(--fondo-panel);
+    border-bottom: 1px solid var(--borde);
+    white-space: nowrap;
+}
+
+.td {
+    padding: 10px 12px;
+    color: var(--texto-suave);
+    border-bottom: 1px solid var(--borde);
+    vertical-align: middle;
+}
+
+.tabla tr:last-child .td {
+    border-bottom: none;
+}
+
+.tabla tr:hover .td {
+    background: var(--fondo-hover);
+}
+
+/* ─── Responsive ─────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+    .grid { grid-template-columns: 1fr; }
+    .infoGrid { grid-template-columns: 1fr 1fr; }
 }

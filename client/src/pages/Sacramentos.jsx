@@ -91,10 +91,11 @@ export default function Sacramentos() {
         }
     };
 
-    const tipoColor = {
-        bautismo:     '#ebf8ff',
-        confirmacion: '#faf5ff',
-        matrimonio:   '#fff5f0'
+    // Clases CSS por tipo de sacramento (sin colores hardcodeados)
+    const tipoClase = {
+        bautismo:     styles.sacramentoBautismo,
+        confirmacion: styles.sacramentoConfirmacion,
+        matrimonio:   styles.sacramentoMatrimonio
     };
 
     return (
@@ -180,8 +181,7 @@ export default function Sacramentos() {
                             ) : (
                                 sacramentos.map(s => (
                                     <div key={s.id}
-                                        className={styles.sacramentoItem}
-                                        style={{ backgroundColor: tipoColor[s.tipo] }}>
+                                        className={`${styles.sacramentoItem} ${tipoClase[s.tipo] || ''}`}>
                                         <strong style={{ textTransform: 'capitalize' }}>{s.tipo}</strong>
                                         <p className={styles.textoGris}>
                                             {s.fecha
