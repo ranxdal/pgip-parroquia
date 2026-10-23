@@ -288,8 +288,144 @@ select.input {
     background: var(--fondo-hover);
 }
 
+/* ─── Badges tipo pago ───────────────────────────────────────────── */
+.badgeEfectivo {
+    background: rgba(201, 151, 58, 0.12);
+    color: var(--oro);
+    border: 1px solid rgba(201, 151, 58, 0.3);
+}
+
+.badgeTransferencia {
+    background: rgba(100, 180, 255, 0.12);
+    color: #6ab0f0;
+    border: 1px solid rgba(100, 180, 255, 0.3);
+}
+
+/* ─── Correlativo ────────────────────────────────────────────────── */
+.correlativo {
+    font-family: var(--fuente-mono, monospace);
+    font-size: 0.78rem;
+    color: var(--texto-tenue);
+    letter-spacing: 0.03em;
+}
+
+/* ─── Selector de conceptos ──────────────────────────────────────── */
+.conceptosGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.conceptoBtn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 12px 8px;
+    background: var(--fondo-panel);
+    border: 1.5px solid var(--borde);
+    border-radius: var(--radio);
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    text-align: center;
+    color: var(--texto-suave);
+}
+
+.conceptoBtn:hover {
+    border-color: var(--oro);
+    background: var(--fondo-hover);
+}
+
+.conceptoBtnActivo {
+    border-color: var(--oro) !important;
+    background: rgba(201, 151, 58, 0.1) !important;
+    color: var(--oro) !important;
+}
+
+.conceptoIcono {
+    font-size: 1.4rem;
+    line-height: 1;
+}
+
+.conceptoLabel {
+    font-size: 0.72rem;
+    font-weight: 600;
+    font-family: var(--fuente-cuerpo);
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+}
+
+/* ─── Banner de cobro registrado ─────────────────────────────────── */
+.bannerCobro {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    background: rgba(201, 151, 58, 0.08);
+    border: 1.5px solid rgba(201, 151, 58, 0.4);
+    border-radius: var(--radio-lg);
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.bannerTexto {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.bannerIcono {
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.bannerTitulo {
+    font-family: var(--fuente-display);
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--oro);
+    margin: 0 0 3px;
+}
+
+.bannerSub {
+    font-size: 0.82rem;
+    color: var(--texto-suave);
+    margin: 0;
+}
+
+.bannerAcciones {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* ─── Botón "Ir al módulo" ───────────────────────────────────────── */
+.botonIrModulo {
+    background: var(--oro);
+    color: #2C1A0E;
+    padding: 9px 18px;
+    border: none;
+    border-radius: var(--radio);
+    font-family: var(--fuente-display);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+}
+
+.botonIrModulo:hover {
+    background: var(--oro-claro);
+}
+
 /* ─── Responsive ─────────────────────────────────────────────────── */
 @media (max-width: 640px) {
     .grid { grid-template-columns: 1fr; }
     .infoGrid { grid-template-columns: 1fr 1fr; }
+    .conceptosGrid { grid-template-columns: 1fr 1fr; }
+    .bannerCobro { flex-direction: column; align-items: flex-start; }
 }
