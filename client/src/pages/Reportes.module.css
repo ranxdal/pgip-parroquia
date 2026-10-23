@@ -182,7 +182,7 @@
 }
 .botonPDF:hover { background: #991b1b; }
 
-.botonCSV {
+.botonExcel {
     padding: 8px 18px;
     background: #15803d;
     color: #fff;
@@ -194,7 +194,7 @@
     cursor: pointer;
     transition: background 0.2s;
 }
-.botonCSV:hover { background: #166534; }
+.botonExcel:hover { background: #166534; }
 
 /* ─── Resumen cards ──────────────────────────────────────────────── */
 .resumenGrid {
