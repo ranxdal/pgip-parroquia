@@ -256,12 +256,12 @@ const obtenerResumenIngresos = async (req, res) => {
         // Ingresos agrupados por día (para la gráfica)
         const { rows: porDia } = await pool.query(
             `SELECT
-                DATE(created_at)          AS fecha,
-                COALESCE(SUM(monto), 0)   AS total
+                TO_CHAR(DATE(created_at), 'YYYY-MM-DD') AS fecha,
+                COALESCE(SUM(monto), 0)                  AS total
              FROM pgip.transaccion
              WHERE DATE(created_at) BETWEEN $1 AND $2
              GROUP BY DATE(created_at)
-             ORDER BY fecha ASC`,
+             ORDER BY DATE(created_at) ASC`,
             [fechaDesde, fechaHasta]
         );
 
