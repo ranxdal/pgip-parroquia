@@ -422,6 +422,81 @@ select.input {
     background: var(--oro-claro);
 }
 
+/* ─── Cierre de caja ─────────────────────────────────────────────── */
+.formCierre {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--borde);
+}
+
+.botonPeligro {
+    background: #b91c1c;
+    color: #fff;
+    padding: 9px 16px;
+    border: none;
+    border-radius: var(--radio);
+    font-family: var(--fuente-display);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.botonPeligro:hover:not(:disabled) { background: #991b1b; }
+.botonPeligro:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.botonSecundario {
+    background: transparent;
+    color: var(--texto-suave);
+    padding: 9px 16px;
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    font-family: var(--fuente-display);
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+}
+.botonSecundario:hover { border-color: var(--oro); color: var(--oro); }
+
+/* ─── Resumen de cierre ──────────────────────────────────────────── */
+.resumenCierre {
+    margin-top: 14px;
+    background: var(--fondo-panel);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    padding: 14px 16px;
+}
+
+.resumenTitulo {
+    font-family: var(--fuente-display);
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--texto-principal);
+    margin: 0 0 10px;
+}
+
+.resumenFila {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    color: var(--texto-suave);
+    padding: 4px 0;
+    border-bottom: 1px solid var(--borde);
+}
+.resumenFila:last-child { border-bottom: none; }
+
+.resumenTotal {
+    margin-top: 4px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--texto-principal);
+}
+
+.cuadreExacto      { color: var(--exito); }
+.cuadreDiscrepancia { color: #f59e0b; }
+
 /* ─── Responsive ─────────────────────────────────────────────────── */
 @media (max-width: 640px) {
     .grid { grid-template-columns: 1fr; }

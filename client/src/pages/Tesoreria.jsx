@@ -21,6 +21,9 @@ export default function Tesoreria() {
     const [balance, setBalance]           = useState(null);
     const [historial, setHistorial]       = useState([]);
     const [montoInicial, setMontoInicial] = useState('50');
+    const [montoFinal, setMontoFinal]     = useState('');
+    const [cerrando, setCerrando]         = useState(false); // mostrar form cierre
+    const [resumenCierre, setResumenCierre] = useState(null);
     const [mensaje, setMensaje]           = useState('');
     const [error, setError]               = useState('');
     const [cargando, setCargando]         = useState(false);
@@ -77,6 +80,27 @@ export default function Tesoreria() {
             cargarBalance();
         } catch (err) {
             mostrarError(err.response?.data?.error || 'Error al abrir caja');
+        } finally {
+            setCargando(false);
+        }
+    };
+
+    // ── CERRAR CAJA ───────────────────────────────────────────────────
+    const cerrarCaja = async () => {
+        if (!montoFinal && montoFinal !== '0') return mostrarError('Ingrese el monto final en caja');
+        setCargando(true);
+        try {
+            const { data } = await api.post('/tesoreria/caja/cerrar', {
+                sesion_caja_id: sesionCaja.id,
+                monto_final:    parseFloat(montoFinal)
+            });
+            setResumenCierre(data.resumen);
+            setCerrando(false);
+            setMontoFinal('');
+            mostrarExito('Caja cerrada correctamente');
+            cargarBalance();
+        } catch (err) {
+            mostrarError(err.response?.data?.error || 'Error al cerrar caja');
         } finally {
             setCargando(false);
         }
@@ -284,7 +308,84 @@ export default function Tesoreria() {
                                         <span className={styles.infoEtiqueta}>Cobros hoy</span>
                                         <span className={styles.infoValor}>{balance?.cantidad_transacciones || 0}</span>
                                     </div>
+                                    <div className={styles.infoItem}>
+                                        <span className={styles.infoEtiqueta}>Total esperado</span>
+                                        <span className={styles.infoValor}>
+                                            Q{(parseFloat(sesionCaja.monto_inicial) + parseFloat(balance?.total_transacciones || 0)).toFixed(2)}
+                                        </span>
+                                    </div>
                                 </div>
+
+                                {/* Resumen después de cerrar */}
+                                {resumenCierre && sesionCaja.estado === 'cerrada' && (
+                                    <div className={styles.resumenCierre}>
+                                        <p className={styles.resumenTitulo}>📋 Resumen de cierre</p>
+                                        <div className={styles.resumenFila}>
+                                            <span>Monto inicial</span>
+                                            <span>Q{parseFloat(resumenCierre.monto_inicial).toFixed(2)}</span>
+                                        </div>
+                                        <div className={styles.resumenFila}>
+                                            <span>Total cobros</span>
+                                            <span>Q{parseFloat(resumenCierre.total_transacciones).toFixed(2)}</span>
+                                        </div>
+                                        <div className={styles.resumenFila}>
+                                            <span>Monto final ingresado</span>
+                                            <span>Q{parseFloat(resumenCierre.monto_final).toFixed(2)}</span>
+                                        </div>
+                                        <div className={`${styles.resumenFila} ${styles.resumenTotal}`}>
+                                            <span>{resumenCierre.estado_cuadre}</span>
+                                            <span className={resumenCierre.diferencia === 0 ? styles.cuadreExacto : styles.cuadreDiscrepancia}>
+                                                {resumenCierre.diferencia === 0
+                                                    ? '✅ Sin diferencia'
+                                                    : `⚠️ Diferencia: Q${parseFloat(resumenCierre.diferencia).toFixed(2)}`}
+                                            </span>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Botón / form de cierre */}
+                                {sesionCaja.estado === 'abierta' && (
+                                    cerrando ? (
+                                        <div className={styles.formCierre}>
+                                            <p className={styles.textoGris} style={{ marginBottom: 8 }}>
+                                                Cuente el efectivo físico en caja e ingrese el monto total:
+                                            </p>
+                                            <div className={styles.campo}>
+                                                <label className={styles.etiqueta}>Monto final en caja (Q)</label>
+                                                <input
+                                                    type="number"
+                                                    value={montoFinal}
+                                                    onChange={e => setMontoFinal(e.target.value)}
+                                                    className={styles.input}
+                                                    placeholder="0.00"
+                                                    min="0"
+                                                    step="0.01"
+                                                    autoFocus
+                                                />
+                                            </div>
+                                            <div style={{ display: 'flex', gap: 8 }}>
+                                                <button
+                                                    onClick={cerrarCaja}
+                                                    className={styles.botonPeligro}
+                                                    disabled={cargando}>
+                                                    {cargando ? 'Cerrando...' : '🔒 Confirmar cierre'}
+                                                </button>
+                                                <button
+                                                    onClick={() => { setCerrando(false); setMontoFinal(''); }}
+                                                    className={styles.botonSecundario}>
+                                                    Cancelar
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <button
+                                            onClick={() => setCerrando(true)}
+                                            className={styles.botonSecundario}
+                                            style={{ marginTop: 12 }}>
+                                            🔒 Cerrar caja del día
+                                        </button>
+                                    )
+                                )}
                             </div>
                         )}
                     </div>
