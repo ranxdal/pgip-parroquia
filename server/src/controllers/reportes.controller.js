@@ -86,7 +86,7 @@ const reporteIntenciones = async (req, res) => {
                 u.nombre   AS nombre_usuario,
                 u.apellido AS apellido_usuario
              FROM intenciones_misa i
-             LEFT JOIN pgip.usuario u ON u.id = i.creado_por
+             LEFT JOIN pgip.usuario u ON u.id::text = i.creado_por::text
              WHERE i.fecha_misa BETWEEN $1 AND $2
              ORDER BY i.fecha_misa ASC, i.created_at ASC`,
             [desde, hasta]
