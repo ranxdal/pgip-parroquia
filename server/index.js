@@ -8,6 +8,7 @@ const intencionesRoutes = require('./src/routes/intenciones.routes');
 const sacrarentosRoutes = require('./src/routes/sacramentos.routes');
 const authRoutes        = require('./src/routes/auth.routes');
 const tesoreriaRoutes   = require('./src/routes/tesoreria.routes');
+const reportesRoutes    = require('./src/routes/reportes.routes');
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.use('/api/archivo',     archivoRoutes);
 app.use('/api/intenciones', intencionesRoutes);
 app.use('/api/sacramentos', sacrarentosRoutes);
 app.use('/api/tesoreria',   tesoreriaRoutes);
+app.use('/api/reportes',    reportesRoutes);
 
 app.get('/api/ping', (req, res) => {
     res.json({ mensaje: 'Servidor PGIP funcionando correctamente' });
