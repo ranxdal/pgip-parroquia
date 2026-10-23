@@ -79,16 +79,14 @@ const reporteIntenciones = async (req, res) => {
             `SELECT
                 i.id,
                 i.fecha_misa,
-                i.misa,
-                i.estado,
+                i.nombre_familia,
+                i.intencion,
+                i.texto_lectura,
                 i.created_at,
-                f.nombre   AS nombre_feligres,
-                f.apellido AS apellido_feligres,
                 u.nombre   AS nombre_usuario,
                 u.apellido AS apellido_usuario
-             FROM pgip.intencion i
-             LEFT JOIN pgip.feligres f ON f.id = i.feligres_id
-             LEFT JOIN pgip.usuario  u ON u.id = i.usuario_id
+             FROM intenciones_misa i
+             LEFT JOIN pgip.usuario u ON u.id = i.creado_por
              WHERE i.fecha_misa BETWEEN $1 AND $2
              ORDER BY i.fecha_misa ASC, i.created_at ASC`,
             [desde, hasta]
@@ -96,18 +94,15 @@ const reporteIntenciones = async (req, res) => {
 
         const { rows: resumen } = await pool.query(
             `SELECT
-                COUNT(*)                                    AS total,
-                COUNT(*) FILTER (WHERE estado = 'pendiente') AS pendientes,
-                COUNT(*) FILTER (WHERE estado = 'celebrada') AS celebradas,
-                COUNT(*) FILTER (WHERE estado = 'cancelada') AS canceladas
-             FROM pgip.intencion
+                COUNT(*) AS total
+             FROM intenciones_misa
              WHERE fecha_misa BETWEEN $1 AND $2`,
             [desde, hasta]
         );
 
         res.json({
             periodo: { desde, hasta },
-            resumen: resumen[0],
+            resumen: { total: resumen[0].total },
             intenciones,
         });
     } catch (error) {
