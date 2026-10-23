@@ -38,19 +38,6 @@
     min-height: 300px;
 }
 
-/* Fallback si no hay imagen: gradiente evocador */
-.panelImagen::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-        135deg,
-        #3A2212 0%,
-        #2C1A0E 40%,
-        #4A2D18 100%
-    );
-    z-index: 0;
-}
 
 .imagenOverlay {
     position: absolute;
