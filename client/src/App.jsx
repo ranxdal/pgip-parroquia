@@ -8,6 +8,7 @@ import Archivo from './pages/Archivo';
 import Certificados from './pages/Certificados';
 import Intenciones from './pages/Intenciones';
 import Perfil from './pages/Perfil';
+import Reportes from './pages/Reportes';
 
 function RutaProtegida({ children, soloAdmin = false }) {
     const { usuario, cargando } = useAuth();
@@ -67,6 +68,12 @@ export default function App() {
             <Route path="/perfil" element={
                 <RutaProtegida>
                     <Perfil />
+                </RutaProtegida>
+            } />
+
+            <Route path="/reportes" element={
+                <RutaProtegida>
+                    <Reportes />
                 </RutaProtegida>
             } />
 

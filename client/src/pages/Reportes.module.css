@@ -1,0 +1,305 @@
+/* ─── Reportes — PGIP ───────────────────────────────────────────── */
+
+.contenedor {
+    min-height: 100vh;
+    background: var(--bg-page);
+    transition: background 0.3s;
+}
+
+.contenido {
+    padding: 24px 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.titulo {
+    font-family: var(--fuente-display);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--texto-principal);
+    letter-spacing: 0.02em;
+    margin: 0 0 20px;
+}
+
+/* ─── Selector tipo ──────────────────────────────────────────────── */
+.tipoGrid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.tipoBtn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: var(--fondo-panel);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    color: var(--texto-suave);
+    font-family: var(--fuente-display);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+}
+
+.tipoBtn:hover { border-color: var(--oro); color: var(--oro); }
+
+.tipoBtnActivo {
+    border-color: var(--oro);
+    color: var(--oro);
+    background: rgba(201, 151, 58, 0.08);
+}
+
+.tipoIcono { font-size: 1.1rem; }
+
+/* ─── Panel de filtros ───────────────────────────────────────────── */
+.filtrosPanel {
+    background: var(--fondo-panel);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.periodoRapido {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.periodoBtn {
+    padding: 6px 14px;
+    background: transparent;
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    color: var(--texto-suave);
+    font-size: 0.78rem;
+    font-family: var(--fuente-display);
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+}
+.periodoBtn:hover { border-color: var(--oro); color: var(--oro); }
+
+.fechasCustom {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.campo { display: flex; flex-direction: column; gap: 4px; }
+
+.etiqueta {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--texto-tenue);
+}
+
+.inputFecha {
+    padding: 8px 12px;
+    background: var(--fondo-input);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    color: var(--texto-principal);
+    font-size: 0.88rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+.inputFecha:focus { border-color: var(--oro); }
+
+.botonGenerar {
+    padding: 9px 22px;
+    background: var(--oro);
+    color: #2C1A0E;
+    border: none;
+    border-radius: var(--radio);
+    font-family: var(--fuente-display);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+.botonGenerar:hover:not(:disabled) { background: var(--oro-claro); }
+.botonGenerar:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ─── Error ──────────────────────────────────────────────────────── */
+.errorDiv {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #ef4444;
+    padding: 12px 16px;
+    border-radius: var(--radio);
+    font-size: 0.88rem;
+    margin-bottom: 16px;
+}
+
+/* ─── Resultados ─────────────────────────────────────────────────── */
+.resultados { display: flex; flex-direction: column; gap: 16px; }
+
+/* Barra de exportación */
+.exportBar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: var(--fondo-panel);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+}
+
+.exportLabel {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--texto-tenue);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-right: 4px;
+}
+
+.botonPDF {
+    padding: 8px 18px;
+    background: #b91c1c;
+    color: #fff;
+    border: none;
+    border-radius: var(--radio);
+    font-family: var(--fuente-display);
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.botonPDF:hover { background: #991b1b; }
+
+.botonCSV {
+    padding: 8px 18px;
+    background: #15803d;
+    color: #fff;
+    border: none;
+    border-radius: var(--radio);
+    font-family: var(--fuente-display);
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.botonCSV:hover { background: #166534; }
+
+/* ─── Resumen cards ──────────────────────────────────────────────── */
+.resumenGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+}
+
+.resumenCard {
+    background: var(--fondo-panel);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    padding: 14px 16px;
+}
+
+.resumenLabel {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--texto-tenue);
+    margin: 0 0 6px;
+}
+
+.resumenValorOro {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--oro);
+    margin: 0 0 2px;
+}
+
+.resumenValor {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--texto-principal);
+    margin: 0 0 2px;
+}
+
+.resumenSub {
+    font-size: 0.78rem;
+    color: var(--texto-tenue);
+    margin: 0;
+}
+
+/* ─── Tabla ──────────────────────────────────────────────────────── */
+.tablaContenedor {
+    overflow-x: auto;
+    border-radius: var(--radio);
+    border: 1px solid var(--borde);
+}
+
+.tabla {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.83rem;
+}
+
+.th {
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--texto-tenue);
+    background: var(--fondo-panel);
+    border-bottom: 1px solid var(--borde);
+    white-space: nowrap;
+}
+
+.td {
+    padding: 9px 14px;
+    color: var(--texto-principal);
+    border-bottom: 1px solid var(--borde);
+    vertical-align: middle;
+}
+
+.tabla tbody tr:last-child .td { border-bottom: none; }
+.tabla tbody tr:hover { background: rgba(201, 151, 58, 0.04); }
+
+/* ─── Badges ─────────────────────────────────────────────────────── */
+.badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 99px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: capitalize;
+}
+.badgeVerde   { background: rgba(34,197,94,0.15);  color: #22c55e; }
+.badgeRojo    { background: rgba(239,68,68,0.15);  color: #ef4444; }
+.badgeAmarillo{ background: rgba(245,158,11,0.15); color: #f59e0b; }
+
+/* ─── Sin datos ──────────────────────────────────────────────────── */
+.sinDatos {
+    text-align: center;
+    padding: 32px;
+    color: var(--texto-tenue);
+    font-size: 0.9rem;
+}
+
+/* ─── Responsive ─────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+    .tipoGrid    { flex-direction: column; }
+    .fechasCustom { flex-direction: column; align-items: stretch; }
+    .botonGenerar { width: 100%; }
+    .exportBar   { flex-wrap: wrap; }
+}

@@ -59,6 +59,8 @@ export default function Navbar() {
                             className={styles.navBtn}>Certificados</button>
                         <button onClick={() => navegar('/intenciones')}
                             className={styles.navBtn}>Intenciones</button>
+                        <button onClick={() => navegar('/reportes')}
+                            className={styles.navBtn}>Reportes</button>
 
                         {/* Toggle tema */}
                         <button
@@ -134,6 +136,10 @@ export default function Navbar() {
                     <button onClick={() => navegar('/intenciones')}
                         className={styles.menuItem}>
                         🕊️ Intenciones de Misa
+                    </button>
+                    <button onClick={() => navegar('/reportes')}
+                        className={styles.menuItem}>
+                        📋 Reportes
                     </button>
                     <button onClick={() => navegar('/perfil')}
                         className={styles.menuItem}>
