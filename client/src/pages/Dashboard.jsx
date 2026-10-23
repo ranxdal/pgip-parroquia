@@ -17,15 +17,19 @@ const PERIODOS = [
 
 const MESES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 
+function fechaLocal(d) {
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
 function fechasDesdeHasta(periodo) {
-    const hoy  = new Date();
-    const hasta = hoy.toISOString().slice(0, 10);
+    const hoy   = new Date();
+    const hasta = fechaLocal(hoy);
     const desde = new Date(hoy);
     if (periodo === 'hoy')    desde.setDate(hoy.getDate());
     if (periodo === 'semana') desde.setDate(hoy.getDate() - 6);
     if (periodo === 'mes')    desde.setDate(hoy.getDate() - 29);
     if (periodo === 'año')    desde.setFullYear(hoy.getFullYear() - 1);
-    return { desde: desde.toISOString().slice(0, 10), hasta };
+    return { desde: fechaLocal(desde), hasta };
 }
 
 function nombreMes(mesStr) {  // 'YYYY-MM'
@@ -98,8 +102,10 @@ export default function Dashboard() {
 
     /* ── Alertas ─────────────────────────────────────────────── */
     const alertas = [];
-    const hoy = new Date().toISOString().slice(0, 10);
-    const intencionesHoy = intenciones.filter(i => (i.fecha_misa || '') === hoy);
+    // Usar fecha local (no UTC) para evitar desfase de zona horaria
+    const hoyLocal = new Date();
+    const hoy = `${hoyLocal.getFullYear()}-${String(hoyLocal.getMonth()+1).padStart(2,'0')}-${String(hoyLocal.getDate()).padStart(2,'0')}`;
+    const intencionesHoy = intenciones.filter(i => (i.fecha_misa || '').slice(0, 10) === hoy);
     if (!cargando && intencionesHoy.length === 0) {
         alertas.push({ nivel: 'advertencia', mensaje: '⚠️ No se han registrado intenciones el día de hoy' });
     }
