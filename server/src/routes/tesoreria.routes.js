@@ -5,7 +5,8 @@ const {
     cerrarCaja,
     registrarTransaccion,
     verificarCodigo,
-    obtenerBalance
+    obtenerBalance,
+    obtenerTransacciones,
 } = require('../controllers/tesoreria.controller');
 const { verificarToken, verificarRol } = require('../middleware/auth.middleware');
 
@@ -21,6 +22,7 @@ router.post('/caja/cerrar', verificarRol(['admin', 'operador']), cerrarCaja);
 router.get('/caja/balance', verificarRol(['admin', 'operador']), obtenerBalance);
 
 // Rutas de transacciones
-router.post('/transaccion', verificarRol(['admin', 'operador']), registrarTransaccion);
+router.post('/transaccion',           verificarRol(['admin', 'operador']), registrarTransaccion);
+router.get('/transacciones/:sesion_id', verificarRol(['admin', 'operador']), obtenerTransacciones);
 
 module.exports = router;
