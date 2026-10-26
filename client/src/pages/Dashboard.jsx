@@ -99,7 +99,7 @@ export default function Dashboard() {
         } finally {
             setCargando(false);
         }
-    }, [periodo]);
+    }, [intento, periodo]);
 
     useEffect(() => { cargar(); }, [cargar, intento]);
 

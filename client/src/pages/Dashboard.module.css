@@ -29,7 +29,9 @@
     transition: background 0.3s;
 }
 
-.heroTexto {}
+.heroTexto {
+    flex: 1;
+}
 
 .heroTituloFila {
     display: flex;
