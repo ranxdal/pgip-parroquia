@@ -2,8 +2,28 @@
 
 .pagina {
     min-height: 100vh;
+    position: relative;
+    background-color: var(--bg-page);
+    background-image: url('/fotos/parroquia-exterior.jpg');
+    background-size: cover;
+    background-position: center 30%;
+    background-attachment: fixed;
+    transition: background-color 0.3s;
+}
+
+.pagina::before {
+    content: '';
+    position: fixed;
+    inset: 0;
     background: var(--bg-page);
-    transition: background 0.3s;
+    opacity: 0.90;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.pagina > * {
+    position: relative;
+    z-index: 1;
 }
 
 .contenedor {

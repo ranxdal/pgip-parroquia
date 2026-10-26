@@ -332,3 +332,58 @@ input, textarea, select, button {
     border-radius: var(--radio);
     font-size: 0.875rem;
 }
+
+/* ══════════════════════════════════════════════════════════════
+   TRANSICIONES DE PÁGINA — animación de entrada entre módulos
+   ══════════════════════════════════════════════════════════════ */
+
+@keyframes pgipPageIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pgipFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Wrapper de animación usado en App.jsx */
+.pgip-page-transition {
+    animation: pgipPageIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Fondo parroquial compartido — mismo estilo que el login */
+.pgip-fondo-parroquia {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background-image: url('/fotos/parroquia-exterior.jpg');
+    background-size: cover;
+    background-position: center 30%;
+    background-attachment: fixed;
+    pointer-events: none;
+}
+.pgip-fondo-parroquia::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--fondo-oscuro);
+    opacity: 0.88;
+}
+
+/* ── Micro-transiciones globales en elementos interactivos ── */
+button, a, [role="button"] {
+    transition: opacity 0.15s, transform 0.15s, background 0.2s,
+                border-color 0.2s, box-shadow 0.2s, color 0.2s;
+}
+
+/* Efecto de pulsación al hacer clic en botones */
+button:active:not(:disabled) {
+    transform: scale(0.97);
+}

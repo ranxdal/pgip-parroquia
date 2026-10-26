@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import Login from './pages/Login';
 import Hub from './pages/Hub';
@@ -16,9 +16,19 @@ function RutaProtegida({ children, soloAdmin = false }) {
 
     if (cargando) return <div style={{ padding: '20px' }}>Cargando...</div>;
     if (!usuario) return <Navigate to="/login" />;
-    if (soloAdmin && usuario.rol !== 'admin') return <Navigate to="/tesoreria" />;
+    if (soloAdmin && usuario.rol !== 'admin') return <Navigate to="/hub" />;
 
     return children;
+}
+
+/* Wrapper que dispara la animación de entrada en cada cambio de ruta */
+function PaginaAnimada({ children }) {
+    const { pathname } = useLocation();
+    return (
+        <div key={pathname} className="pgip-page-transition">
+            {children}
+        </div>
+    );
 }
 
 export default function App() {
@@ -32,55 +42,55 @@ export default function App() {
 
             <Route path="/hub" element={
                 <RutaProtegida>
-                    <Hub />
+                    <PaginaAnimada><Hub /></PaginaAnimada>
                 </RutaProtegida>
             } />
 
             <Route path="/dashboard" element={
                 <RutaProtegida soloAdmin={true}>
-                    <Dashboard />
+                    <PaginaAnimada><Dashboard /></PaginaAnimada>
                 </RutaProtegida>
             } />
 
             <Route path="/tesoreria" element={
                 <RutaProtegida>
-                    <Tesoreria />
+                    <PaginaAnimada><Tesoreria /></PaginaAnimada>
                 </RutaProtegida>
             } />
 
             <Route path="/sacramentos" element={
                 <RutaProtegida>
-                    <Sacrementos />
+                    <PaginaAnimada><Sacrementos /></PaginaAnimada>
                 </RutaProtegida>
             } />
 
             <Route path="/certificados" element={
                 <RutaProtegida>
-                    <Certificados />
+                    <PaginaAnimada><Certificados /></PaginaAnimada>
                 </RutaProtegida>
             } />
 
             <Route path="/intenciones" element={
                 <RutaProtegida>
-                    <Intenciones />
+                    <PaginaAnimada><Intenciones /></PaginaAnimada>
                 </RutaProtegida>
             } />
 
             <Route path="/archivo" element={
                 <RutaProtegida>
-                    <Archivo />
+                    <PaginaAnimada><Archivo /></PaginaAnimada>
                 </RutaProtegida>
             } />
 
             <Route path="/perfil" element={
                 <RutaProtegida>
-                    <Perfil />
+                    <PaginaAnimada><Perfil /></PaginaAnimada>
                 </RutaProtegida>
             } />
 
             <Route path="/reportes" element={
                 <RutaProtegida>
-                    <Reportes />
+                    <PaginaAnimada><Reportes /></PaginaAnimada>
                 </RutaProtegida>
             } />
 

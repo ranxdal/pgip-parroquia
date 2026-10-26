@@ -3,9 +3,32 @@
 /* ── Layout ── */
 .contenedor {
     min-height: 100vh;
-    background: var(--bg-page);
+    position: relative;
+    background-color: var(--bg-page);
+    /* Fondo parroquial con overlay — igual que el login */
+    background-image: url('/fotos/parroquia-exterior.jpg');
+    background-size: cover;
+    background-position: center 30%;
+    background-attachment: fixed;
+    transition: background-color 0.3s;
     color: var(--texto-principal);
-    transition: background 0.3s, color 0.3s;
+}
+
+/* Overlay oscuro sobre la imagen de fondo */
+.contenedor::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: var(--bg-page);
+    opacity: 0.90;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Todo el contenido por encima del overlay */
+.contenedor > * {
+    position: relative;
+    z-index: 1;
 }
 .contenido {
     max-width: 1100px;

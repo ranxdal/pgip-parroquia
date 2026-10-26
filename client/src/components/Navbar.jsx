@@ -53,6 +53,12 @@ export default function Navbar() {
                 {/* Logo */}
                 <div className={styles.navLogo} onClick={() => navegar('/hub')}
                      style={{ cursor: 'pointer' }}>
+                    <img
+                        src="/fotos/parroquia-logo.png"
+                        alt=""
+                        className={styles.navLogoImg}
+                        onError={e => { e.target.style.display = 'none'; }}
+                    />
                     <span className={styles.navLogoPrincipal}>PGIP</span>
                     <span className={styles.navLogoSep} />
                     <span className={styles.navSub}>Parroquia San Agustín</span>

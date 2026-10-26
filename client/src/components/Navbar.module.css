@@ -24,10 +24,20 @@
 .navLogo {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     margin-right: 12px;
     flex-shrink: 0;
     text-decoration: none;
+}
+
+.navLogoImg {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    border-radius: 4px;
+    flex-shrink: 0;
+    /* Tinte dorado suave para modo oscuro */
+    filter: drop-shadow(0 0 4px rgba(201, 151, 58, 0.35));
 }
 
 .navLogoPrincipal {
