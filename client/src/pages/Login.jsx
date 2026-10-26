@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import styles from './Login.module.css';
 
 export default function Login() {
@@ -8,6 +9,7 @@ export default function Login() {
     const [error, setError] = useState('');
     const [cargando, setCargando] = useState(false);
     const { login } = useAuth();
+    const { tema, toggleTema } = useTheme();
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -28,8 +30,19 @@ export default function Login() {
         }
     };
 
+    const iconoTema = tema === 'dark' ? '☀️' : '🌙';
+    const labelTema = tema === 'dark' ? 'Modo día' : 'Modo noche';
+
     return (
         <div className={styles.pagina}>
+            {/* Toggle tema — esquina superior derecha */}
+            <button
+                className={styles.temaToggle}
+                onClick={toggleTema}
+                title={labelTema}
+                aria-label={labelTema}>
+                {iconoTema}
+            </button>
             {/* Panel izquierdo — imagen */}
             <div className={styles.panelImagen}>
                 <div className={styles.imagenOverlay} />
