@@ -5,8 +5,8 @@
     top: 0;
     z-index: 50;
     background: var(--navbar-bg);
-    border-bottom: 1px solid var(--navbar-border);
-    box-shadow: var(--sombra-card);
+    border-bottom: 2px solid var(--oro);          /* línea dorada inferior */
+    box-shadow: 0 2px 16px rgba(0,0,0,0.18);
     transition: background 0.3s, border-color 0.3s;
 }
 
@@ -15,91 +15,147 @@
     margin: 0 auto;
     display: flex;
     align-items: center;
-    padding: 0 20px;
-    height: 56px;
-    gap: 8px;
+    padding: 0 24px;
+    height: 60px;
+    gap: 4px;
 }
 
 /* ── Logo ── */
 .navLogo {
     display: flex;
-    align-items: baseline;
-    gap: 10px;
-    margin-right: 8px;
+    align-items: center;
+    gap: 12px;
+    margin-right: 12px;
     flex-shrink: 0;
     text-decoration: none;
 }
 
 .navLogoPrincipal {
     font-family: 'Cinzel', 'Georgia', serif;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     font-weight: 700;
     color: var(--oro);
-    letter-spacing: 0.1em;
+    letter-spacing: 0.15em;
 }
 
 .navLogoSep {
     width: 1px;
-    height: 16px;
-    background: var(--borde);
+    height: 20px;
+    background: rgba(201, 151, 58, 0.35);
     flex-shrink: 0;
     align-self: center;
 }
 
 .navSub {
-    font-size: 0.65rem;
-    font-weight: 400;
-    letter-spacing: 0.08em;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
     color: var(--texto-tenue);
     white-space: nowrap;
     text-transform: uppercase;
+    line-height: 1.4;
 }
 
 /* ── Links desktop ── */
 .navLinksDesktop {
     display: flex;
     align-items: center;
-    gap: 2px;
+    gap: 0;
     margin-left: auto;
 }
 
 .navBtn {
-    padding: 6px 12px;
+    position: relative;
+    padding: 6px 13px;
     background: transparent;
     border: none;
     color: var(--texto-suave);
-    font-family: 'Inter', sans-serif;
-    font-size: 0.8rem;
-    font-weight: 500;
-    letter-spacing: 0.02em;
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
     cursor: pointer;
-    border-radius: 6px;
-    transition: color 0.15s, background 0.15s;
+    border-radius: 0;
+    transition: color 0.2s;
     white-space: nowrap;
+    height: 60px;
+    display: flex;
+    align-items: center;
+}
+
+/* Subrayado dorado animado al hacer hover */
+.navBtn::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: var(--oro);
+    transition: width 0.25s ease;
 }
 
 .navBtn:hover {
-    color: var(--texto-principal);
-    background: var(--fondo-hover);
+    color: var(--oro);
+}
+
+.navBtn:hover::after {
+    width: 70%;
+}
+
+/* Página activa */
+.navBtnActivo {
+    color: var(--oro);
+}
+.navBtnActivo::after {
+    width: 70%;
 }
 
 .navBtnRojo {
-    padding: 6px 12px;
+    position: relative;
+    padding: 6px 13px;
     background: transparent;
-    border: 1px solid rgba(248, 113, 113, 0.25);
+    border: none;
     color: var(--error);
-    font-family: 'Inter', sans-serif;
-    font-size: 0.8rem;
-    font-weight: 500;
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
     cursor: pointer;
-    border-radius: 6px;
-    transition: color 0.15s, border-color 0.15s, background 0.15s;
-    margin-left: 4px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+    margin-left: 6px;
+    white-space: nowrap;
 }
 
-.navBtnRojo:hover {
-    border-color: var(--error);
-    background: var(--error-bg);
+.navBtnRojo::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: var(--error);
+    transition: width 0.25s ease;
+}
+
+.navBtnRojo:hover::after {
+    width: 70%;
+}
+
+/* ── Separador vertical entre links ── */
+.navSeparador {
+    width: 1px;
+    height: 18px;
+    background: rgba(201, 151, 58, 0.2);
+    flex-shrink: 0;
+    margin: 0 4px;
 }
 
 /* ── Toggle tema ── */
@@ -107,45 +163,47 @@
     width: 34px;
     height: 34px;
     border-radius: 50%;
-    background: var(--fondo-hover);
-    border: 1px solid var(--borde);
+    background: transparent;
+    border: 1px solid rgba(201, 151, 58, 0.3);
     color: var(--oro);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1rem;
-    transition: background 0.2s, border-color 0.2s, transform 0.2s;
+    transition: background 0.2s, border-color 0.2s, transform 0.3s;
     flex-shrink: 0;
-    margin-left: 2px;
+    margin-left: 8px;
 }
 
 .temaToggle:hover {
-    border-color: var(--borde-activo);
-    transform: rotate(15deg);
+    border-color: var(--oro);
+    background: rgba(201, 151, 58, 0.1);
+    transform: rotate(20deg);
 }
 
 /* ── Avatar ── */
 .navAvatar {
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
-    background: var(--oro-suave);
-    border: 1.5px solid var(--borde);
+    background: rgba(201, 151, 58, 0.1);
+    border: 1.5px solid rgba(201, 151, 58, 0.4);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0;
     overflow: hidden;
-    transition: border-color 0.15s, transform 0.15s;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
     flex-shrink: 0;
-    margin-left: 6px;
+    margin-left: 8px;
 }
 
 .navAvatar:hover {
     border-color: var(--oro);
-    transform: scale(1.06);
+    transform: scale(1.08);
+    box-shadow: 0 0 0 3px rgba(201, 151, 58, 0.15);
 }
 
 .avatarImg {
@@ -166,38 +224,46 @@
 .hamburguesa {
     display: none;
     background: transparent;
-    border: 1px solid var(--borde);
+    border: 1px solid rgba(201, 151, 58, 0.35);
     color: var(--oro);
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
     border-radius: 6px;
     font-size: 1.1rem;
     cursor: pointer;
     margin-left: auto;
     align-items: center;
     justify-content: center;
-    transition: border-color 0.15s;
+    transition: border-color 0.2s, background 0.2s;
 }
 
 .hamburguesa:hover {
-    border-color: var(--borde-activo);
+    border-color: var(--oro);
+    background: rgba(201, 151, 58, 0.08);
 }
 
 @media (max-width: 860px) {
     .navLinksDesktop { display: none; }
     .hamburguesa { display: flex; }
     .navSub { display: none; }
+    .navContenido { height: 54px; }
 }
 
 /* ── Menú móvil ── */
 .menuMovil {
-    border-top: 1px solid var(--borde);
+    border-top: 1px solid rgba(201, 151, 58, 0.25);
     background: var(--fondo-panel);
     padding: 8px 12px 16px;
     display: flex;
     flex-direction: column;
     gap: 2px;
     transition: background 0.3s;
+    animation: deslizar 0.2s ease;
+}
+
+@keyframes deslizar {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 .menuUsuario {
@@ -205,29 +271,31 @@
     align-items: center;
     gap: 10px;
     padding: 12px 12px 14px;
-    border-bottom: 1px solid var(--borde);
+    border-bottom: 1px solid rgba(201, 151, 58, 0.2);
     margin-bottom: 6px;
 }
 
 .menuUsuario span {
     font-size: 0.8rem;
     color: var(--texto-tenue);
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.05em;
 }
 
 .menuAvatarImg {
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     object-fit: cover;
-    border: 1.5px solid var(--borde);
+    border: 1.5px solid rgba(201, 151, 58, 0.4);
 }
 
 .menuAvatarLetra {
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
-    background: var(--oro-suave);
-    border: 1.5px solid var(--borde);
+    background: rgba(201, 151, 58, 0.1);
+    border: 1.5px solid rgba(201, 151, 58, 0.4);
     color: var(--oro);
     font-family: 'Cinzel', serif;
     font-size: 12px;
@@ -241,65 +309,88 @@
 .menuItem {
     width: 100%;
     text-align: left;
-    padding: 10px 12px;
+    padding: 11px 14px;
     background: transparent;
     border: none;
+    border-left: 2px solid transparent;
     color: var(--texto-suave);
-    font-family: 'Inter', sans-serif;
-    font-size: 0.875rem;
-    font-weight: 400;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     cursor: pointer;
-    border-radius: 6px;
-    transition: color 0.15s, background 0.15s;
+    border-radius: 0 6px 6px 0;
+    transition: color 0.15s, background 0.15s, border-color 0.15s;
 }
 
 .menuItem:hover {
-    color: var(--texto-principal);
-    background: var(--fondo-hover);
+    color: var(--oro);
+    background: rgba(201, 151, 58, 0.06);
+    border-left-color: var(--oro);
+}
+
+.menuItemActivo {
+    color: var(--oro);
+    background: rgba(201, 151, 58, 0.08);
+    border-left-color: var(--oro);
 }
 
 .menuItemRojo {
     width: 100%;
     text-align: left;
-    padding: 10px 12px;
+    padding: 11px 14px;
     background: transparent;
     border: none;
+    border-left: 2px solid transparent;
     color: var(--error);
-    font-family: 'Inter', sans-serif;
-    font-size: 0.875rem;
-    font-weight: 400;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     cursor: pointer;
-    border-radius: 6px;
-    transition: color 0.15s, background 0.15s;
+    border-radius: 0 6px 6px 0;
+    transition: color 0.15s, background 0.15s, border-color 0.15s;
     margin-top: 4px;
 }
 
 .menuItemRojo:hover {
     background: var(--error-bg);
+    border-left-color: var(--error);
 }
 
 .menuTemaFila {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 12px;
-    border-top: 1px solid var(--borde);
+    padding: 10px 14px;
+    border-top: 1px solid rgba(201, 151, 58, 0.15);
     margin-top: 6px;
 }
 
 .menuTemaLabel {
-    font-size: 0.8rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     color: var(--texto-tenue);
-    font-family: 'Inter', sans-serif;
+    font-family: 'Cinzel', serif;
 }
 
 .menuTemaBtnMovil {
-    background: var(--fondo-hover);
-    border: 1px solid var(--borde);
+    background: rgba(201, 151, 58, 0.08);
+    border: 1px solid rgba(201, 151, 58, 0.35);
     color: var(--oro);
     border-radius: 20px;
-    padding: 4px 12px;
-    font-size: 0.8rem;
+    padding: 5px 14px;
+    font-size: 0.78rem;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: background 0.2s, border-color 0.2s;
+    font-family: 'Inter', sans-serif;
+}
+
+.menuTemaBtnMovil:hover {
+    background: rgba(201, 151, 58, 0.15);
+    border-color: var(--oro);
 }

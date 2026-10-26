@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import styles from './Navbar.module.css';
@@ -7,18 +7,22 @@ import styles from './Navbar.module.css';
 export default function Navbar() {
     const { usuario, logout } = useAuth();
     const { tema, toggleTema } = useTheme();
-    const navigate = useNavigate();
+    const navigate  = useNavigate();
+    const location  = useLocation();
     const [menuAbierto, setMenuAbierto] = useState(false);
-    const [esMovil, setEsMovil] = useState(window.innerWidth <= 768);
+    const [esMovil, setEsMovil] = useState(window.innerWidth <= 860);
 
     useEffect(() => {
         const handleResize = () => {
-            setEsMovil(window.innerWidth <= 768);
-            if (window.innerWidth > 768) setMenuAbierto(false);
+            setEsMovil(window.innerWidth <= 860);
+            if (window.innerWidth > 860) setMenuAbierto(false);
         };
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
+
+    // Cierra el menú al cambiar de ruta
+    useEffect(() => { setMenuAbierto(false); }, [location.pathname]);
 
     const handleLogout = () => {
         logout();
@@ -30,37 +34,65 @@ export default function Navbar() {
         setMenuAbierto(false);
     };
 
+    // Devuelve true si la ruta actual coincide (exacta o sub-ruta)
+    const esActivo = (ruta) => location.pathname === ruta || location.pathname.startsWith(ruta + '/');
+
+    const btnClass = (ruta) =>
+        `${styles.navBtn}${esActivo(ruta) ? ' ' + styles.navBtnActivo : ''}`;
+
+    const menuClass = (ruta) =>
+        `${styles.menuItem}${esActivo(ruta) ? ' ' + styles.menuItemActivo : ''}`;
+
     const avatarLetra = (usuario?.nombre?.[0] || '?').toUpperCase();
-    const iconoTema = tema === 'dark' ? '☀️' : '🌙';
-    const labelTema = tema === 'dark' ? 'Modo día' : 'Modo noche';
+    const iconoTema   = tema === 'dark' ? '☀️' : '🌙';
+    const labelTema   = tema === 'dark' ? 'Modo día' : 'Modo noche';
 
     return (
         <nav className={styles.navbar}>
             <div className={styles.navContenido}>
-                <div className={styles.navLogo}>
+                {/* Logo */}
+                <div className={styles.navLogo} onClick={() => navegar('/dashboard')}
+                     style={{ cursor: 'pointer' }}>
                     <span className={styles.navLogoPrincipal}>PGIP</span>
                     <span className={styles.navLogoSep} />
                     <span className={styles.navSub}>Parroquia San Agustín</span>
                 </div>
 
+                {/* Links desktop */}
                 {!esMovil && (
                     <div className={styles.navLinksDesktop}>
                         {usuario?.rol === 'admin' && (
                             <button onClick={() => navegar('/dashboard')}
-                                className={styles.navBtn}>Dashboard</button>
+                                className={btnClass('/dashboard')}>
+                                Dashboard
+                            </button>
                         )}
                         <button onClick={() => navegar('/tesoreria')}
-                            className={styles.navBtn}>Tesorería</button>
+                            className={btnClass('/tesoreria')}>
+                            Tesorería
+                        </button>
                         <button onClick={() => navegar('/sacramentos')}
-                            className={styles.navBtn}>Sacramentos</button>
+                            className={btnClass('/sacramentos')}>
+                            Sacramentos
+                        </button>
                         <button onClick={() => navegar('/archivo')}
-                            className={styles.navBtn}>Archivo</button>
+                            className={btnClass('/archivo')}>
+                            Archivo
+                        </button>
                         <button onClick={() => navegar('/certificados')}
-                            className={styles.navBtn}>Certificados</button>
+                            className={btnClass('/certificados')}>
+                            Certificados
+                        </button>
                         <button onClick={() => navegar('/intenciones')}
-                            className={styles.navBtn}>Intenciones</button>
+                            className={btnClass('/intenciones')}>
+                            Intenciones
+                        </button>
                         <button onClick={() => navegar('/reportes')}
-                            className={styles.navBtn}>Reportes</button>
+                            className={btnClass('/reportes')}>
+                            Reportes
+                        </button>
+
+                        <span className={styles.navSeparador} />
 
                         {/* Toggle tema */}
                         <button
@@ -71,7 +103,7 @@ export default function Navbar() {
                             {iconoTema}
                         </button>
 
-                        {/* Avatar / perfil */}
+                        {/* Avatar */}
                         <button onClick={() => navegar('/perfil')}
                             className={styles.navAvatar}
                             title={`${usuario?.nombre} — Mi perfil`}>
@@ -85,20 +117,24 @@ export default function Navbar() {
                         </button>
 
                         <button onClick={handleLogout}
-                            className={styles.navBtnRojo}>Salir</button>
+                            className={styles.navBtnRojo}>
+                            Salir
+                        </button>
                     </div>
                 )}
 
+                {/* Hamburguesa */}
                 {esMovil && (
                     <button
                         className={styles.hamburguesa}
                         onClick={() => setMenuAbierto(!menuAbierto)}
-                    >
+                        aria-label={menuAbierto ? 'Cerrar menú' : 'Abrir menú'}>
                         {menuAbierto ? '✕' : '☰'}
                     </button>
                 )}
             </div>
 
+            {/* Menú móvil */}
             {esMovil && menuAbierto && (
                 <div className={styles.menuMovil}>
                     <div className={styles.menuUsuario}>
@@ -111,46 +147,49 @@ export default function Navbar() {
                         )}
                         <span>{usuario?.nombre} ({usuario?.rol})</span>
                     </div>
+
                     {usuario?.rol === 'admin' && (
                         <button onClick={() => navegar('/dashboard')}
-                            className={styles.menuItem}>
+                            className={menuClass('/dashboard')}>
                             📊 Dashboard
                         </button>
                     )}
                     <button onClick={() => navegar('/tesoreria')}
-                        className={styles.menuItem}>
+                        className={menuClass('/tesoreria')}>
                         💰 Tesorería
                     </button>
                     <button onClick={() => navegar('/sacramentos')}
-                        className={styles.menuItem}>
+                        className={menuClass('/sacramentos')}>
                         ✝️ Sacramentos
                     </button>
                     <button onClick={() => navegar('/archivo')}
-                        className={styles.menuItem}>
+                        className={menuClass('/archivo')}>
                         📁 Archivo Histórico
                     </button>
                     <button onClick={() => navegar('/certificados')}
-                        className={styles.menuItem}>
+                        className={menuClass('/certificados')}>
                         📄 Certificados
                     </button>
                     <button onClick={() => navegar('/intenciones')}
-                        className={styles.menuItem}>
+                        className={menuClass('/intenciones')}>
                         🕊️ Intenciones de Misa
                     </button>
                     <button onClick={() => navegar('/reportes')}
-                        className={styles.menuItem}>
+                        className={menuClass('/reportes')}>
                         📋 Reportes
                     </button>
                     <button onClick={() => navegar('/perfil')}
-                        className={styles.menuItem}>
+                        className={menuClass('/perfil')}>
                         👤 Mi Perfil
                     </button>
+
                     <div className={styles.menuTemaFila}>
                         <span className={styles.menuTemaLabel}>Apariencia</span>
                         <button className={styles.menuTemaBtnMovil} onClick={toggleTema}>
                             {iconoTema} {labelTema}
                         </button>
                     </div>
+
                     <button onClick={handleLogout}
                         className={styles.menuItemRojo}>
                         🚪 Cerrar Sesión
