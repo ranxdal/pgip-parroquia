@@ -49,6 +49,16 @@ export default function Login() {
             {/* Panel derecho — formulario */}
             <div className={styles.panelForm}>
                 <div className={styles.formContenido}>
+                    {/* Logo parroquial arriba del formulario */}
+                    <div className={styles.logoImgBloque}>
+                        <img
+                            src="/fotos/parroquia-logo.png"
+                            alt="Parroquia San Agustín"
+                            className={styles.logoImgGrande}
+                            onError={e => { e.target.style.display = 'none'; }}
+                        />
+                    </div>
+
                     <div className={styles.logoBloque}>
                         <span className={styles.logoAcronimo}>PGIP</span>
                         <span className={styles.logoLinea} />
