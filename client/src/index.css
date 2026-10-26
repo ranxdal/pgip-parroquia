@@ -334,18 +334,13 @@ input, textarea, select, button {
 }
 
 /* ══════════════════════════════════════════════════════════════
-   TRANSICIONES DE PÁGINA — animación de entrada entre módulos
+   TRANSICIONES DE PÁGINA — fundido suave entre módulos
    ══════════════════════════════════════════════════════════════ */
 
+/* Fundido puro: solo opacidad, sin desplazamiento → sin parpadeo */
 @keyframes pgipPageIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }
 
 @keyframes pgipFadeIn {
@@ -355,7 +350,8 @@ input, textarea, select, button {
 
 /* Wrapper de animación usado en App.jsx */
 .pgip-page-transition {
-    animation: pgipPageIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation: pgipPageIn 0.45s ease both;
+    will-change: opacity;
 }
 
 /* Fondo parroquial compartido — mismo estilo que el login */
