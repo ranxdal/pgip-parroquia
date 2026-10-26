@@ -6,7 +6,7 @@ const API = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 const getToken = () => localStorage.getItem('pgip_token');
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 const apiFetch = async (path, options = {}) => {
     const res = await fetch(`${API}${path}`, {
         ...options,
@@ -33,7 +33,7 @@ const formatearFecha = (fechaISO) => {
     return `${parseInt(d)} de ${meses[parseInt(m)-1]} de ${a}`;
 };
 
-// ─── Formulario de nueva intención ───────────────────────────────────────────
+// ─── Formulario modal ─────────────────────────────────────────────────────────
 const FormIntencion = ({ onGuardado, onCancelar, editar }) => {
     const [form, setForm] = useState({
         fecha_misa:     editar?.fecha_misa?.slice(0, 10) || hoy(),
@@ -78,7 +78,7 @@ const FormIntencion = ({ onGuardado, onCancelar, editar }) => {
         <div className={styles.modalOverlay}>
             <div className={styles.modal}>
                 <div className={styles.modalHeader}>
-                    <h3>{editar ? 'Editar Intención' : 'Nueva Intención de Misa'}</h3>
+                    <h3>{editar ? 'Editar Intención' : '✝️ Nueva Intención de Misa'}</h3>
                     <button className={styles.btnCerrar} onClick={onCancelar}>✕</button>
                 </div>
 
@@ -169,12 +169,13 @@ export default function Intenciones() {
         }
     };
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => { cargar(); }, [fechaFiltro]);
 
     const alGuardar = () => {
         setMostrarForm(false);
         setEditando(null);
-        setMensaje('Intención guardada correctamente.');
+        setMensaje('✅ Intención guardada correctamente.');
         setTimeout(() => setMensaje(''), 3500);
         cargar();
     };
@@ -205,7 +206,7 @@ export default function Intenciones() {
             a.download = `intenciones_misa_${fechaFiltro}.docx`;
             a.click();
             URL.revokeObjectURL(url);
-            setMensaje('Documento Word descargado.');
+            setMensaje('📄 Documento Word descargado.');
             setTimeout(() => setMensaje(''), 3000);
         } catch (err) {
             setError(err.message);
@@ -214,25 +215,33 @@ export default function Intenciones() {
         }
     };
 
+    const abrirNuevo = () => { setEditando(null); setMostrarForm(true); };
+
     return (
-        <div>
+        <div className={styles.pagina}>
             <Navbar />
             <div className={styles.contenedor}>
-                {/* Encabezado */}
-                <div className={styles.encabezado}>
-                    <div>
-                        <h1 className={styles.titulo}>Intenciones de Misa</h1>
-                        <p className={styles.subtitulo}>Gestión y exportación de intenciones para el celebrante</p>
+
+                {/* ── Hero encabezado ── */}
+                <div className={styles.hero}>
+                    <div className={styles.heroTexto}>
+                        <div className={styles.heroTituloFila}>
+                            <span className={styles.heroIcono}>🕊️</span>
+                            <h1 className={styles.titulo}>Intenciones de Misa</h1>
+                        </div>
+                        <p className={styles.subtitulo}>
+                            Gestión y exportación para el celebrante · Parroquia San Agustín
+                        </p>
                     </div>
-                    <button className={styles.btnPrimario} onClick={() => { setEditando(null); setMostrarForm(true); }}>
+                    <button className={styles.btnPrimario} onClick={abrirNuevo}>
                         + Nueva Intención
                     </button>
                 </div>
 
-                {/* Barra de herramientas */}
+                {/* ── Toolbar de filtro ── */}
                 <div className={styles.toolbar}>
                     <div className={styles.filtroFecha}>
-                        <label>Fecha de misa:</label>
+                        <label>Fecha de misa</label>
                         <input
                             type="date"
                             value={fechaFiltro}
@@ -241,8 +250,8 @@ export default function Intenciones() {
                     </div>
                     <div className={styles.toolbarDerecha}>
                         <span className={styles.conteo}>
-                            {intenciones.length} intención{intenciones.length !== 1 ? 'es' : ''}
-                            {' '}para el {formatearFecha(fechaFiltro)}
+                            {cargando ? '…' : `${intenciones.length} intención${intenciones.length !== 1 ? 'es' : ''}`}
+                            {!cargando && ` · ${formatearFecha(fechaFiltro)}`}
                         </span>
                         <button
                             className={styles.btnExportar}
@@ -250,62 +259,73 @@ export default function Intenciones() {
                             disabled={exportando || intenciones.length === 0}
                             title={intenciones.length === 0 ? 'No hay intenciones para esta fecha' : 'Descargar documento Word'}
                         >
-                            {exportando ? '⏳ Generando...' : '📄 Exportar a Word'}
+                            {exportando ? '⏳ Generando...' : '📄 Exportar Word'}
                         </button>
                     </div>
                 </div>
 
-                {/* Alertas */}
+                {/* ── Alertas ── */}
                 {mensaje && <div className={styles.alertaOk}>{mensaje}</div>}
                 {error   && <div className={styles.alertaError}>{error}</div>}
 
-                {/* Lista de intenciones */}
+                {/* ── Contenido ── */}
                 {cargando ? (
-                    <div className={styles.cargando}>Cargando intenciones...</div>
+                    <div className={styles.cargando}>Cargando intenciones…</div>
                 ) : intenciones.length === 0 ? (
                     <div className={styles.vacio}>
-                        <span className={styles.iconoVacio}>📋</span>
-                        <p>No hay intenciones registradas para esta fecha.</p>
-                        <button className={styles.btnPrimario} onClick={() => setMostrarForm(true)}>
+                        <span className={styles.iconoVacio}>🕊️</span>
+                        <p>No hay intenciones registradas para el {formatearFecha(fechaFiltro)}.</p>
+                        <button className={styles.btnPrimario} onClick={abrirNuevo}>
                             Registrar primera intención
                         </button>
                     </div>
                 ) : (
-                    <div className={styles.lista}>
-                        {intenciones.map((item, idx) => (
-                            <div key={item.id} className={styles.tarjeta}>
-                                <div className={styles.tarjetaHeader}>
-                                    <span className={styles.numero}>{idx + 1}</span>
-                                    <div className={styles.tarjetaInfo}>
-                                        <strong className={styles.familia}>{item.nombre_familia}</strong>
-                                        <span className={styles.intencionTexto}>{item.intencion}</span>
+                    <>
+                        <p className={styles.seccionLabel}>
+                            Intenciones del día
+                        </p>
+                        <div className={styles.lista}>
+                            {intenciones.map((item, idx) => (
+                                <div key={item.id} className={styles.tarjeta}>
+                                    <div className={styles.tarjetaHeader}>
+                                        <span className={styles.numero}>{idx + 1}</span>
+                                        <div className={styles.tarjetaInfo}>
+                                            <strong className={styles.familia}>
+                                                {item.nombre_familia}
+                                            </strong>
+                                            <span className={styles.intencionTexto}>
+                                                {item.intencion}
+                                            </span>
+                                        </div>
+                                        <div className={styles.tarjetaAcciones}>
+                                            <button
+                                                className={styles.btnEditar}
+                                                onClick={() => { setEditando(item); setMostrarForm(true); }}
+                                                title="Editar"
+                                            >✏️</button>
+                                            <button
+                                                className={styles.btnEliminar}
+                                                onClick={() => eliminar(item.id)}
+                                                title="Eliminar"
+                                            >🗑️</button>
+                                        </div>
                                     </div>
-                                    <div className={styles.tarjetaAcciones}>
-                                        <button
-                                            className={styles.btnEditar}
-                                            onClick={() => { setEditando(item); setMostrarForm(true); }}
-                                            title="Editar"
-                                        >✏️</button>
-                                        <button
-                                            className={styles.btnEliminar}
-                                            onClick={() => eliminar(item.id)}
-                                            title="Eliminar"
-                                        >🗑️</button>
-                                    </div>
-                                </div>
 
-                                {item.texto_lectura && (
-                                    <div className={styles.textoLectura}>
-                                        <span className={styles.etiquetaTexto}>Texto para la misa:</span>
-                                        <p className={styles.textoLecturaContenido}>{item.texto_lectura}</p>
-                                    </div>
-                                )}
-                            </div>
-                        ))}
-                    </div>
+                                    {item.texto_lectura && (
+                                        <div className={styles.textoLectura}>
+                                            <span className={styles.etiquetaTexto}>Texto para la misa</span>
+                                            <p className={styles.textoLecturaContenido}>
+                                                {item.texto_lectura}
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </>
                 )}
 
-                {/* Modal formulario */}
+                {/* ── Modal formulario ── */}
                 {mostrarForm && (
                     <FormIntencion
                         editar={editando}

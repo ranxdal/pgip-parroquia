@@ -1,38 +1,67 @@
-/* ─── Intenciones de Misa — PGIP ─────────────────────────────── */
+/* ─── Intenciones de Misa — PGIP ──────────────────────────────── */
 
-/* ─── Layout principal ────────────────────────────────────────── */
-.contenedor {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 24px 20px;
+.pagina {
     min-height: 100vh;
+    background: var(--bg-page);
+    transition: background 0.3s;
+}
+
+.contenedor {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 32px 24px 48px;
     color: var(--texto-principal);
     transition: color 0.3s;
 }
 
-/* ─── Encabezado ──────────────────────────────────────────────── */
-.encabezado {
+/* ─── Hero encabezado ─────────────────────────────────────────── */
+.hero {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 24px;
-    gap: 16px;
+    align-items: flex-end;
     flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding: 24px 28px;
+    background: var(--fondo-card);
+    border: 1px solid var(--borde);
+    border-top: 3px solid var(--oro);
+    border-radius: var(--radio-lg);
+    box-shadow: var(--sombra-card);
+    transition: background 0.3s;
+}
+
+.heroTexto {
+    flex: 1;
+}
+
+.heroTituloFila {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 4px;
+}
+
+.heroIcono {
+    font-size: 1.4rem;
+    opacity: 0.9;
 }
 
 .titulo {
-    font-family: var(--fuente-display);
+    font-family: 'Cinzel', 'Georgia', serif;
     font-size: 1.5rem;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--texto-principal);
-    margin: 0 0 4px;
-    letter-spacing: 0.02em;
+    margin: 0;
+    letter-spacing: 0.04em;
 }
 
 .subtitulo {
-    font-size: 0.85rem;
+    font-size: 0.78rem;
     color: var(--texto-tenue);
     margin: 0;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
 }
 
 /* ─── Toolbar ─────────────────────────────────────────────────── */
@@ -40,14 +69,15 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: var(--fondo-panel);
+    background: var(--fondo-card);
     border: 1px solid var(--borde);
     border-radius: var(--radio-lg);
-    padding: 12px 16px;
-    margin-bottom: 18px;
+    padding: 12px 18px;
+    margin-bottom: 20px;
     gap: 12px;
     flex-wrap: wrap;
     transition: background 0.3s, border-color 0.3s;
+    box-shadow: var(--sombra-card);
 }
 
 .filtroFecha {
@@ -58,16 +88,18 @@
 
 .filtroFecha label {
     font-weight: 600;
-    font-size: 0.85rem;
-    color: var(--texto-suave);
+    font-size: 0.72rem;
+    color: var(--texto-tenue);
     white-space: nowrap;
-    font-family: var(--fuente-cuerpo);
+    font-family: 'Cinzel', serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
 }
 
 .filtroFecha input[type="date"] {
     border: 1px solid var(--borde);
     border-radius: var(--radio);
-    padding: 7px 10px;
+    padding: 8px 12px;
     font-size: 0.875rem;
     color: var(--texto-principal);
     background: var(--fondo-input);
@@ -77,7 +109,7 @@
 }
 
 .filtroFecha input[type="date"]:focus {
-    border-color: var(--borde-activo);
+    border-color: var(--oro);
     background: var(--fondo-hover);
 }
 
@@ -91,25 +123,29 @@
 .conteo {
     font-size: 0.8rem;
     color: var(--texto-tenue);
+    font-style: italic;
 }
 
 /* ─── Botones ─────────────────────────────────────────────────── */
 .btnPrimario {
     background: var(--oro);
-    color: var(--fondo-oscuro);
+    color: #2C1A0E;
     border: none;
     border-radius: var(--radio);
     padding: 10px 20px;
-    font-family: var(--fuente-display);
-    font-size: 0.8rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
     font-weight: 700;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: background 0.2s, transform 0.15s;
     white-space: nowrap;
 }
-.btnPrimario:hover:not(:disabled) { background: var(--oro-claro); }
+.btnPrimario:hover:not(:disabled) {
+    background: #dba94a;
+    transform: translateY(-1px);
+}
 .btnPrimario:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .btnSecundario {
@@ -118,118 +154,166 @@
     border: 1px solid var(--borde);
     border-radius: var(--radio);
     padding: 10px 18px;
-    font-size: 0.875rem;
-    font-weight: 500;
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     cursor: pointer;
     transition: border-color 0.2s, color 0.2s;
-    font-family: var(--fuente-cuerpo);
 }
 .btnSecundario:hover:not(:disabled) {
-    border-color: var(--borde-activo);
-    color: var(--texto-principal);
+    border-color: var(--oro);
+    color: var(--oro);
 }
 
 .btnExportar {
-    background: var(--exito-bg);
+    background: transparent;
     color: var(--exito);
-    border: 1px solid rgba(74, 222, 128, 0.25);
+    border: 1px solid rgba(74, 222, 128, 0.35);
     border-radius: var(--radio);
     padding: 9px 18px;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 600;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     cursor: pointer;
-    transition: background 0.2s, color 0.2s;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
     white-space: nowrap;
-    font-family: var(--fuente-cuerpo);
 }
 .btnExportar:hover:not(:disabled) {
     background: var(--exito);
-    color: var(--fondo-oscuro);
+    color: #0a1f0a;
     border-color: var(--exito);
 }
-.btnExportar:disabled { opacity: 0.5; cursor: not-allowed; }
+.btnExportar:disabled { opacity: 0.45; cursor: not-allowed; }
 
 .btnEditar {
     background: transparent;
     border: 1px solid var(--borde);
-    border-radius: var(--radio-sm);
-    padding: 5px 9px;
+    border-radius: var(--radio-sm, 6px);
+    padding: 6px 10px;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: var(--texto-suave);
     transition: background 0.15s, border-color 0.15s;
 }
 .btnEditar:hover {
-    background: var(--fondo-hover);
-    border-color: var(--borde-activo);
-    color: var(--texto-principal);
+    background: rgba(201, 151, 58, 0.1);
+    border-color: var(--oro);
 }
 
 .btnEliminar {
     background: transparent;
     border: 1px solid var(--borde);
-    border-radius: var(--radio-sm);
-    padding: 5px 9px;
+    border-radius: var(--radio-sm, 6px);
+    padding: 6px 10px;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: var(--error);
-    transition: background 0.15s;
+    transition: background 0.15s, border-color 0.15s;
 }
-.btnEliminar:hover { background: var(--error-bg); }
+.btnEliminar:hover {
+    background: var(--error-bg);
+    border-color: var(--error);
+}
 
 /* ─── Alertas ─────────────────────────────────────────────────── */
 .alertaOk {
     background: var(--exito-bg);
     border: 1px solid rgba(74, 222, 128, 0.3);
+    border-left: 3px solid var(--exito);
     color: var(--exito);
     border-radius: var(--radio);
     padding: 12px 16px;
     margin-bottom: 14px;
-    font-weight: 500;
     font-size: 0.875rem;
 }
 
 .alertaError {
     background: var(--error-bg);
     border: 1px solid rgba(248, 113, 113, 0.3);
+    border-left: 3px solid var(--error);
     color: var(--error);
     border-radius: var(--radio);
     padding: 12px 16px;
     margin-bottom: 14px;
-    font-weight: 500;
     font-size: 0.875rem;
 }
 
-/* ─── Estado vacío / cargando ─────────────────────────────────── */
-.cargando, .vacio {
+/* ─── Cargando / Vacío ────────────────────────────────────────── */
+.cargando {
     text-align: center;
-    padding: 60px 20px;
+    padding: 80px 20px;
     color: var(--texto-tenue);
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+}
+
+.vacio {
+    text-align: center;
+    padding: 64px 20px;
+    color: var(--texto-tenue);
+    background: var(--fondo-card);
+    border: 1px dashed var(--borde);
+    border-radius: var(--radio-lg);
 }
 
 .iconoVacio {
     font-size: 3rem;
     display: block;
-    margin-bottom: 12px;
-    opacity: 0.6;
+    margin-bottom: 14px;
+    opacity: 0.5;
 }
 
-.vacio p { margin-bottom: 20px; }
+.vacio p {
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+}
+
+/* ─── Sección label ───────────────────────────────────────────── */
+.seccionLabel {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--texto-tenue);
+    margin: 0 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.seccionLabel::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--borde);
+}
 
 /* ─── Lista de tarjetas ───────────────────────────────────────── */
 .lista {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
 }
 
 .tarjeta {
     background: var(--fondo-card);
     border: 1px solid var(--borde);
+    border-left: 3px solid var(--oro);       /* acento dorado izquierdo */
     border-radius: var(--radio-lg);
     box-shadow: var(--sombra-card);
     overflow: hidden;
-    transition: background 0.3s, border-color 0.3s;
+    transition: background 0.3s, border-color 0.3s,
+                transform 0.2s, box-shadow 0.2s;
+}
+
+.tarjeta:hover {
+    transform: translateX(2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
 }
 
 .tarjetaHeader {
@@ -240,19 +324,20 @@
 }
 
 .numero {
-    min-width: 32px;
-    height: 32px;
-    background: var(--oro-suave);
+    min-width: 30px;
+    height: 30px;
+    background: rgba(201, 151, 58, 0.1);
     color: var(--oro);
-    border: 1px solid var(--borde-activo);
+    border: 1px solid rgba(201, 151, 58, 0.35);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: var(--fuente-display);
+    font-family: 'Cinzel', serif;
     font-weight: 700;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     flex-shrink: 0;
+    margin-top: 2px;
 }
 
 .tarjetaInfo {
@@ -260,49 +345,55 @@
     display: flex;
     flex-direction: column;
     gap: 4px;
+    min-width: 0;
 }
 
 .familia {
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--texto-principal);
-    font-family: var(--fuente-display);
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.02em;
 }
 
 .intencionTexto {
     font-size: 0.875rem;
     color: var(--texto-suave);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .tarjetaAcciones {
     display: flex;
     gap: 6px;
     flex-shrink: 0;
+    align-items: flex-start;
 }
 
 /* ─── Texto de lectura ────────────────────────────────────────── */
 .textoLectura {
     border-top: 1px solid var(--borde);
     background: var(--fondo-panel);
-    padding: 14px 18px;
+    padding: 14px 18px 14px 46px;   /* sangría alineada con el texto */
     transition: background 0.3s;
 }
 
 .etiquetaTexto {
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.1em;
     color: var(--oro);
     display: block;
     margin-bottom: 8px;
-    font-family: var(--fuente-display);
+    font-family: 'Cinzel', serif;
 }
 
 .textoLecturaContenido {
     font-size: 0.875rem;
     color: var(--texto-suave);
-    line-height: 1.7;
+    line-height: 1.75;
     margin: 0;
     white-space: pre-wrap;
     font-style: italic;
@@ -319,54 +410,71 @@
     z-index: 1000;
     padding: 16px;
     backdrop-filter: blur(4px);
+    animation: fadeIn 0.15s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }
 
 .modal {
     background: var(--fondo-card);
     border: 1px solid var(--borde);
+    border-top: 3px solid var(--oro);
     border-radius: var(--radio-lg);
     width: 100%;
     max-width: 620px;
     max-height: 90vh;
     overflow-y: auto;
-    box-shadow: var(--sombra-lg);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
     transition: background 0.3s;
+    animation: slideUp 0.2s ease;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 .modalHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 24px 0;
-    margin-bottom: 20px;
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid var(--borde);
+    margin-bottom: 4px;
 }
 
 .modalHeader h3 {
-    font-family: var(--fuente-display);
-    font-size: 1.1rem;
-    font-weight: 600;
+    font-family: 'Cinzel', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
     color: var(--texto-principal);
     margin: 0;
+    letter-spacing: 0.04em;
 }
 
 .btnCerrar {
     background: none;
-    border: none;
-    font-size: 1.1rem;
+    border: 1px solid transparent;
+    font-size: 1rem;
     color: var(--texto-tenue);
     cursor: pointer;
-    padding: 4px 8px;
+    padding: 5px 8px;
     border-radius: var(--radio);
-    transition: background 0.2s, color 0.2s;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    line-height: 1;
 }
 .btnCerrar:hover {
     background: var(--fondo-hover);
+    border-color: var(--borde);
     color: var(--texto-principal);
 }
 
 /* ─── Formulario ──────────────────────────────────────────────── */
 .form {
-    padding: 0 24px 24px;
+    padding: 20px 24px 24px;
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -385,12 +493,12 @@
 }
 
 .campo label {
-    font-size: 0.8rem;
-    font-weight: 600;
+    font-size: 0.7rem;
+    font-weight: 700;
     color: var(--texto-tenue);
-    letter-spacing: 0.04em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    font-family: var(--fuente-cuerpo);
+    font-family: 'Cinzel', serif;
 }
 
 .campo input,
@@ -414,20 +522,21 @@
 
 .campo input:focus,
 .campo textarea:focus {
-    border-color: var(--borde-activo);
+    border-color: var(--oro);
     background: var(--fondo-hover);
 }
 
 .opcional {
     font-weight: 400;
     color: var(--texto-tenue);
-    font-size: 0.78rem;
+    font-size: 0.72rem;
     text-transform: none;
     letter-spacing: 0;
+    font-family: var(--fuente-cuerpo);
 }
 
 .hint {
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     color: var(--texto-tenue);
     font-style: italic;
 }
@@ -435,6 +544,7 @@
 .error {
     background: var(--error-bg);
     border: 1px solid rgba(248, 113, 113, 0.3);
+    border-left: 3px solid var(--error);
     color: var(--error);
     border-radius: var(--radio);
     padding: 10px 14px;
@@ -447,13 +557,17 @@
     justify-content: flex-end;
     gap: 10px;
     padding-top: 8px;
+    border-top: 1px solid var(--borde);
+    margin-top: 4px;
 }
 
 /* ─── Responsive ─────────────────────────────────────────────── */
 @media (max-width: 600px) {
+    .contenedor { padding: 20px 16px 40px; }
+    .hero { padding: 18px 20px; }
     .fila2 { grid-template-columns: 1fr; }
-    .encabezado { flex-direction: column; }
     .toolbar { flex-direction: column; align-items: flex-start; }
     .toolbarDerecha { width: 100%; justify-content: space-between; }
     .titulo { font-size: 1.3rem; }
+    .textoLectura { padding-left: 18px; }
 }
