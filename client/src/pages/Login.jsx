@@ -20,7 +20,7 @@ export default function Login() {
         setCargando(true);
         try {
             const usuario = await login(form.usuario, form.contrasena);
-            navigate(usuario.rol === 'admin' ? '/dashboard' : '/tesoreria');
+            navigate('/hub');
         } catch (err) {
             setError(err.response?.data?.error || 'Usuario o contraseña incorrectos');
         } finally {

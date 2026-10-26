@@ -275,7 +275,16 @@ export default function Reportes() {
         <div className={styles.contenedor}>
             <Navbar />
             <div className={styles.contenido}>
-                <h1 className={styles.titulo}>Generacion de Reportes</h1>
+                {/* ── Hero encabezado ── */}
+                <div className={styles.hero}>
+                    <div className={styles.heroTexto}>
+                        <div className={styles.heroTituloFila}>
+                            <span className={styles.heroIcono}>📋</span>
+                            <h1 className={styles.heroTitulo}>Reportes</h1>
+                        </div>
+                        <p className={styles.heroSub}>Generación de reportes en PDF y Excel · Parroquia San Agustín</p>
+                    </div>
+                </div>
 
                 {/* Selector tipo */}
                 <div className={styles.tipoGrid}>

@@ -157,8 +157,17 @@ export default function Archivo() {
         <div className={styles.contenedor}>
             <Navbar />
             <div className={styles.contenido}>
+                {/* ── Hero encabezado ── */}
+                <div className={styles.hero}>
+                    <div className={styles.heroTexto}>
+                        <div className={styles.heroTituloFila}>
+                            <span className={styles.heroIcono}>📁</span>
+                            <h1 className={styles.heroTitulo}>Archivo Histórico</h1>
+                        </div>
+                        <p className={styles.heroSub}>Digitalización y consulta del acervo documental · Parroquia San Agustín</p>
+                    </div>
+                </div>
                 <div className={styles.encabezado}>
-                    <h1 className={styles.titulo}>Archivo Histórico Digital</h1>
                     <div className={styles.tabs}>
                         <button onClick={() => setVista('subir')}
                             className={`${styles.tab} ${vista === 'subir' ? styles.tabActivo : ''}`}>

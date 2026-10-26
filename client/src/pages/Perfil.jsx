@@ -162,7 +162,16 @@ export default function Perfil() {
         <div className={styles.contenedor}>
             <Navbar />
             <div className={styles.contenido}>
-                <h1 className={styles.titulo}>Mi Perfil</h1>
+                {/* ── Hero encabezado ── */}
+                <div className={styles.hero}>
+                    <div className={styles.heroTexto}>
+                        <div className={styles.heroTituloFila}>
+                            <span className={styles.heroIcono}>👤</span>
+                            <h1 className={styles.heroTitulo}>Mi Perfil</h1>
+                        </div>
+                        <p className={styles.heroSub}>Configuración de cuenta y gestión de usuarios · Parroquia San Agustín</p>
+                    </div>
+                </div>
 
                 <div className={styles.grid}>
 

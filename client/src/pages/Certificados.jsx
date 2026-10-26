@@ -484,7 +484,16 @@ export default function Certificados() {
         <div className={styles.contenedor}>
             <Navbar />
             <div className={styles.contenido}>
-                <h1 className={styles.titulo}>Emisión de Certificados Sacramentales</h1>
+                {/* ── Hero encabezado ── */}
+                <div className={styles.hero}>
+                    <div className={styles.heroTexto}>
+                        <div className={styles.heroTituloFila}>
+                            <span className={styles.heroIcono}>📄</span>
+                            <h1 className={styles.heroTitulo}>Certificados</h1>
+                        </div>
+                        <p className={styles.heroSub}>Búsqueda y emisión de certificados sacramentales · Parroquia San Agustín</p>
+                    </div>
+                </div>
 
                 {error  && <div className={styles.errorDiv}  onClick={() => setError('')}>❌ {error}</div>}
                 {exito  && <div className={styles.exitoDiv}  onClick={() => setExito('')}>✅ {exito}</div>}

@@ -228,7 +228,16 @@ export default function Tesoreria() {
         <div className={styles.contenedor}>
             <Navbar />
             <div className={styles.contenido}>
-                <h1 className={styles.titulo}>Tesorería y Control de Caja</h1>
+                {/* ── Hero encabezado ── */}
+                <div className={styles.hero}>
+                    <div className={styles.heroTexto}>
+                        <div className={styles.heroTituloFila}>
+                            <span className={styles.heroIcono}>💰</span>
+                            <h1 className={styles.heroTitulo}>Tesorería</h1>
+                        </div>
+                        <p className={styles.heroSub}>Registro de cobros y gestión de caja · Parroquia San Agustín</p>
+                    </div>
+                </div>
 
                 {mensaje && <div className={styles.exito}    onClick={() => setMensaje('')}>✅ {mensaje}</div>}
                 {error   && <div className={styles.errorDiv} onClick={() => setError('')}>❌ {error}</div>}

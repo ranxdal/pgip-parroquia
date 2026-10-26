@@ -501,3 +501,44 @@ select.input {
     .tabs { overflow-x: auto; }
     .tab { font-size: 0.8rem; padding: 10px 12px; }
 }
+
+
+/* ─── Hero encabezado (estilo unificado PGIP) ────────────────────── */
+.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 20px;
+    padding: 24px 28px;
+    background: var(--fondo-card);
+    border: 1px solid var(--borde);
+    border-top: 3px solid var(--oro);
+    border-radius: var(--radio-lg);
+    box-shadow: var(--sombra-card);
+    transition: background 0.3s;
+}
+.heroTexto { flex: 1; }
+.heroTituloFila {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 4px;
+}
+.heroIcono { font-size: 1.4rem; opacity: 0.9; }
+.heroTitulo {
+    font-family: 'Cinzel', 'Georgia', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--texto-principal);
+    margin: 0;
+    letter-spacing: 0.04em;
+}
+.heroSub {
+    font-size: 0.78rem;
+    color: var(--texto-tenue);
+    margin: 0;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}

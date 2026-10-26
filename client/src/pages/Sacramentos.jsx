@@ -102,8 +102,17 @@ export default function Sacramentos() {
         <div className={styles.contenedor}>
             <Navbar />
             <div className={styles.contenido}>
+                {/* ── Hero encabezado ── */}
+                <div className={styles.hero}>
+                    <div className={styles.heroTexto}>
+                        <div className={styles.heroTituloFila}>
+                            <span className={styles.heroIcono}>✝️</span>
+                            <h1 className={styles.heroTitulo}>Sacramentos</h1>
+                        </div>
+                        <p className={styles.heroSub}>Registro de feligreses y sacramentos · Parroquia San Agustín</p>
+                    </div>
+                </div>
                 <div className={styles.encabezado}>
-                    <h1 className={styles.titulo}>Registro de Sacramentos</h1>
                     <div className={styles.tabs}>
                         {['buscar', 'nuevo', 'sacramento'].map(t => (
                             <button key={t}
