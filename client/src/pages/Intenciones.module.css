@@ -7,12 +7,18 @@
 }
 
 .contenedor {
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 32px 24px 48px;
+    min-height: 100vh;
+    position: relative;
+    background-color: var(--bg-page);
+    /* Fondo parroquial con overlay — igual que el login */
+    background-image: url('/fotos/parroquia-exterior.jpg');
+    background-size: cover;
+    background-position: center 30%;
+    background-attachment: fixed;
+    transition: background-color 0.3s;
     color: var(--texto-principal);
-    transition: color 0.3s;
 }
+
 
 /* ─── Hero encabezado ─────────────────────────────────────────── */
 .hero {
