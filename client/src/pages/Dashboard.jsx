@@ -99,9 +99,9 @@ export default function Dashboard() {
         } finally {
             setCargando(false);
         }
-    }, [intento, periodo]); // eslint-disable-line
+    }, [periodo]);
 
-    useEffect(() => { cargar(); }, [cargar]);
+    useEffect(() => { cargar(); }, [cargar, intento]);
 
     /* ── KPIs ─────────────────────────────────────────────────────── */
     const totalIngresos      = resumenTesoreria?.resumen?.total_ingresos      ?? 0;
