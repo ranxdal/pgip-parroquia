@@ -51,7 +51,7 @@ export default function Navbar() {
         <nav className={styles.navbar}>
             <div className={styles.navContenido}>
                 {/* Logo */}
-                <div className={styles.navLogo} onClick={() => navegar('/dashboard')}
+                <div className={styles.navLogo} onClick={() => navegar('/hub')}
                      style={{ cursor: 'pointer' }}>
                     <span className={styles.navLogoPrincipal}>PGIP</span>
                     <span className={styles.navLogoSep} />

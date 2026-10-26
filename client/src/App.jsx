@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import Login from './pages/Login';
+import Hub from './pages/Hub';
 import Dashboard from './pages/Dashboard';
 import Tesoreria from './pages/Tesoreria';
 import Sacrementos from './pages/Sacramentos';
@@ -26,7 +27,13 @@ export default function App() {
     return (
         <Routes>
             <Route path="/login" element={
-                usuario ? <Navigate to={usuario.rol === 'admin' ? '/dashboard' : '/tesoreria'} /> : <Login />
+                usuario ? <Navigate to="/hub" /> : <Login />
+            } />
+
+            <Route path="/hub" element={
+                <RutaProtegida>
+                    <Hub />
+                </RutaProtegida>
             } />
 
             <Route path="/dashboard" element={
@@ -77,7 +84,8 @@ export default function App() {
                 </RutaProtegida>
             } />
 
-            <Route path="*" element={<Navigate to="/login" />} />
+            <Route path="/" element={<Navigate to={usuario ? '/hub' : '/login'} />} />
+            <Route path="*" element={<Navigate to={usuario ? '/hub' : '/login'} />} />
         </Routes>
     );
 }
