@@ -6,7 +6,6 @@
     min-height: 100vh;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    /* Imagen de fondo cubre TODO el login */
     background-image: url('/fotos/parroquia-exterior.jpg');
     background-size: cover;
     background-position: center 30%;
@@ -15,12 +14,14 @@
     position: relative;
 }
 
-/* Overlay oscuro sobre la foto — más suave para dejar ver la imagen */
+/* Overlay difuminado oscuro uniforme sobre toda la foto */
 .pagina::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: rgba(20, 8, 2, 0.42);
+    background: rgba(10, 4, 1, 0.62);
+    backdrop-filter: blur(3px) saturate(1.2);
+    -webkit-backdrop-filter: blur(3px) saturate(1.2);
     z-index: 0;
 }
 
@@ -38,9 +39,10 @@
         display: none;
     }
     .panelForm {
-        background: rgba(20, 8, 2, 0.65);
+        background: transparent;
         min-height: 100vh;
         border-left: none;
+        padding: 32px 20px;
     }
 }
 
@@ -56,13 +58,13 @@
 
 
 .imagenOverlay {
+    /* Gradiente suave solo en la parte inferior para el texto */
     position: absolute;
     inset: 0;
     background: linear-gradient(
         to bottom,
-        rgba(10, 3, 0, 0.45) 0%,
-        rgba(10, 3, 0, 0.72) 60%,
-        rgba(10, 3, 0, 0.88) 100%
+        transparent 30%,
+        rgba(10, 3, 0, 0.35) 100%
     );
     z-index: 1;
 }
@@ -143,21 +145,24 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    /* Sin blur de fondo — transparente sobre la foto */
-    background: rgba(20, 8, 2, 0.55);
-    border-left: 1px solid rgba(201, 151, 58, 0.22);
+    /* Panel derecho sin separación — mismo fondo que el izquierdo */
+    background: transparent;
+    border-left: none;
     padding: 40px 24px;
 }
 
 .formContenido {
     width: 100%;
-    max-width: 360px;
-    background: rgba(20, 8, 2, 0.32);
-    border: 1px solid rgba(201, 151, 58, 0.18);
-    border-radius: 12px;
+    max-width: 380px;
+    /* Card aclarado con blur propio — destaca sobre el fondo difuminado */
+    background: rgba(44, 26, 14, 0.55);
+    backdrop-filter: blur(20px) saturate(1.5);
+    -webkit-backdrop-filter: blur(20px) saturate(1.5);
+    border: 1px solid rgba(201, 151, 58, 0.28);
+    border-radius: 16px;
     padding: 36px 32px;
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.45),
-                inset 0 1px 0 rgba(201, 151, 58, 0.12);
+    box-shadow: 0 8px 48px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(201, 151, 58, 0.15);
 }
 
 /* Logo imagen arriba del formulario */
