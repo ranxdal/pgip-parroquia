@@ -1,4 +1,4 @@
-/* ─── Dashboard — PGIP ────────────────────────────────────────────── */
+/* ─── Dashboard — PGIP Parroquia San Agustín ──────────────────────── */
 
 .contenedor {
     min-height: 100vh;
@@ -7,27 +7,56 @@
 }
 
 .contenido {
-    padding: 24px 20px;
-    max-width: 1200px;
+    padding: 32px 24px 100px;   /* 100px al fondo para la barra flotante */
+    max-width: 1280px;
     margin: 0 auto;
 }
 
-/* ─── Encabezado ─────────────────────────────────────────────────── */
-.encabezado {
+/* ─── Hero encabezado ────────────────────────────────────────────── */
+.hero {
+    margin-bottom: 28px;
+    padding: 28px 32px;
+    background: var(--fondo-card);
+    border: 1px solid var(--borde);
+    border-top: 3px solid var(--oro);
+    border-radius: var(--radio-lg);
+    box-shadow: var(--sombra-card);
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
+    align-items: flex-end;
     flex-wrap: wrap;
+    gap: 16px;
+    transition: background 0.3s;
+}
+
+.heroTexto {}
+
+.heroTituloFila {
+    display: flex;
+    align-items: center;
     gap: 12px;
+    margin-bottom: 4px;
+}
+
+.heroIcono {
+    font-size: 1.5rem;
+    opacity: 0.9;
 }
 
 .titulo {
-    font-family: var(--fuente-display);
-    font-size: 1.5rem;
-    font-weight: 600;
+    font-family: 'Cinzel', 'Georgia', serif;
+    font-size: 1.55rem;
+    font-weight: 700;
     color: var(--texto-principal);
-    letter-spacing: 0.02em;
+    letter-spacing: 0.04em;
+    margin: 0;
+}
+
+.heroSub {
+    font-size: 0.78rem;
+    color: var(--texto-tenue);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     margin: 0;
 }
 
@@ -39,25 +68,25 @@
 }
 
 .filtroBton {
-    padding: 7px 16px;
+    padding: 7px 18px;
     border: 1px solid var(--borde);
     border-radius: 20px;
-    font-size: 0.8rem;
-    font-family: var(--fuente-cuerpo);
-    font-weight: 500;
+    font-size: 0.75rem;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     cursor: pointer;
     transition: background 0.2s, color 0.2s, border-color 0.2s;
-    background: var(--fondo-panel);
+    background: transparent;
     color: var(--texto-suave);
 }
 
 .filtroBton:hover {
-    border-color: var(--borde-activo);
-    color: var(--texto-principal);
-    background: var(--fondo-hover);
+    border-color: var(--oro);
+    color: var(--oro);
 }
 
-/* Activo: fondo dorado, texto oscuro — visible en ambos modos */
 .filtroBtonActivo {
     background: var(--oro) !important;
     color: #2C1A0E !important;
@@ -75,70 +104,104 @@
 
 .alerta {
     background: var(--fondo-card);
-    border-left: 4px solid;
+    border-left: 3px solid;
     border-top: 1px solid var(--borde);
     border-right: 1px solid var(--borde);
     border-bottom: 1px solid var(--borde);
-    padding: 10px 14px;
+    padding: 10px 16px;
     border-radius: var(--radio);
-    font-size: 0.875rem;
+    font-size: 0.85rem;
     color: var(--texto-suave);
     box-shadow: var(--sombra-card);
     transition: background 0.3s;
 }
 
-.alertaUrgente    { border-left-color: var(--error); }
+.alertaUrgente     { border-left-color: var(--error); }
 .alertaAdvertencia { border-left-color: var(--advertencia); }
 .alertaInformacion { border-left-color: #63b3ed; }
 
 /* ─── Cargando ───────────────────────────────────────────────────── */
 .cargando {
     text-align: center;
-    padding: 60px;
+    padding: 80px;
     color: var(--texto-tenue);
     font-size: 0.9rem;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.06em;
 }
+
+.cargandoSpinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid rgba(201, 151, 58, 0.2);
+    border-top-color: var(--oro);
+    border-radius: 50%;
+    animation: girar 0.8s linear infinite;
+    margin: 0 auto 16px;
+}
+
+@keyframes girar { to { transform: rotate(360deg); } }
 
 /* ─── KPI Grid ───────────────────────────────────────────────────── */
 .kpiGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 14px;
-    margin-bottom: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
 }
 
 .kpiTarjeta {
     background: var(--fondo-card);
     border: 1px solid var(--borde);
-    padding: 20px;
+    border-top: 3px solid var(--oro);        /* línea dorada superior característica */
+    padding: 20px 22px;
     border-radius: var(--radio-lg);
     box-shadow: var(--sombra-card);
-    transition: background 0.3s, border-color 0.3s;
+    transition: background 0.3s, border-color 0.3s, transform 0.2s, box-shadow 0.2s;
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+}
+
+.kpiTarjeta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+
+/* ícono decorativo en esquina superior derecha */
+.kpiIcono {
+    position: absolute;
+    top: 16px;
+    right: 18px;
+    font-size: 1.5rem;
+    opacity: 0.18;
+    pointer-events: none;
+    user-select: none;
 }
 
 .kpiEtiqueta {
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.07em;
+    letter-spacing: 0.1em;
     color: var(--texto-tenue);
     margin: 0 0 10px;
-    font-family: var(--fuente-cuerpo);
+    font-family: 'Cinzel', serif;
 }
 
 .kpiValor {
-    font-size: 1.6rem;
+    font-size: 1.75rem;
     font-weight: 700;
-    font-family: var(--fuente-display);
+    font-family: 'Cinzel', serif;
     color: var(--oro);
     margin: 0;
     line-height: 1.1;
 }
 
 .kpiValorExito {
-    font-size: 1.6rem;
+    font-size: 1.75rem;
     font-weight: 700;
-    font-family: var(--fuente-display);
+    font-family: 'Cinzel', serif;
     color: var(--exito);
     margin: 0;
     line-height: 1.1;
@@ -147,14 +210,35 @@
 .kpiSub {
     font-size: 0.72rem;
     color: var(--texto-tenue);
-    margin: 6px 0 0;
+    margin: 8px 0 0;
+}
+
+/* ─── Sección de gráficas ────────────────────────────────────────── */
+.seccionTitulo {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--texto-tenue);
+    margin: 28px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.seccionTitulo::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--borde);
 }
 
 /* ─── Gráficas ───────────────────────────────────────────────────── */
 .graficaContenedor {
     background: var(--fondo-card);
     border: 1px solid var(--borde);
-    padding: 20px;
+    padding: 22px 24px;
     border-radius: var(--radio-lg);
     box-shadow: var(--sombra-card);
     margin-bottom: 16px;
@@ -162,18 +246,171 @@
     transition: background 0.3s, border-color 0.3s;
 }
 
+.graficaEncabezado {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.graficaLinea {
+    width: 3px;
+    height: 18px;
+    background: var(--oro);
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
 .graficaTitulo {
-    font-family: var(--fuente-display);
-    font-size: 0.95rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
     font-weight: 600;
     color: var(--texto-principal);
-    margin: 0 0 16px;
-    letter-spacing: 0.02em;
+    margin: 0;
+    letter-spacing: 0.04em;
+}
+
+/* ─── Grid 2 columnas para gráficas ─────────────────────────────── */
+.graficasGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+@media (max-width: 860px) {
+    .graficasGrid { grid-template-columns: 1fr; }
+}
+
+/* ─── Desglose por concepto ──────────────────────────────────────── */
+.conceptoGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+}
+
+.conceptoCard {
+    background: var(--fondo-panel);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    padding: 14px 16px;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.conceptoCard:hover {
+    border-color: rgba(201, 151, 58, 0.5);
+    background: var(--fondo-hover);
+}
+
+.conceptoEtiqueta {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--texto-tenue);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 0 0 8px;
+    font-family: 'Cinzel', serif;
+}
+
+.conceptoMonto {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--oro);
+    margin: 0 0 4px;
+    font-family: 'Cinzel', serif;
+}
+
+.conceptoCantidad {
+    font-size: 0.78rem;
+    color: var(--texto-tenue);
+    margin: 0;
+}
+
+/* ─── Sin datos ──────────────────────────────────────────────────── */
+.sinDatos {
+    text-align: center;
+    padding: 40px;
+    color: var(--texto-tenue);
+    font-size: 0.9rem;
+}
+
+/* ─── Barra de accesos rápidos (inferior flotante) ───────────────── */
+.accesosBarra {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 40;
+    background: var(--fondo-card);
+    border-top: 1px solid rgba(201, 151, 58, 0.3);
+    box-shadow: 0 -4px 24px rgba(0,0,0,0.14);
+    padding: 10px 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.3s;
+}
+
+.accesoLabel {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--texto-tenue);
+    font-family: 'Cinzel', serif;
+    margin-right: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.accesoBtn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 8px 14px;
+    background: transparent;
+    border: 1px solid var(--borde);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    color: var(--texto-suave);
+    min-width: 72px;
+}
+
+.accesoBtn:hover {
+    border-color: var(--oro);
+    background: rgba(201, 151, 58, 0.07);
+    transform: translateY(-2px);
+}
+
+.accesoBtnIcono {
+    font-size: 1.2rem;
+    line-height: 1;
+}
+
+.accesoBtnLabel {
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    font-family: 'Cinzel', serif;
+    color: inherit;
+    white-space: nowrap;
 }
 
 /* ─── Responsive ─────────────────────────────────────────────────── */
-@media (max-width: 480px) {
-    .encabezado { flex-direction: column; align-items: flex-start; }
+@media (max-width: 640px) {
+    .contenido { padding: 20px 16px 100px; }
+    .hero { padding: 20px; }
     .kpiGrid { grid-template-columns: 1fr 1fr; }
     .titulo { font-size: 1.25rem; }
+    .accesosBarra { gap: 4px; padding: 10px 12px; }
+    .accesoBtn { min-width: 56px; padding: 7px 8px; }
+    .accesoLabel { display: none; }
+}
+
+@media (max-width: 400px) {
+    .kpiGrid { grid-template-columns: 1fr; }
 }
