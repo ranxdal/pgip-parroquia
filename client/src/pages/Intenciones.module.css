@@ -19,6 +19,16 @@
     color: var(--texto-principal);
 }
 
+/* Overlay oscuro sobre la imagen de fondo */
+.contenedor::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: var(--bg-page);
+    opacity: 0.90;
+    z-index: 0;
+    pointer-events: none;
+}
 
 /* ─── Hero encabezado ─────────────────────────────────────────── */
 .hero {
