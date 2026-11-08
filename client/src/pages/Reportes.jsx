@@ -290,7 +290,6 @@ export default function Reportes() {
                 <div className={styles.tipoGrid}>
                     {[
                         { valor: 'tesoreria',    etiqueta: 'Tesoreria' },
-                        { valor: 'intenciones',  etiqueta: 'Intenciones de Misa' },
                         { valor: 'certificados', etiqueta: 'Certificados' },
                     ].map(t => (
                         <button

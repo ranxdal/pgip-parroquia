@@ -3,6 +3,7 @@ import api from '../services/api';
 import Navbar from '../components/Navbar';
 import styles from './Certificados.module.css';
 import jsPDF from 'jspdf';
+import QRCode from 'qrcode';
 
 const TIPO_COLOR = {
     bautismo:     { bg: '#ebf8ff', color: '#2b6cb0' },
@@ -475,6 +476,35 @@ export default function Certificados() {
         const serie = `PGIP-${sacramento.tipo.toUpperCase().slice(0, 3)}-${Date.now().toString().slice(-8)}`;
         doc.text(`Serie: ${serie}`, 14, 273);
         doc.text(`Emitido: ${fechaEmision}`, 204, 273, { align: 'right' });
+
+        // ── Código QR de verificación ──────────────────────────────
+        try {
+            const tipoLabel = { bautismo: 'Bautismo', confirmacion: 'Confirmación', matrimonio: 'Matrimonio' };
+            const qrTexto = [
+                'PARROQUIA SAN AGUSTÍN DE SUMPANGO',
+                `Documento: Constancia de ${tipoLabel[sacramento.tipo] || sacramento.tipo}`,
+                `Nombre: ${feligres.nombres} ${feligres.apellidos}`,
+                `Fecha del sacramento: ${diaSacramento} de ${mesSacramento} de ${anioSacramento}`,
+                `Libro: ${sacramento.libro || '-'}   Folio: ${sacramento.folio || '-'}   Partida: ${sacramento.partida || '-'}`,
+                `Ministro: ${sacramento.ministro || '-'}`,
+                `Serie: ${serie}`,
+                `Emitido: ${fechaEmision}`,
+                'Verificado mediante PGIP - Sistema de Gestión Parroquial',
+            ].join('\n');
+
+            const qrDataUrl = await QRCode.toDataURL(qrTexto, {
+                errorCorrectionLevel: 'M',
+                margin: 1,
+                width: 200,
+            });
+            // Posicionar QR en esquina inferior derecha, dentro del borde
+            doc.addImage(qrDataUrl, 'PNG', 171, 228, 30, 30);
+            doc.setFontSize(6);
+            doc.setFont('times', 'normal');
+            doc.setTextColor(120, 120, 120);
+            doc.text('Escanear para', 186, 260, { align: 'center' });
+            doc.text('verificar autenticidad', 186, 263.5, { align: 'center' });
+        } catch { /* QR no disponible, continuar sin él */ }
 
         doc.save(`constancia_${sacramento.tipo}_${feligres.apellidos.replace(/\s/g, '_')}.pdf`);
     };
