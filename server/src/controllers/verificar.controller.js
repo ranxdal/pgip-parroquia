@@ -13,7 +13,7 @@ const verificarCertificado = async (req, res) => {
         const { rows } = await pool.query(
             `SELECT
                 t.correlativo,
-                t.fecha,
+                sc.fecha,
                 t.hora,
                 t.monto,
                 t.concepto,
