@@ -9,7 +9,7 @@ const sacrarentosRoutes = require('./src/routes/sacramentos.routes');
 const authRoutes        = require('./src/routes/auth.routes');
 const tesoreriaRoutes   = require('./src/routes/tesoreria.routes');
 const reportesRoutes    = require('./src/routes/reportes.routes');
-const verificarRoutes   = require('./src/routes/verificar.routes');
+const verificarRoutes   = require('./src/routes/Verificar.routes');
 
 const app = express();
 
