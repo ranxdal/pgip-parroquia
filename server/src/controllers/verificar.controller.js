@@ -13,16 +13,14 @@ const verificarCertificado = async (req, res) => {
         const { rows } = await pool.query(
             `SELECT
                 t.correlativo,
-                sc.fecha,
-                t.hora,
                 t.monto,
                 t.concepto,
-                t.tipo,
+                t.tipo_certificado,
+                t.created_at,
                 u.nombres   AS nombre_usuario,
                 u.apellidos AS apellido_usuario
              FROM pgip.transaccion t
-             LEFT JOIN pgip.sesion_caja sc ON sc.id = t.sesion_caja_id
-             LEFT JOIN pgip.usuario u      ON u.id  = sc.usuario_id
+             LEFT JOIN pgip.usuario u ON u.id = t.usuario_id
              WHERE t.correlativo = $1`,
             [serie]
         );
@@ -46,17 +44,20 @@ const verificarCertificado = async (req, res) => {
             }));
         }
 
-        const tipo   = tx.concepto.replace('certificado_', '');
+        const tipo   = tx.tipo_certificado || tx.concepto.replace('certificado_', '');
         const emisor = tx.nombre_usuario
             ? `${tx.nombre_usuario} ${tx.apellido_usuario}`
             : 'Secretaría Parroquial';
+
+        const fechaEmision = tx.created_at
+            ? new Date(tx.created_at).toLocaleDateString('es-GT', { day: 'numeric', month: 'long', year: 'numeric' })
+            : '—';
 
         return res.send(paginaHTML({
             valido: true,
             serie,
             tipo,
-            fecha:  tx.fecha,
-            hora:   tx.hora,
+            fecha:  fechaEmision,
             monto:  tx.monto,
             emisor,
         }));
@@ -72,7 +73,7 @@ const verificarCertificado = async (req, res) => {
 };
 
 /* ── Página HTML de respuesta ──────────────────────────────────── */
-function paginaHTML({ valido, serie, tipo, fecha, hora, monto, emisor, mensaje }) {
+function paginaHTML({ valido, serie, tipo, fecha, monto, emisor, mensaje }) {
     const TIPOS = {
         bautismo:     'Bautismo',
         confirmacion: 'Confirmación',
@@ -86,7 +87,6 @@ function paginaHTML({ valido, serie, tipo, fecha, hora, monto, emisor, mensaje }
     const detalles = valido ? `
         <div class="fila"><span class="etiqueta">Tipo de sacramento</span><span class="valor">${TIPOS[tipo] || tipo}</span></div>
         <div class="fila"><span class="etiqueta">Fecha de emisión</span><span class="valor">${fecha || '—'}</span></div>
-        <div class="fila"><span class="etiqueta">Hora</span><span class="valor">${hora || '—'}</span></div>
         <div class="fila"><span class="etiqueta">Monto cobrado</span><span class="valor">Q${parseFloat(monto || 0).toFixed(2)}</span></div>
         <div class="fila"><span class="etiqueta">Emitido por</span><span class="valor">${emisor}</span></div>
         <div class="fila"><span class="etiqueta">Número de serie</span><span class="valor mono">${serie}</span></div>
