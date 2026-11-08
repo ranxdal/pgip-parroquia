@@ -9,6 +9,7 @@ const sacrarentosRoutes = require('./src/routes/sacramentos.routes');
 const authRoutes        = require('./src/routes/auth.routes');
 const tesoreriaRoutes   = require('./src/routes/tesoreria.routes');
 const reportesRoutes    = require('./src/routes/reportes.routes');
+const { verificarCertificado } = require('./src/controllers/verificar.controller');
 
 const app = express();
 
@@ -39,6 +40,7 @@ app.use('/api/intenciones', intencionesRoutes);
 app.use('/api/sacramentos', sacrarentosRoutes);
 app.use('/api/tesoreria',   tesoreriaRoutes);
 app.use('/api/reportes',    reportesRoutes);
+app.use('/verificar/:serie', verificarCertificado); // Ruta pública — sin token, para que funcione al escanear el QR
 
 app.get('/api/ping', (req, res) => {
     res.json({ mensaje: 'Servidor PGIP funcionando correctamente' });

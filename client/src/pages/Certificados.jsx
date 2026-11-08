@@ -479,20 +479,9 @@ export default function Certificados() {
 
         // ── Código QR de verificación ──────────────────────────────
         try {
-            const tipoLabel = { bautismo: 'Bautismo', confirmacion: 'Confirmación', matrimonio: 'Matrimonio' };
-            const qrTexto = [
-                'PARROQUIA SAN AGUSTÍN DE SUMPANGO',
-                `Documento: Constancia de ${tipoLabel[sacramento.tipo] || sacramento.tipo}`,
-                `Nombre: ${feligres.nombres} ${feligres.apellidos}`,
-                `Fecha del sacramento: ${diaSacramento} de ${mesSacramento} de ${anioSacramento}`,
-                `Libro: ${sacramento.libro || '-'}   Folio: ${sacramento.folio || '-'}   Partida: ${sacramento.partida || '-'}`,
-                `Ministro: ${sacramento.ministro || '-'}`,
-                `Serie: ${serie}`,
-                `Emitido: ${fechaEmision}`,
-                'Verificado mediante PGIP - Sistema de Gestión Parroquial',
-            ].join('\n');
+            const urlVerificacion = `https://pgip-backend.onrender.com/verificar/${serie}`;
 
-            const qrDataUrl = await QRCode.toDataURL(qrTexto, {
+            const qrDataUrl = await QRCode.toDataURL(urlVerificacion, {
                 errorCorrectionLevel: 'M',
                 margin: 1,
                 width: 200,
