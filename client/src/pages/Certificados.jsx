@@ -206,10 +206,10 @@ export default function Certificados() {
         // Encabezado
         doc.setTextColor(color.r, color.g, color.b);
         doc.setFontSize(15);
-        doc.setFont('helvetica', 'bold');
+        doc.setFont('times', 'bold');
         doc.text('PARROQUIA SAN AGUSTÍN', 125, 21, { align: 'center' });
         doc.setFontSize(8.5);
-        doc.setFont('helvetica', 'normal');
+        doc.setFont('times', 'normal');
         doc.text('Vicaría Episcopal de Sacatepéquez', 125, 27, { align: 'center' });
         doc.text('"Santo Hermano Pedro"', 125, 32, { align: 'center' });
         doc.text('Arquidiócesis de Santiago de Guatemala.', 125, 37, { align: 'center' });
@@ -227,7 +227,7 @@ export default function Certificados() {
             matrimonio:   'CONSTANCIA DE MATRIMONIO RELIGIOSO'
         };
         doc.setFontSize(13);
-        doc.setFont('helvetica', 'bold');
+        doc.setFont('times', 'bold');
         doc.setTextColor(color.r, color.g, color.b);
         doc.text(titulos[sacramento.tipo], 109, 55, { align: 'center' });
 
@@ -235,7 +235,7 @@ export default function Certificados() {
         const xR = 201;
 
         const campo = (etiqueta, valor, y, xIni = xL, xFin = xR) => {
-            doc.setFont('helvetica', 'normal');
+            doc.setFont('times', 'normal');
             doc.setTextColor(30, 30, 30);
             doc.text(etiqueta, xIni, y);
             const w = doc.getTextWidth(etiqueta);
@@ -243,7 +243,7 @@ export default function Certificados() {
             doc.setLineWidth(0.3);
             doc.line(xIni + w + 1, y + 1, xFin, y + 1);
             if (valor) {
-                doc.setFont('helvetica', 'bold');
+                doc.setFont('times', 'bold');
                 doc.setTextColor(color.r, color.g, color.b);
                 doc.text(valor, xIni + w + 3, y);
             }
@@ -256,13 +256,13 @@ export default function Certificados() {
         };
 
         const txt = (texto, x, y) => {
-            doc.setFont('helvetica', 'normal');
+            doc.setFont('times', 'normal');
             doc.setTextColor(30, 30, 30);
             doc.text(texto, x, y);
         };
 
         const bold = (texto, x, y) => {
-            doc.setFont('helvetica', 'bold');
+            doc.setFont('times', 'bold');
             doc.setTextColor(color.r, color.g, color.b);
             doc.text(texto, x, y);
         };
@@ -326,7 +326,7 @@ export default function Certificados() {
             txt('De esta', xL + 141, y);
             y += lh;
             txt('Parroquia de San Agustín, consta que el', xL, y);
-            const xDia = xL + doc.getTextWidth('Parroquia, consta que el') + 2;
+            const xDia = xL + doc.getTextWidth('Parroquia de San Agustín, consta que el') + 2;
             bold(String(diaSacramento), xDia, y);
             const xDe1 = xDia + doc.getTextWidth(String(diaSacramento)) + 2;
             txt('de', xDe1, y);
@@ -351,9 +351,11 @@ export default function Certificados() {
             } else {
                 campo('de:', '', y); y += lh;
             }
-            campo('bautizado en la Parroquia de', '', y); y += lh;
-            campo('Hijo (a) de:', '', y); y += lhS; linea(y); y += lh;
-            campo('y de:', '', y); y += lhS; linea(y); y += lh + 2;
+            campo('bautizado en la Parroquia de', 'San Agustín de Sumpango', y); y += lh;
+            const nombrePadre = feligres.nombre_padre || feligres.padre || '';
+            const nombreMadre = feligres.nombre_madre || feligres.madre || '';
+            campo('Hijo (a) de:', nombrePadre, y); y += lhS; linea(y); y += lh;
+            campo('y de:', nombreMadre, y); y += lhS; linea(y); y += lh + 2;
             campo('Padrinos:', sacramento.padrino_1 || '', y); y += lhS;
             if (sacramento.padrino_2) bold(sacramento.padrino_2, xL, y);
             linea(y); y += lh;
@@ -380,10 +382,10 @@ export default function Certificados() {
             bold(String(anioSacramento), xA2 + 1, y);
             y += lh;
             txt('Contrajeron Matrimonio Religioso:', xL, y); y += lh;
-            doc.setFont('helvetica', 'bold');
+            doc.setFont('times', 'bold');
             doc.setTextColor(color.r, color.g, color.b);
             doc.text(`${feligres.nombres} ${feligres.apellidos}`, xL, y);
-            doc.setFont('helvetica', 'normal');
+            doc.setFont('times', 'normal');
             doc.setTextColor(30, 30, 30);
             linea(y); y += lh;
             // Siempre mostrar la segunda línea; si hay cónyuge, poner el nombre
@@ -391,12 +393,12 @@ export default function Certificados() {
             linea(y); y += lh;
             // Si no hay cónyuge registrado, mostrar una nota discreta
             if (!sacramento.conyuge) {
-                doc.setFont('helvetica', 'italic');
+                doc.setFont('times', 'italic');
                 doc.setFontSize(8);
                 doc.setTextColor(150, 150, 150);
                 doc.text('(nombre del cónyuge no registrado)', xL, y - 2);
                 doc.setFontSize(10);
-                doc.setFont('helvetica', 'normal');
+                doc.setFont('times', 'normal');
                 doc.setTextColor(30, 30, 30);
             }
             y += 2;
@@ -441,7 +443,7 @@ export default function Certificados() {
         doc.setLineWidth(0.5);
         doc.line(76, y, 148, y);
         y += 5;
-        doc.setFont('helvetica', 'bold');
+        doc.setFont('times', 'bold');
         doc.setTextColor(color.r, color.g, color.b);
         doc.setFontSize(10);
         doc.text('Párroco', 112, y, { align: 'center' });
@@ -453,7 +455,7 @@ export default function Certificados() {
         doc.setLineWidth(0.3);
         doc.line(14, 260, 204, 260);
         doc.setFontSize(7.5);
-        doc.setFont('helvetica', 'normal');
+        doc.setFont('times', 'normal');
         doc.setTextColor(color.r, color.g, color.b);
         doc.text('0 Calle 0-14 Zona 4, Sumpango Sacatepéquez. Guatemala C.A.', 109, 264, { align: 'center' });
         doc.text('Teléfono: 7833-1366  •  E-mail: sanagustinparroquiasumpangosac@gmail.com', 109, 269, { align: 'center' });
@@ -461,14 +463,14 @@ export default function Certificados() {
         // Marca de agua
         doc.setTextColor(color.r, color.g, color.b);
         doc.setFontSize(50);
-        doc.setFont('helvetica', 'bold');
+        doc.setFont('times', 'bold');
         doc.setGState(new doc.GState({ opacity: 0.04 }));
         doc.text('PARROQUIA', 109, 150, { align: 'center', angle: 45 });
         doc.setGState(new doc.GState({ opacity: 1 }));
 
         // Número de serie
         doc.setFontSize(7);
-        doc.setFont('helvetica', 'normal');
+        doc.setFont('times', 'normal');
         doc.setTextColor(150, 150, 150);
         const serie = `PGIP-${sacramento.tipo.toUpperCase().slice(0, 3)}-${Date.now().toString().slice(-8)}`;
         doc.text(`Serie: ${serie}`, 14, 273);
