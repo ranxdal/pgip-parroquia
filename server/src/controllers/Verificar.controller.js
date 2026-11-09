@@ -18,7 +18,7 @@ const verificarCertificado = async (req, res) => {
                 t.tipo_certificado,
                 t.created_at,
                 u.nombre    AS nombre_usuario,
-                u.apellidos AS apellido_usuario
+                u.apellido AS apellido_usuario
              FROM pgip.transaccion t
              LEFT JOIN pgip.usuario u ON u.id = t.usuario_id
              WHERE t.correlativo = $1`,
