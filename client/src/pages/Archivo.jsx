@@ -38,6 +38,7 @@ export default function Archivo() {
     const [vista, setVista] = useState('subir');
     const [folios, setFolios] = useState([]);
     const [guardando, setGuardando] = useState(false);
+    const [folioId, setFolioId] = useState(null);
 
     const set = (campo, valor) => setForm(prev => ({ ...prev, [campo]: valor }));
 
@@ -49,6 +50,7 @@ export default function Archivo() {
         setPrevistaImagen(URL.createObjectURL(archivo));
         setTextoExtraido('');
         setConfianza(null);
+        setFolioId(null);
     };
 
     // ── OCR ─────────────────────────────────────────────────
@@ -71,8 +73,11 @@ export default function Archivo() {
             setTextoExtraido(data.folio.texto_extraido);
             setConfianza(data.ocr.confianza);
             setMotor(data.ocr.motor);
-            extraerDatosDelTexto(data.folio.texto_extraido);
-            setMensaje('Imagen procesada — verifique y complete los datos');
+            setFolioId(data.folio.id);
+            const n = extraerDatosDelTexto(data.folio.texto_extraido);
+            setMensaje(n > 0
+                ? `Imagen procesada — se detectaron ${n} campos. Verifique y corrija los datos`
+                : 'Imagen procesada — no se detectaron campos automáticamente, complételos manualmente');
         } catch (err) {
             setError(err.response?.data?.error || 'Error al procesar la imagen');
         } finally {
@@ -81,57 +86,73 @@ export default function Archivo() {
     };
 
     // ── Extracción automática de texto OCR ───────────────────
+    // Devuelve la cantidad de campos detectados.
     const extraerDatosDelTexto = (texto) => {
-        // Nombre
-        const mNombre = texto.match(/Nombre[:\s]+([A-ZÁÉÍÓÚÑ][a-záéíóúñA-ZÁÉÍÓÚÑ\s]+?)(?:\n|Pidió|Recibió|$)/i);
-        if (mNombre) {
-            const partes = mNombre[1].trim().split(' ');
-            setForm(prev => ({
-                ...prev,
-                nombres:   partes.slice(0, 2).join(' '),
-                apellidos: partes.slice(2).join(' ') || ''
-            }));
+        const MESES = { enero:'01',febrero:'02',marzo:'03',abril:'04',mayo:'05',junio:'06',julio:'07',
+            agosto:'08',septiembre:'09',octubre:'10',noviembre:'11',diciembre:'12' };
+        const t = (texto || '').replace(/\r/g, '');
+        const limpiar = (s) => (s || '')
+            .replace(/\bNN\b/g, ' ')
+            .replace(/[^A-Za-zÁÉÍÓÚÑáéíóúñ\s]/g, ' ')
+            .replace(/\s+/g, ' ').trim();
+        const c = {};
+
+        // Tipo de sacramento
+        const tl = t.toLowerCase();
+        if (tl.includes('confirmaci')) c.tipo_sacramento = 'confirmacion';
+        else if (tl.includes('matrimonio')) c.tipo_sacramento = 'matrimonio';
+        else if (/bautismo|bautizo|bautiz/.test(tl)) c.tipo_sacramento = 'bautismo';
+
+        // Fecha del sacramento (solo el texto anterior a "Bautizado")
+        const RE_FECHA = /(\d{1,2})[^A-Za-z0-9]{0,20}de[^A-Za-z0-9]{0,20}(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)[^A-Za-z0-9]{0,20}de\s*(\d{4})/i;
+        const mF = t.split(/bautizad/i)[0].match(RE_FECHA);
+        if (mF) c.fecha_sacramento = `${mF[3]}-${MESES[mF[2].toLowerCase()]}-${mF[1].padStart(2, '0')}`;
+
+        // Nombre: línea que sigue a "Recibió el Sacramento de ..." o etiqueta "Nombre:"
+        const mNom = t.match(/sacramento\s+de\s+(?:la\s+)?(?:confirmaci[oó]n|matrimonio|bautismo)[^\n]*\n+([^\n]+)/i)
+                  || t.match(/nombre[:\s]+([^\n]+)/i);
+        if (mNom) {
+            const p = limpiar(mNom[1]).replace(/\s+Y$/i, '').split(' ').filter(Boolean);
+            const n = p.length >= 4 ? 2 : 1;
+            c.nombres   = p.slice(0, n).join(' ');
+            c.apellidos = p.slice(n).join(' ');
         }
 
-        // Fecha del sacramento
-        const mFecha = texto.match(/(\d{1,2})\s+(?:de\s+)?([a-záéíóúñ]+)\s+(?:de\s+)?(\d{4})/i);
-        if (mFecha) {
-            const meses = {
-                'enero':'01','febrero':'02','marzo':'03','abril':'04',
-                'mayo':'05','junio':'06','julio':'07','agosto':'08',
-                'septiembre':'09','octubre':'10','noviembre':'11','diciembre':'12'
-            };
-            const mes = meses[mFecha[2].toLowerCase()];
-            if (mes) {
-                setForm(prev => ({
-                    ...prev,
-                    fecha_sacramento: `${mFecha[3]}-${mes}-${mFecha[1].padStart(2,'0')}`
-                }));
-            }
+        // Padres: "HIJO de X" + madre en la línea siguiente, o "X y de Y" en la misma línea
+        const mHijo = t.match(/hij[oa]\s+(?:leg[ií]tim[oa]\s+)?de\s+([^\n]+)(?:\n+([^\n]+))?/i);
+        if (mHijo) {
+            const l1 = limpiar(mHijo[1].split(/[,;]|\bpadrinos?\b/i)[0]);
+            const d = l1.split(/\s+y\s+(?:de\s+)?/i);
+            if (d.length >= 2) { c.nombre_padre = d[0]; c.nombre_madre = d[1]; }
+            else { c.nombre_padre = l1; c.nombre_madre = limpiar(mHijo[2]); }
         }
 
-        // Tipo
-        const tl = texto.toLowerCase();
-        if (tl.includes('confirmacion') || tl.includes('confirmación')) {
-            setForm(prev => ({ ...prev, tipo_sacramento: 'confirmacion' }));
-        } else if (tl.includes('matrimonio')) {
-            setForm(prev => ({ ...prev, tipo_sacramento: 'matrimonio' }));
-        } else if (tl.includes('bautismo') || tl.includes('bautizo')) {
-            setForm(prev => ({ ...prev, tipo_sacramento: 'bautismo' }));
+        // Padrinos: "Padrino o Madrina A Y B"
+        const mPad = t.match(/padrinos?(?:\s+o\s+madrinas?)?\s+([^\n]+)/i);
+        if (mPad) {
+            const partes = limpiar(mPad[1]).split(/\s+y\s+/i);
+            c.padrino_1 = partes[0];
+            c.padrino_2 = partes[1];
         }
+
+        const encontrados = Object.fromEntries(Object.entries(c).filter(([, v]) => v));
+        setForm(prev => ({ ...prev, ...encontrados }));
+        return Object.keys(encontrados).length;
     };
 
     // ── Guardar ──────────────────────────────────────────────
     const guardarFolio = async () => {
         setGuardando(true);
+        setError('');
         try {
-            await api.post('/archivo/guardar', form);
+            await api.post('/archivo/guardar', { ...form, id: folioId });
             setMensaje('Datos guardados exitosamente');
             setForm(FORM_INICIAL);
             setImagen(null);
             setPrevistaImagen(null);
             setTextoExtraido('');
             setConfianza(null);
+            setFolioId(null);
         } catch (err) {
             setError(err.response?.data?.error || 'Error al guardar');
         } finally {
@@ -249,6 +270,13 @@ export default function Archivo() {
                                         onChange={e => setTextoExtraido(e.target.value)}
                                         className={styles.textarea}
                                         rows={6} />
+                                    <button onClick={() => {
+                                            const n = extraerDatosDelTexto(textoExtraido);
+                                            setMensaje(`Se detectaron ${n} campos del texto`);
+                                        }}
+                                        className={styles.botonPrimario}>
+                                        🔄 Volver a extraer datos del texto
+                                    </button>
                                 </div>
                             )}
                         </div>
