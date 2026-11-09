@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import api from '../services/api';
+import { extraerCampos } from '../services/extraerCampos';
 import Navbar from '../components/Navbar';
 import styles from './Archivo.module.css';
 
@@ -85,58 +86,20 @@ export default function Archivo() {
         }
     };
 
-    // ── Extracción automática de texto OCR ───────────────────
-    // Devuelve la cantidad de campos detectados.
+    // ── Extracción automática de campos a partir del texto OCR ──
+    // La lógica está en services/extraerCampos.js. Devuelve cuántos campos detectó.
+    // Libro / folio / partida escritos a mano antes de procesar no se pisan.
     const extraerDatosDelTexto = (texto) => {
-        const MESES = { enero:'01',febrero:'02',marzo:'03',abril:'04',mayo:'05',junio:'06',julio:'07',
-            agosto:'08',septiembre:'09',octubre:'10',noviembre:'11',diciembre:'12' };
-        const t = (texto || '').replace(/\r/g, '');
-        const limpiar = (s) => (s || '')
-            .replace(/\bNN\b/g, ' ')
-            .replace(/[^A-Za-zÁÉÍÓÚÑáéíóúñ\s]/g, ' ')
-            .replace(/\s+/g, ' ').trim();
-        const c = {};
-
-        // Tipo de sacramento
-        const tl = t.toLowerCase();
-        if (tl.includes('confirmaci')) c.tipo_sacramento = 'confirmacion';
-        else if (tl.includes('matrimonio')) c.tipo_sacramento = 'matrimonio';
-        else if (/bautismo|bautizo|bautiz/.test(tl)) c.tipo_sacramento = 'bautismo';
-
-        // Fecha del sacramento (solo el texto anterior a "Bautizado")
-        const RE_FECHA = /(\d{1,2})[^A-Za-z0-9]{0,20}de[^A-Za-z0-9]{0,20}(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)[^A-Za-z0-9]{0,20}de\s*(\d{4})/i;
-        const mF = t.split(/bautizad/i)[0].match(RE_FECHA);
-        if (mF) c.fecha_sacramento = `${mF[3]}-${MESES[mF[2].toLowerCase()]}-${mF[1].padStart(2, '0')}`;
-
-        // Nombre: línea que sigue a "Recibió el Sacramento de ..." o etiqueta "Nombre:"
-        const mNom = t.match(/sacramento\s+de\s+(?:la\s+)?(?:confirmaci[oó]n|matrimonio|bautismo)[^\n]*\n+([^\n]+)/i)
-                  || t.match(/nombre[:\s]+([^\n]+)/i);
-        if (mNom) {
-            const p = limpiar(mNom[1]).replace(/\s+Y$/i, '').split(' ').filter(Boolean);
-            const n = p.length >= 4 ? 2 : 1;
-            c.nombres   = p.slice(0, n).join(' ');
-            c.apellidos = p.slice(n).join(' ');
-        }
-
-        // Padres: "HIJO de X" + madre en la línea siguiente, o "X y de Y" en la misma línea
-        const mHijo = t.match(/hij[oa]\s+(?:leg[ií]tim[oa]\s+)?de\s+([^\n]+)(?:\n+([^\n]+))?/i);
-        if (mHijo) {
-            const l1 = limpiar(mHijo[1].split(/[,;]|\bpadrinos?\b/i)[0]);
-            const d = l1.split(/\s+y\s+(?:de\s+)?/i);
-            if (d.length >= 2) { c.nombre_padre = d[0]; c.nombre_madre = d[1]; }
-            else { c.nombre_padre = l1; c.nombre_madre = limpiar(mHijo[2]); }
-        }
-
-        // Padrinos: "Padrino o Madrina A Y B"
-        const mPad = t.match(/padrinos?(?:\s+o\s+madrinas?)?\s+([^\n]+)/i);
-        if (mPad) {
-            const partes = limpiar(mPad[1]).split(/\s+y\s+/i);
-            c.padrino_1 = partes[0];
-            c.padrino_2 = partes[1];
-        }
-
-        const encontrados = Object.fromEntries(Object.entries(c).filter(([, v]) => v));
-        setForm(prev => ({ ...prev, ...encontrados }));
+        const encontrados = extraerCampos(texto);
+        setForm(prev => {
+            const nuevo = { ...prev };
+            for (const [campo, valor] of Object.entries(encontrados)) {
+                const conservar = ['numero_libro', 'numero_folio', 'numero_partida'].includes(campo);
+                if (conservar && prev[campo]) continue;
+                nuevo[campo] = valor;
+            }
+            return nuevo;
+        });
         return Object.keys(encontrados).length;
     };
 
