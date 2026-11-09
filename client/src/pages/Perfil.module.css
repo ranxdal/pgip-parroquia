@@ -368,3 +368,41 @@
     letter-spacing: 0.06em;
     text-transform: uppercase;
 }
+.fotoUploadSeccion {
+    margin-bottom: 20px;
+    padding: 16px;
+    background: #f9f7f4;
+    border-radius: 8px;
+    border: 1px solid #e8e0d5;
+}
+.fotoUploadFila {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+}
+.nombreArchivo {
+    font-size: 13px;
+    color: #4a5568;
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.botonSecundario {
+    padding: 8px 16px;
+    background: #fff;
+    color: #276749;
+    border: 2px solid #276749;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+}
+.botonSecundario:hover {
+    background: #276749;
+    color: #fff;
+}

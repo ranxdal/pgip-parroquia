@@ -9,11 +9,19 @@ export default function Perfil() {
 
     // ── Datos del perfil ──────────────────────────────────
     const [formPerfil, setFormPerfil] = useState({
-        nombre: '', apellido: '', foto_url: ''
+        nombre: '', apellido: ''
     });
     const [guardandoPerfil, setGuardandoPerfil] = useState(false);
     const [mensajePerfil, setMensajePerfil] = useState('');
     const [errorPerfil, setErrorPerfil] = useState('');
+
+    // ── Foto de perfil ────────────────────────────────────
+    const [fotoPreview, setFotoPreview] = useState(null);
+    const [fotoArchivo, setFotoArchivo] = useState(null);
+    const [subiendoFoto, setSubiendoFoto] = useState(false);
+    const [mensajeFoto, setMensajeFoto] = useState('');
+    const [errorFoto, setErrorFoto] = useState('');
+    const fotoInputRef = useRef();
 
     // ── Contraseña ────────────────────────────────────────
     const [formPass, setFormPass] = useState({
@@ -33,10 +41,8 @@ export default function Perfil() {
     const [creando, setCreando] = useState(false);
     const [mensajeAdmin, setMensajeAdmin] = useState('');
     const [errorAdmin, setErrorAdmin] = useState('');
-    const [modalReset, setModalReset] = useState(null); // { id, nombre }
+    const [modalReset, setModalReset] = useState(null);
     const [nuevaPassReset, setNuevaPassReset] = useState('');
-
-    const fotoInputRef = useRef();
 
     // Cargar datos actuales al montar
     useEffect(() => {
@@ -44,8 +50,8 @@ export default function Perfil() {
             setFormPerfil({
                 nombre:   usuario.nombre   || '',
                 apellido: usuario.apellido || '',
-                foto_url: usuario.foto_url || ''
             });
+            setFotoPreview(usuario.foto_url || null);
         }
         if (usuario?.rol === 'admin') cargarUsuarios();
     }, []);
@@ -62,7 +68,58 @@ export default function Perfil() {
         }
     };
 
-    // ── Guardar perfil ────────────────────────────────────
+    // ── Seleccionar foto (solo preview local) ─────────────
+    const seleccionarFoto = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // Validar tamaño (2 MB)
+        if (file.size > 2 * 1024 * 1024) {
+            setErrorFoto('La imagen no puede superar 2 MB');
+            return;
+        }
+
+        setFotoArchivo(file);
+        setErrorFoto('');
+        setMensajeFoto('');
+
+        // Preview local inmediato
+        const reader = new FileReader();
+        reader.onload = (ev) => setFotoPreview(ev.target.result);
+        reader.readAsDataURL(file);
+    };
+
+    // ── Subir foto al servidor ────────────────────────────
+    const subirFoto = async () => {
+        if (!fotoArchivo) return;
+
+        setSubiendoFoto(true);
+        setErrorFoto('');
+        setMensajeFoto('');
+
+        try {
+            const formData = new FormData();
+            formData.append('foto', fotoArchivo);
+
+            const { data } = await api.post('/auth/perfil/foto', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' },
+            });
+
+            // Actualizar contexto global
+            setUsuario(prev => ({ ...prev, foto_url: data.usuario.foto_url }));
+            setFotoPreview(data.usuario.foto_url);
+            setFotoArchivo(null);
+            setMensajeFoto('Foto actualizada correctamente');
+        } catch (err) {
+            setErrorFoto(err.response?.data?.error || 'Error al subir la foto');
+            // Revertir preview al original
+            setFotoPreview(usuario?.foto_url || null);
+        } finally {
+            setSubiendoFoto(false);
+        }
+    };
+
+    // ── Guardar perfil (nombre y apellido) ────────────────
     const guardarPerfil = async (e) => {
         e.preventDefault();
         setGuardandoPerfil(true);
@@ -70,7 +127,6 @@ export default function Perfil() {
         setMensajePerfil('');
         try {
             const { data } = await api.put('/auth/perfil', formPerfil);
-            // Actualizar contexto global para que Navbar refleje el cambio
             setUsuario(prev => ({ ...prev, ...data.usuario }));
             setMensajePerfil('Perfil actualizado');
         } catch (err) {
@@ -79,9 +135,6 @@ export default function Perfil() {
             setGuardandoPerfil(false);
         }
     };
-
-    // ── Foto por URL ──────────────────────────────────────
-    const previewFoto = formPerfil.foto_url || usuario?.foto_url;
 
     // ── Cambiar contraseña ────────────────────────────────
     const cambiarContrasena = async (e) => {
@@ -181,8 +234,8 @@ export default function Perfil() {
 
                         <div className={styles.fotoSeccion}>
                             <div className={styles.fotoContenedor}>
-                                {previewFoto ? (
-                                    <img src={previewFoto} alt="Foto de perfil"
+                                {fotoPreview ? (
+                                    <img src={fotoPreview} alt="Foto de perfil"
                                         className={styles.fotoImg}
                                         onError={e => { e.target.style.display = 'none'; }} />
                                 ) : (
@@ -200,6 +253,58 @@ export default function Perfil() {
                                 </p>
                                 <p className={styles.textoGris}>@{usuario?.usuario}</p>
                             </div>
+                        </div>
+
+                        {/* ── Sección foto de perfil ── */}
+                        <div className={styles.fotoUploadSeccion}>
+                            <label className={styles.etiqueta}>Foto de perfil</label>
+
+                            {mensajeFoto && (
+                                <div className={styles.exito} onClick={() => setMensajeFoto('')}>
+                                    ✅ {mensajeFoto}
+                                </div>
+                            )}
+                            {errorFoto && (
+                                <div className={styles.errorDiv} onClick={() => setErrorFoto('')}>
+                                    ❌ {errorFoto}
+                                </div>
+                            )}
+
+                            <div className={styles.fotoUploadFila}>
+                                <input
+                                    type="file"
+                                    accept="image/jpeg,image/png,image/webp,image/gif"
+                                    ref={fotoInputRef}
+                                    onChange={seleccionarFoto}
+                                    style={{ display: 'none' }}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => fotoInputRef.current.click()}
+                                    className={styles.botonSecundario}
+                                >
+                                    🖼️ Elegir imagen
+                                </button>
+                                {fotoArchivo && (
+                                    <>
+                                        <span className={styles.nombreArchivo}>
+                                            {fotoArchivo.name}
+                                        </span>
+                                        <button
+                                            type="button"
+                                            onClick={subirFoto}
+                                            className={styles.botonPrimario}
+                                            disabled={subiendoFoto}
+                                            style={{ width: 'auto' }}
+                                        >
+                                            {subiendoFoto ? 'Subiendo...' : '⬆️ Subir foto'}
+                                        </button>
+                                    </>
+                                )}
+                            </div>
+                            <p className={styles.ayuda}>
+                                Formatos: JPG, PNG, WebP o GIF · Máximo 2 MB
+                            </p>
                         </div>
 
                         {mensajePerfil && (
@@ -227,16 +332,6 @@ export default function Perfil() {
                                         onChange={e => setFormPerfil({ ...formPerfil, apellido: e.target.value })}
                                         className={styles.input} required />
                                 </div>
-                            </div>
-                            <div className={styles.campo}>
-                                <label className={styles.etiqueta}>URL de foto de perfil</label>
-                                <input type="url" value={formPerfil.foto_url}
-                                    onChange={e => setFormPerfil({ ...formPerfil, foto_url: e.target.value })}
-                                    className={styles.input}
-                                    placeholder="https://..." />
-                                <p className={styles.ayuda}>
-                                    Pega el enlace de una imagen (Google Drive, Dropbox, etc.)
-                                </p>
                             </div>
                             <button type="submit" className={styles.botonPrimario}
                                 disabled={guardandoPerfil}>
