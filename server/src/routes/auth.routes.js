@@ -14,6 +14,7 @@ const {
 } = require('../controllers/auth.controller');
 const { verificarToken, verificarRol } = require('../middleware/auth.middleware');
 const upload = require('../middleware/upload.middleware');
+//null
 
 // ── Rutas públicas ──────────────────────────────────────────
 router.post('/login',     login);
