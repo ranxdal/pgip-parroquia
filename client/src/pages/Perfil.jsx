@@ -101,9 +101,7 @@ export default function Perfil() {
             const formData = new FormData();
             formData.append('foto', fotoArchivo);
 
-            const { data } = await api.post('/auth/perfil/foto', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' },
-            });
+            const { data } = await api.post('/auth/perfil/foto', formData);
 
             // Actualizar contexto global
             setUsuario(prev => ({ ...prev, foto_url: data.usuario.foto_url }));
