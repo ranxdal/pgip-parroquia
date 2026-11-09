@@ -5,13 +5,15 @@ const {
     login,
     obtenerPerfil,
     actualizarPerfil,
+    subirFotoPerfil,
     cambiarContrasena,
     listarUsuarios,
     crearUsuario,
     toggleActivo,
     resetearContrasena
-} = require('../controllers/auth.controller');
+} = require('../controllers/Auth.controller');
 const { verificarToken, verificarRol } = require('../middleware/auth.middleware');
+const upload = require('../middleware/upload');
 
 // ── Rutas públicas ──────────────────────────────────────────
 router.post('/login',     login);
@@ -23,14 +25,15 @@ router.get('/verificar', verificarToken, (req, res) => {
 });
 
 // ── Perfil propio (cualquier usuario autenticado) ───────────
-router.get ('/perfil',             verificarToken, obtenerPerfil);
-router.put ('/perfil',             verificarToken, actualizarPerfil);
-router.post('/perfil/contrasena',  verificarToken, cambiarContrasena);
+router.get ('/perfil',            verificarToken, obtenerPerfil);
+router.put ('/perfil',            verificarToken, actualizarPerfil);
+router.post('/perfil/contrasena', verificarToken, cambiarContrasena);
+router.post('/perfil/foto',       verificarToken, upload.single('foto'), subirFotoPerfil);
 
 // ── Gestión de usuarios (solo admin) ───────────────────────
-router.get ('/usuarios',              verificarToken, verificarRol(['admin']), listarUsuarios);
-router.post('/usuarios',              verificarToken, verificarRol(['admin']), crearUsuario);
-router.patch('/usuarios/:id/activo', verificarToken, verificarRol(['admin']), toggleActivo);
-router.post('/usuarios/:id/reset',   verificarToken, verificarRol(['admin']), resetearContrasena);
+router.get  ('/usuarios',             verificarToken, verificarRol(['admin']), listarUsuarios);
+router.post ('/usuarios',             verificarToken, verificarRol(['admin']), crearUsuario);
+router.patch('/usuarios/:id/activo',  verificarToken, verificarRol(['admin']), toggleActivo);
+router.post ('/usuarios/:id/reset',   verificarToken, verificarRol(['admin']), resetearContrasena);
 
 module.exports = router;
