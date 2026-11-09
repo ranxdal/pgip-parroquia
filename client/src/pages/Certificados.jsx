@@ -473,18 +473,7 @@ export default function Certificados() {
         doc.setFontSize(7);
         doc.setFont('times', 'normal');
         doc.setTextColor(150, 150, 150);
-        // Número de serie
-        const serie = `PGIP-${sacramento.tipo.toUpperCase().slice(0, 3)}-${Date.now().toString().slice(-8)}`;
-
-        // ── Registrar la emisión en la base de datos ──────────────────
-        try {
-            await api.post('/verificar/registrar', {
-                correlativo: serie,
-                tipo_certificado: sacramento.tipo,
-                concepto: `certificado_${sacramento.tipo}`,
-                monto: 1,
-            });
-        } catch { /* si falla el registro, el PDF igual se genera */ }
+        const serie = `PGIP-${sacramento.tipo.toUpperCase().slice(0, 3)}-${sacramento.id}`;
         doc.text(`Serie: ${serie}`, 14, 273);
         doc.text(`Emitido: ${fechaEmision}`, 204, 273, { align: 'right' });
 

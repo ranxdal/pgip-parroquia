@@ -10,19 +10,33 @@ const verificarCertificado = async (req, res) => {
     const { serie } = req.params;
 
     try {
+        // El serie tiene formato PGIP-BAU-{id}, PGIP-CON-{id}, PGIP-MAT-{id}
+        const partes = serie.split('-');
+        const sacramentoId = partes[partes.length - 1];
+
+        if (!sacramentoId || isNaN(parseInt(sacramentoId))) {
+            return res.status(404).send(paginaHTML({
+                valido:  false,
+                serie,
+                mensaje: 'Número de serie inválido.',
+            }));
+        }
+
         const { rows } = await pool.query(
             `SELECT
-                t.correlativo,
-                t.monto,
-                t.concepto,
-                t.tipo_certificado,
-                t.created_at,
-                u.nombre   AS nombre_usuario,
-                u.apellido AS apellido_usuario
-             FROM pgip.transaccion t
-             LEFT JOIN pgip.usuario u ON u.id = t.usuario_id
-             WHERE t.correlativo = $1`,
-            [serie]
+                s.id,
+                s.tipo,
+                s.fecha,
+                s.libro,
+                s.folio,
+                s.partida,
+                s.ministro,
+                f.nombres   AS feligres_nombres,
+                f.apellidos AS feligres_apellidos
+             FROM pgip.sacramento s
+             JOIN pgip.feligres f ON f.id = s.feligres_id
+             WHERE s.id = $1`,
+            [parseInt(sacramentoId)]
         );
 
         if (rows.length === 0) {
@@ -33,33 +47,22 @@ const verificarCertificado = async (req, res) => {
             }));
         }
 
-        const tx = rows[0];
+        const s = rows[0];
 
-        // Solo certificados (concepto empieza con "certificado_")
-        if (!tx.concepto?.startsWith('certificado_')) {
-            return res.status(404).send(paginaHTML({
-                valido:  false,
-                serie,
-                mensaje: 'Este código no corresponde a un certificado sacramental.',
-            }));
-        }
-
-        const tipo   = tx.tipo_certificado || tx.concepto.replace('certificado_', '');
-        const emisor = tx.nombre_usuario
-            ? `${tx.nombre_usuario} ${tx.apellido_usuario}`
-            : 'Secretaría Parroquial';
-
-        const fechaEmision = tx.created_at
-            ? new Date(tx.created_at).toLocaleDateString('es-GT', { day: 'numeric', month: 'long', year: 'numeric' })
+        const fechaSacramento = s.fecha
+            ? new Date(s.fecha).toLocaleDateString('es-GT', { day: 'numeric', month: 'long', year: 'numeric' })
             : '—';
 
         return res.send(paginaHTML({
-            valido: true,
+            valido:   true,
             serie,
-            tipo,
-            fecha:  fechaEmision,
-            monto:  tx.monto,
-            emisor,
+            tipo:     s.tipo,
+            nombre:   `${s.feligres_nombres} ${s.feligres_apellidos}`,
+            fecha:    fechaSacramento,
+            libro:    s.libro,
+            folio:    s.folio,
+            partida:  s.partida,
+            ministro: s.ministro,
         }));
 
     } catch (error) {
@@ -73,7 +76,7 @@ const verificarCertificado = async (req, res) => {
 };
 
 /* ── Página HTML de respuesta ──────────────────────────────────── */
-function paginaHTML({ valido, serie, tipo, fecha, monto, emisor, mensaje }) {
+function paginaHTML({ valido, serie, tipo, nombre, fecha, libro, folio, partida, ministro, mensaje }) {
     const TIPOS = {
         bautismo:     'Bautismo',
         confirmacion: 'Confirmación',
@@ -86,9 +89,12 @@ function paginaHTML({ valido, serie, tipo, fecha, monto, emisor, mensaje }) {
 
     const detalles = valido ? `
         <div class="fila"><span class="etiqueta">Tipo de sacramento</span><span class="valor">${TIPOS[tipo] || tipo}</span></div>
-        <div class="fila"><span class="etiqueta">Fecha de emisión</span><span class="valor">${fecha || '—'}</span></div>
-        <div class="fila"><span class="etiqueta">Monto cobrado</span><span class="valor">Q${parseFloat(monto || 0).toFixed(2)}</span></div>
-        <div class="fila"><span class="etiqueta">Emitido por</span><span class="valor">${emisor}</span></div>
+        <div class="fila"><span class="etiqueta">Feligrés</span><span class="valor">${nombre || '—'}</span></div>
+        <div class="fila"><span class="etiqueta">Fecha del sacramento</span><span class="valor">${fecha || '—'}</span></div>
+        ${libro ? `<div class="fila"><span class="etiqueta">Libro</span><span class="valor">${libro}</span></div>` : ''}
+        ${folio ? `<div class="fila"><span class="etiqueta">Folio</span><span class="valor">${folio}</span></div>` : ''}
+        ${partida ? `<div class="fila"><span class="etiqueta">Partida</span><span class="valor">${partida}</span></div>` : ''}
+        ${ministro ? `<div class="fila"><span class="etiqueta">Ministro</span><span class="valor">${ministro}</span></div>` : ''}
         <div class="fila"><span class="etiqueta">Número de serie</span><span class="valor mono">${serie}</span></div>
     ` : `<p class="msg-error">${mensaje}</p>`;
 
@@ -174,7 +180,7 @@ function paginaHTML({ valido, serie, tipo, fecha, monto, emisor, mensaje }) {
 </html>`;
 }
 
-/* ── Registrar emisión de certificado ─────────────────────────── */
+/* ── Registrar emisión de certificado (ya no se usa) ──────────── */
 const registrarEmisionCertificado = async (req, res) => {
     const { correlativo, tipo_certificado, concepto, monto } = req.body;
 
