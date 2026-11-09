@@ -10,18 +10,7 @@ const verificarCertificado = async (req, res) => {
     const { serie } = req.params;
 
     try {
-        // El serie tiene formato PGIP-BAU-{id}, PGIP-CON-{id}, PGIP-MAT-{id}
-        const partes = serie.split('-');
-        const sacramentoId = partes[partes.length - 1];
-
-        if (!sacramentoId || isNaN(parseInt(sacramentoId))) {
-            return res.status(404).send(paginaHTML({
-                valido:  false,
-                serie,
-                mensaje: 'Número de serie inválido.',
-            }));
-        }
-
+        // El serie es directamente el UUID del sacramento
         const { rows } = await pool.query(
             `SELECT
                 s.id,
@@ -36,7 +25,7 @@ const verificarCertificado = async (req, res) => {
              FROM pgip.sacramento s
              JOIN pgip.feligres f ON f.id = s.feligres_id
              WHERE s.id = $1`,
-            [parseInt(sacramentoId)]
+            [serie]
         );
 
         if (rows.length === 0) {

@@ -473,7 +473,7 @@ export default function Certificados() {
         doc.setFontSize(7);
         doc.setFont('times', 'normal');
         doc.setTextColor(150, 150, 150);
-        const serie = `PGIP-${sacramento.tipo.toUpperCase().slice(0, 3)}-${sacramento.id}`;
+        const serie = sacramento.id;
         doc.text(`Serie: ${serie}`, 14, 273);
         doc.text(`Emitido: ${fechaEmision}`, 204, 273, { align: 'right' });
 
