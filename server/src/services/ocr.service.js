@@ -16,18 +16,31 @@ async function preprocesarImagen(rutaOriginal) {
     imagen.greyscale();
     imagen.normalize();
     imagen.contrast(0.2);
+    // Imágenes pequeñas: ampliar para que Tesseract distinga mejor las letras
+    if (imagen.width < 2000) {
+        imagen.scale(2);
+    }
     await imagen.write(rutaProcesada);
 
     return rutaProcesada;
 }
 
 async function procesarConTesseract(rutaImagen) {
-    const { data } = await Tesseract.recognize(rutaImagen, 'spa');
-    return {
-        texto: data.text,
-        confianza: data.confidence,
-        motor: 'tesseract'
-    };
+    const worker = await Tesseract.createWorker('spa');
+    try {
+        await worker.setParameters({
+            tessedit_pageseg_mode: Tesseract.PSM.SINGLE_BLOCK,
+            preserve_interword_spaces: '1'
+        });
+        const { data } = await worker.recognize(rutaImagen);
+        return {
+            texto: data.text,
+            confianza: data.confidence,
+            motor: 'tesseract'
+        };
+    } finally {
+        await worker.terminate();
+    }
 }
 
 async function procesarFolio(rutaImagen) {
