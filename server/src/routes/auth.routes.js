@@ -11,7 +11,7 @@ const {
     crearUsuario,
     toggleActivo,
     resetearContrasena
-} = require('../controllers/Auth.controller');
+} = require('../controllers/auth.controller');
 const { verificarToken, verificarRol } = require('../middleware/auth.middleware');
 const upload = require('../middleware/upload');
 
