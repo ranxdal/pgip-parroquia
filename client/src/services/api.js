@@ -2,9 +2,6 @@ import axios from 'axios';
 
 const api = axios.create({
     baseURL: 'https://pgip-backend.onrender.com/api',
-    headers: {
-        'Content-Type': 'application/json'
-    }
 });
 
 // Interceptor para agregar el token automáticamente
@@ -13,6 +10,10 @@ api.interceptors.request.use(
         const token = localStorage.getItem('pgip_token');
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
+        }
+        // Si no es FormData, forzar JSON
+        if (!(config.data instanceof FormData)) {
+            config.headers['Content-Type'] = 'application/json';
         }
         return config;
     },
