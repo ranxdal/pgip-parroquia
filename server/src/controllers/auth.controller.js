@@ -1,6 +1,13 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const pool = require('../services/db');
+const { createClient } = require('@supabase/supabase-js');
+
+// Cliente admin de Supabase (usa service_role key para Storage)
+const supabaseAdmin = createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_KEY
+);
 
 // Registro de usuario
 const registrar = async (req, res) => {
@@ -114,19 +121,18 @@ const obtenerPerfil = async (req, res) => {
     }
 };
 
-// Actualizar perfil propio (nombre, apellido, foto_url)
+// Actualizar perfil propio (nombre, apellido)
 const actualizarPerfil = async (req, res) => {
-    const { nombre, apellido, foto_url } = req.body;
+    const { nombre, apellido } = req.body;
 
     try {
         const { rows } = await pool.query(
             `UPDATE pgip.usuario
              SET nombre   = COALESCE($1, nombre),
-                 apellido = COALESCE($2, apellido),
-                 foto_url = COALESCE($3, foto_url)
-             WHERE id = $4
+                 apellido = COALESCE($2, apellido)
+             WHERE id = $3
              RETURNING id, nombre, apellido, usuario, rol, foto_url`,
-            [nombre || null, apellido || null, foto_url || null, req.usuario.id]
+            [nombre || null, apellido || null, req.usuario.id]
         );
 
         res.json({
@@ -135,6 +141,52 @@ const actualizarPerfil = async (req, res) => {
         });
     } catch (error) {
         res.status(500).json({ error: error.message });
+    }
+};
+
+// Subir foto de perfil a Supabase Storage
+const subirFotoPerfil = async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ error: 'No se recibió ningún archivo' });
+        }
+
+        const usuarioId = req.usuario.id;
+        const ext = req.file.mimetype.split('/')[1].replace('jpeg', 'jpg');
+        const fileName = `perfil-${usuarioId}-${Date.now()}.${ext}`;
+        const bucket = 'fotos-perfil';
+
+        // Subir a Supabase Storage
+        const { error: uploadError } = await supabaseAdmin.storage
+            .from(bucket)
+            .upload(fileName, req.file.buffer, {
+                contentType: req.file.mimetype,
+                upsert: true,
+            });
+
+        if (uploadError) {
+            console.error('Error al subir a Supabase Storage:', uploadError);
+            return res.status(500).json({ error: 'Error al subir la imagen' });
+        }
+
+        // Obtener URL pública
+        const { data: urlData } = supabaseAdmin.storage
+            .from(bucket)
+            .getPublicUrl(fileName);
+
+        const fotoUrl = urlData.publicUrl;
+
+        // Guardar URL en la base de datos
+        const { rows } = await pool.query(
+            `UPDATE pgip.usuario SET foto_url = $1 WHERE id = $2
+             RETURNING id, nombre, apellido, usuario, rol, activo, foto_url`,
+            [fotoUrl, usuarioId]
+        );
+
+        return res.json({ mensaje: 'Foto actualizada', usuario: rows[0] });
+    } catch (error) {
+        console.error('Error en subirFotoPerfil:', error);
+        return res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
 
@@ -194,7 +246,6 @@ const listarUsuarios = async (req, res) => {
 // Crear usuario operador (solo admin)
 const crearUsuario = async (req, res) => {
     const { nombre, apellido, usuario, contrasena } = req.body;
-    // Admin no puede crear otro admin desde el panel
     const rol = 'operador';
 
     if (!nombre || !apellido || !usuario || !contrasena) {
@@ -237,7 +288,6 @@ const crearUsuario = async (req, res) => {
 const toggleActivo = async (req, res) => {
     const { id } = req.params;
 
-    // No puede desactivarse a sí mismo
     if (id === req.usuario.id) {
         return res.status(400).json({ error: 'No puede desactivar su propia cuenta' });
     }
@@ -296,6 +346,7 @@ module.exports = {
     login,
     obtenerPerfil,
     actualizarPerfil,
+    subirFotoPerfil,
     cambiarContrasena,
     listarUsuarios,
     crearUsuario,
