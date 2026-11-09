@@ -48,7 +48,7 @@ export default function Perfil() {
     useEffect(() => {
         if (usuario) {
             setFormPerfil({
-                nombre:   usuario.nombre   || '',
+                nombre: usuario.nombre || '',
                 apellido: usuario.apellido || '',
             });
             setFotoPreview(usuario.foto_url || null);
@@ -103,8 +103,10 @@ export default function Perfil() {
 
             const { data } = await api.post('/auth/perfil/foto', formData);
 
-            // Actualizar contexto global
-            setUsuario(prev => ({ ...prev, foto_url: data.usuario.foto_url }));
+            // Actualizar contexto global y localStorage
+            const usuarioActualizado = { ...usuario, foto_url: data.usuario.foto_url };
+            setUsuario(usuarioActualizado);
+            localStorage.setItem('pgip_usuario', JSON.stringify(usuarioActualizado));
             setFotoPreview(data.usuario.foto_url);
             setFotoArchivo(null);
             setMensajeFoto('Foto actualizada correctamente');
@@ -149,7 +151,7 @@ export default function Perfil() {
         try {
             await api.post('/auth/perfil/contrasena', {
                 contrasena_actual: formPass.contrasena_actual,
-                contrasena_nueva:  formPass.contrasena_nueva
+                contrasena_nueva: formPass.contrasena_nueva
             });
             setMensajePass('Contraseña actualizada exitosamente');
             setFormPass({ contrasena_actual: '', contrasena_nueva: '', confirmar: '' });
@@ -473,7 +475,7 @@ export default function Perfil() {
                                                         {u.foto_url ? (
                                                             <img src={u.foto_url}
                                                                 className={styles.miniAvatar}
-                                                                onError={e => e.target.style.display='none'} />
+                                                                onError={e => e.target.style.display = 'none'} />
                                                         ) : (
                                                             <div className={styles.miniAvatarPlaceholder}>
                                                                 {(u.nombre?.[0] || '?').toUpperCase()}
