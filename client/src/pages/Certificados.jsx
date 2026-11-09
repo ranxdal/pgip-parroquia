@@ -6,9 +6,9 @@ import jsPDF from 'jspdf';
 import QRCode from 'qrcode';
 
 const TIPO_COLOR = {
-    bautismo:     { bg: '#ebf8ff', color: '#2b6cb0' },
+    bautismo: { bg: '#ebf8ff', color: '#2b6cb0' },
     confirmacion: { bg: '#f0fff4', color: '#276749' },
-    matrimonio:   { bg: '#fff8f0', color: '#c05621' }
+    matrimonio: { bg: '#fff8f0', color: '#c05621' }
 };
 
 const CAMPOS_EDITABLES = ['fecha', 'libro', 'folio', 'partida', 'ministro', 'padrino_1', 'padrino_2', 'conyuge'];
@@ -81,14 +81,14 @@ export default function Certificados() {
     const abrirEditar = (s) => {
         setSacramentoEditando(s);
         setFormEditar({
-            fecha:        s.fecha ? s.fecha.slice(0, 10) : '',
-            libro:        s.libro        || '',
-            folio:        s.folio        || '',
-            partida:      s.partida      || '',
-            ministro:     s.ministro     || '',
-            padrino_1:    s.padrino_1    || '',
-            padrino_2:    s.padrino_2    || '',
-            conyuge:      s.conyuge      || '',
+            fecha: s.fecha ? s.fecha.slice(0, 10) : '',
+            libro: s.libro || '',
+            folio: s.folio || '',
+            partida: s.partida || '',
+            ministro: s.ministro || '',
+            padrino_1: s.padrino_1 || '',
+            padrino_2: s.padrino_2 || '',
+            conyuge: s.conyuge || '',
             nombre_padre: feligres?.nombre_padre || '',
             nombre_madre: feligres?.nombre_madre || '',
         });
@@ -163,22 +163,22 @@ export default function Certificados() {
             ? sacramento.fecha.slice(0, 10).split('-')
             : ['', '', ''];
         const anioSacramento = partesFecha[0];
-        const mesSacramento  = new Date(
+        const mesSacramento = new Date(
             parseInt(partesFecha[0]),
             parseInt(partesFecha[1]) - 1,
             parseInt(partesFecha[2])
         ).toLocaleDateString('es-GT', { month: 'long' });
-        const diaSacramento  = parseInt(partesFecha[2]);
+        const diaSacramento = parseInt(partesFecha[2]);
 
         const hoy = new Date();
-        const diaEmision  = hoy.getDate();
-        const mesEmision  = hoy.toLocaleDateString('es-GT', { month: 'long' });
+        const diaEmision = hoy.getDate();
+        const mesEmision = hoy.toLocaleDateString('es-GT', { month: 'long' });
         const anioEmision = hoy.getFullYear();
 
         const colores = {
-            bautismo:     { r: 26,  g: 54,  b: 93  },
-            confirmacion: { r: 20,  g: 83,  b: 45  },
-            matrimonio:   { r: 120, g: 53,  b: 15  }
+            bautismo: { r: 26, g: 54, b: 93 },
+            confirmacion: { r: 20, g: 83, b: 45 },
+            matrimonio: { r: 120, g: 53, b: 15 }
         };
         const color = colores[sacramento.tipo] || colores.bautismo;
 
@@ -223,9 +223,9 @@ export default function Certificados() {
 
         // Título
         const titulos = {
-            bautismo:     'CONSTANCIA DE BAUTISMO',
+            bautismo: 'CONSTANCIA DE BAUTISMO',
             confirmacion: 'CONSTANCIA DE CONFIRMACIÓN',
-            matrimonio:   'CONSTANCIA DE MATRIMONIO RELIGIOSO'
+            matrimonio: 'CONSTANCIA DE MATRIMONIO RELIGIOSO'
         };
         doc.setFontSize(13);
         doc.setFont('times', 'bold');
@@ -270,7 +270,7 @@ export default function Certificados() {
 
         doc.setFontSize(10);
         let y = 66;
-        const lh  = 9;
+        const lh = 9;
         const lhS = 5;
 
         // ── BAUTISMO ──
@@ -291,8 +291,8 @@ export default function Certificados() {
                 feligres.fecha_nacimiento
                     ? (() => {
                         const [a, m, d] = feligres.fecha_nacimiento.slice(0, 10).split('-');
-                        return `${parseInt(d)} de ${new Date(parseInt(a), parseInt(m)-1, parseInt(d)).toLocaleDateString('es-GT', { month: 'long' })} de ${a}`;
-                      })()
+                        return `${parseInt(d)} de ${new Date(parseInt(a), parseInt(m) - 1, parseInt(d)).toLocaleDateString('es-GT', { month: 'long' })} de ${a}`;
+                    })()
                     : '', y);
             y += lh;
             campo('Fecha de bautismo:', `${diaSacramento} de ${mesSacramento} de ${anioSacramento}`, y); y += lh;
@@ -311,7 +311,7 @@ export default function Certificados() {
             campo('Anotación marginal:', '', y); y += lhS;
             linea(y); y += lh + 3;
 
-        // ── CONFIRMACIÓN ──
+            // ── CONFIRMACIÓN ──
         } else if (sacramento.tipo === 'confirmacion') {
             txt('En el libro de Confirmaciones', xL, y); y += lh;
             txt('No.', xL, y);
@@ -363,7 +363,7 @@ export default function Certificados() {
             campo('Anotación marginal:', '', y); y += lhS;
             linea(y); y += lh + 3;
 
-        // ── MATRIMONIO ──
+            // ── MATRIMONIO ──
         } else if (sacramento.tipo === 'matrimonio') {
             txt('El infrascrito Párroco, hace constar:', xL, y); y += lh;
             txt('Que en fecha:', xL, y);
@@ -473,7 +473,18 @@ export default function Certificados() {
         doc.setFontSize(7);
         doc.setFont('times', 'normal');
         doc.setTextColor(150, 150, 150);
+        // Número de serie
         const serie = `PGIP-${sacramento.tipo.toUpperCase().slice(0, 3)}-${Date.now().toString().slice(-8)}`;
+
+        // ── Registrar la emisión en la base de datos ──────────────────
+        try {
+            await api.post('/verificar/registrar', {
+                correlativo: serie,
+                tipo_certificado: sacramento.tipo,
+                concepto: `certificado_${sacramento.tipo}`,
+                monto: 0,
+            });
+        } catch { /* si falla el registro, el PDF igual se genera */ }
         doc.text(`Serie: ${serie}`, 14, 273);
         doc.text(`Emitido: ${fechaEmision}`, 204, 273, { align: 'right' });
 
@@ -516,8 +527,8 @@ export default function Certificados() {
                     </div>
                 </div>
 
-                {error  && <div className={styles.errorDiv}  onClick={() => setError('')}>❌ {error}</div>}
-                {exito  && <div className={styles.exitoDiv}  onClick={() => setExito('')}>✅ {exito}</div>}
+                {error && <div className={styles.errorDiv} onClick={() => setError('')}>❌ {error}</div>}
+                {exito && <div className={styles.exitoDiv} onClick={() => setExito('')}>✅ {exito}</div>}
 
                 {/* ── Búsqueda ── */}
                 <div className={styles.panel}>
@@ -588,7 +599,7 @@ export default function Certificados() {
                                                 ? (() => {
                                                     const [a, m, d] = s.fecha.slice(0, 10).split('-');
                                                     return `${parseInt(d)}/${parseInt(m)}/${a}`;
-                                                  })()
+                                                })()
                                                 : '—'}
                                         </p>
                                         {s.libro && (

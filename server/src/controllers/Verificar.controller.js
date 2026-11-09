@@ -18,7 +18,7 @@ const verificarCertificado = async (req, res) => {
                 t.tipo_certificado,
                 t.created_at,
                 u.nombre    AS nombre_usuario,
-                u.apellido AS apellido_usuario
+                u.apellidos AS apellido_usuario
              FROM pgip.transaccion t
              LEFT JOIN pgip.usuario u ON u.id = t.usuario_id
              WHERE t.correlativo = $1`,
@@ -174,4 +174,44 @@ function paginaHTML({ valido, serie, tipo, fecha, monto, emisor, mensaje }) {
 </html>`;
 }
 
-module.exports = { verificarCertificado };
+/* ── Registrar emisión de certificado ─────────────────────────── */
+const registrarEmisionCertificado = async (req, res) => {
+    const { correlativo, tipo_certificado, concepto, monto } = req.body;
+
+    if (!correlativo || !tipo_certificado) {
+        return res.status(400).json({ error: 'correlativo y tipo_certificado son requeridos' });
+    }
+
+    try {
+        // Verificar que no exista ya ese correlativo
+        const { rows: existe } = await pool.query(
+            `SELECT id FROM pgip.transaccion WHERE correlativo = $1`,
+            [correlativo]
+        );
+        if (existe.length > 0) {
+            return res.status(200).json({ mensaje: 'Ya registrado', id: existe[0].id });
+        }
+
+        const { rows } = await pool.query(
+            `INSERT INTO pgip.transaccion
+                (correlativo, tipo, monto, concepto, tipo_certificado, usuario_id, ip_origen)
+             VALUES ($1, 'ingreso', $2, $3, $4, $5, $6)
+             RETURNING id`,
+            [
+                correlativo,
+                parseFloat(monto) || 0,
+                concepto || `certificado_${tipo_certificado}`,
+                tipo_certificado,
+                req.usuario?.id || null,
+                req.ip || null,
+            ]
+        );
+
+        return res.status(201).json({ mensaje: 'Emisión registrada', id: rows[0].id });
+    } catch (error) {
+        console.error('Error en registrarEmisionCertificado:', error);
+        return res.status(500).json({ error: 'Error al registrar la emisión' });
+    }
+};
+
+module.exports = { verificarCertificado, registrarEmisionCertificado };
