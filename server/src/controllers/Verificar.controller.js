@@ -192,15 +192,18 @@ const registrarEmisionCertificado = async (req, res) => {
             return res.status(200).json({ mensaje: 'Ya registrado', id: existe[0].id });
         }
 
+        const conceptoValido = `certificado_${tipo_certificado}`; // ej: certificado_bautismo
+        const montoFinal = parseFloat(monto) > 0 ? parseFloat(monto) : 1; // monto debe ser > 0
+
         const { rows } = await pool.query(
             `INSERT INTO pgip.transaccion
                 (correlativo, tipo, monto, concepto, tipo_certificado, usuario_id, ip_origen)
-             VALUES ($1, 'ingreso', $2, $3, $4, $5, $6)
+             VALUES ($1, 'efectivo', $2, $3, $4, $5, $6)
              RETURNING id`,
             [
                 correlativo,
-                parseFloat(monto) || 0,
-                concepto || `certificado_${tipo_certificado}`,
+                montoFinal,
+                conceptoValido,
                 tipo_certificado,
                 req.usuario?.id || null,
                 req.ip || null,
