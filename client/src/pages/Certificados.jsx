@@ -482,7 +482,7 @@ export default function Certificados() {
                 correlativo: serie,
                 tipo_certificado: sacramento.tipo,
                 concepto: `certificado_${sacramento.tipo}`,
-                monto: 0,
+                monto: 1,
             });
         } catch { /* si falla el registro, el PDF igual se genera */ }
         doc.text(`Serie: ${serie}`, 14, 273);
